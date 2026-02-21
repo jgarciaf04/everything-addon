@@ -1,0 +1,172 @@
+---
+/* No server-side props needed – cart state is entirely client-side. */
+---
+
+<header class="nav-header">
+  <nav class="nav-inner" aria-label="Main navigation">
+    <a class="nav-brand" href="/">Everything Addon</a>
+
+    <ul class="nav-links" role="list">
+      <li><a class="nav-link" href="/">Home</a></li>
+      <li><a class="nav-link" href="/catalog">Catalog</a></li>
+      <li>
+        <a class="nav-link nav-cart" href="/cart">
+          Cart
+          <span id="cart-badge" class="cart-badge" aria-label="items in cart" hidden>0</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+</header>
+
+<style>
+  /* ── Layout ─────────────────────────────────────────────────────────── */
+
+  .nav-header {
+    background: var(--color-bg-dark);
+    border-bottom: var(--space-1) solid var(--color-border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .nav-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: var(--space-3) var(--space-4);
+  }
+
+  /* ── Brand / logo text ──────────────────────────────────────────────── */
+
+  .nav-brand {
+    font-family: var(--font-heading);
+    font-size: var(--text-sm);
+    color: var(--color-primary);
+    text-decoration: none;
+    letter-spacing: var(--space-1);
+    white-space: nowrap;
+    border-radius: var(--border-radius);
+  }
+
+  .nav-brand:hover,
+  .nav-brand:focus-visible {
+    color: var(--color-accent);
+  }
+
+  /* ── Link list ──────────────────────────────────────────────────────── */
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .nav-link {
+    font-family: var(--font-body);
+    font-size: var(--text-base);
+    color: var(--color-text-light);
+    text-decoration: none;
+    padding: var(--space-1) var(--space-2);
+    border: var(--space-1) solid transparent;
+    border-radius: var(--border-radius);
+    transition: color 0.15s, border-color 0.15s;
+  }
+
+  .nav-link:hover,
+  .nav-link:focus-visible {
+    color: var(--color-accent);
+    border-color: var(--color-accent);
+  }
+
+  .nav-link[aria-current="page"] {
+    color: var(--color-primary);
+    border-color: var(--color-primary);
+  }
+
+  /* ── Cart link + badge ──────────────────────────────────────────────── */
+
+  .nav-cart {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .cart-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: var(--space-5);
+    height: var(--space-5);
+    padding: 0 var(--space-1);
+    font-family: var(--font-heading);
+    font-size: var(--text-xs);
+    color: var(--color-text-light);
+    background: var(--color-primary);
+    border: var(--space-1) solid var(--color-moss);
+    border-radius: var(--border-radius);
+    line-height: 1;
+  }
+
+  /* When the badge is hidden (0 items), the [hidden] attribute applies. */
+
+  /* ── Responsive: small screens (375px min) ──────────────────────────── */
+
+  @media (max-width: 640px) {
+    .nav-inner {
+      flex-direction: column;
+      gap: var(--space-2);
+      padding: var(--space-2) var(--space-3);
+    }
+
+    .nav-brand {
+      font-size: var(--text-xs);
+    }
+
+    .nav-links {
+      gap: var(--space-3);
+    }
+
+    .nav-link {
+      font-size: var(--text-sm);
+      padding: var(--space-1);
+    }
+  }
+</style>
+
+<script>
+  import { getCartCount, onCartChange } from '../scripts/cart';
+
+  function updateBadge(count: number): void {
+    const badge = document.getElementById('cart-badge');
+    if (!badge) return;
+
+    if (count > 0) {
+      badge.textContent = String(count);
+      badge.hidden = false;
+    } else {
+      badge.textContent = '0';
+      badge.hidden = true;
+    }
+  }
+
+  // Set initial count on page load.
+  updateBadge(getCartCount());
+
+  // Subscribe to live changes (add / remove from other components).
+  onCartChange((count) => updateBadge(count));
+
+  // Highlight current page link based on pathname.
+  const currentPath = window.location.pathname.replace(/\/+$/, '') || '/';
+  document.querySelectorAll<HTMLAnchorElement>('.nav-link').forEach((link) => {
+    const href = link.getAttribute('href')?.replace(/\/+$/, '') || '/';
+    if (href === currentPath) {
+      link.setAttribute('aria-current', 'page');
+    }
+  });
+</script>

@@ -352,5 +352,24 @@
     "tags": ["mangrove", "building", "tropical", "swamp", "decoration", "blocks", "village"],
     "mcVersion": "1.20+",
     "fileSize": "4.5 MB"
+  },
+  {
+    "id": "system-001",
+    "name": "World Settings Manager",
+    "slug": "world-settings-manager",
+    "type": "system",
+    "description": {
+      "short": "A comprehensive in-game UI for managing world rules, difficulty, mob spawning, and tick speed without commands.",
+      "long": "The World Settings Manager adds a sleek, touch-friendly settings panel accessible from a custom craftable tablet item or the pause menu. Operators and world owners can toggle game rules, adjust difficulty, control mob spawning categories, set random tick speed, manage weather cycles, and configure player permissions — all without typing a single slash command. Changes are logged with timestamps and player names so server admins can audit who changed what. The addon also supports preset profiles that can be saved, loaded, and shared as exportable files, making it easy to switch between survival, creative building, and minigame configurations instantly."
+    },
+    "price": 4.99,
+    "thumbnail": "/images/addons/world-settings-manager-thumb.png",
+    "gallery": [
+      "/images/addons/world-settings-manager-gallery-1.png",
+      "/images/addons/world-settings-manager-gallery-2.png"
+    ],
+    "tags": ["system", "settings", "management", "game rules", "admin", "server", "configuration"],
+    "mcVersion": "1.21+",
+    "fileSize": "2.1 MB"
   }
 ]

@@ -1,4 +1,4 @@
-export type AddonType = "mob" | "item" | "block";
+export type AddonType = "mob" | "item" | "block" | "system";
 
 export interface Addon {
   id: string;

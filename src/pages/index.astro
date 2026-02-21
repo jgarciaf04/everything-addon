@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import NavHeader from '../components/NavHeader.astro';
 ---
 
 <!DOCTYPE html>
@@ -10,10 +11,278 @@ import '../styles/global.css';
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" />
-  <title>Everything Addon</title>
+  <title>Everything Addon — Minecraft Bedrock Edition Addons</title>
 </head>
 <body>
-  <h1>Everything Addon</h1>
-  <p>Your one-stop shop for Minecraft Bedrock Edition addons.</p>
+  <NavHeader />
+
+  <main>
+    <!-- ── Hero Banner ──────────────────────────────────────────────────── -->
+    <section class="hero" aria-label="Hero banner">
+      <div class="hero-inner">
+        <h1 class="hero-title">Everything Addon</h1>
+        <p class="hero-subtitle">
+          Your one-stop shop for Minecraft Bedrock Edition addons.
+          Discover, download, and play — all in one place.
+        </p>
+        <a class="cta-button" href="/catalog">Browse Addons</a>
+      </div>
+
+      <!-- Decorative pixel grid overlay -->
+      <div class="hero-pixels" aria-hidden="true"></div>
+    </section>
+
+    <!-- ── Features Section ─────────────────────────────────────────────── -->
+    <section class="features" aria-label="Features">
+      <h2 class="features-heading">Why Everything Addon?</h2>
+
+      <div class="features-grid">
+        <article class="feature-card">
+          <h3 class="feature-title">Curated Addons</h3>
+          <p class="feature-desc">
+            Every addon is hand-picked and tested for quality.
+            No junk, no guesswork — only the best content.
+          </p>
+        </article>
+
+        <article class="feature-card">
+          <h3 class="feature-title">Instant Download</h3>
+          <p class="feature-desc">
+            One-click downloads straight to your device.
+            Get playing in seconds, not minutes.
+          </p>
+        </article>
+
+        <article class="feature-card">
+          <h3 class="feature-title">Bedrock Ready</h3>
+          <p class="feature-desc">
+            Built exclusively for Bedrock Edition.
+            Every addon is guaranteed compatible with your world.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ── Bottom CTA ───────────────────────────────────────────────────── -->
+    <section class="bottom-cta" aria-label="Call to action">
+      <p class="bottom-cta-text">Ready to upgrade your world?</p>
+      <a class="cta-button" href="/catalog">Explore the Catalog</a>
+    </section>
+  </main>
 </body>
 </html>
+
+<style>
+  /* ── Hero Banner ──────────────────────────────────────────────────────── */
+
+  .hero {
+    position: relative;
+    overflow: hidden;
+    background:
+      linear-gradient(
+        180deg,
+        var(--color-bg-dark) 0%,
+        var(--color-bg-mid) 100%
+      );
+    border-bottom: var(--space-1) solid var(--color-border);
+  }
+
+  .hero-inner {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: var(--space-6) var(--space-4) var(--space-6);
+    gap: var(--space-4);
+  }
+
+  .hero-title {
+    font-family: var(--font-heading);
+    font-size: var(--text-2xl);
+    color: var(--color-primary);
+    text-shadow:
+      var(--space-1) var(--space-1) 0 var(--color-moss);
+    letter-spacing: var(--space-1);
+  }
+
+  .hero-subtitle {
+    font-family: var(--font-body);
+    font-size: var(--text-lg);
+    color: var(--color-text-light);
+    max-width: 40rem;
+    margin: 0;
+    line-height: 1.6;
+  }
+
+  /* Decorative pixel-grid overlay on the hero */
+  .hero-pixels {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    opacity: 0.06;
+    background-image:
+      linear-gradient(
+        var(--color-primary) var(--space-1),
+        transparent var(--space-1)
+      ),
+      linear-gradient(
+        90deg,
+        var(--color-primary) var(--space-1),
+        transparent var(--space-1)
+      );
+    background-size: var(--space-5) var(--space-5);
+    pointer-events: none;
+  }
+
+  /* ── CTA Button ───────────────────────────────────────────────────────── */
+
+  .cta-button {
+    display: inline-block;
+    font-family: var(--font-heading);
+    font-size: var(--text-sm);
+    color: var(--color-text-light);
+    background: var(--color-primary);
+    border: var(--space-1) solid var(--color-moss);
+    border-radius: var(--border-radius);
+    padding: var(--space-3) var(--space-6);
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+    box-shadow:
+      var(--space-1) var(--space-1) 0 var(--color-moss);
+  }
+
+  .cta-button:hover,
+  .cta-button:focus-visible {
+    background: var(--color-accent);
+    border-color: var(--color-oak);
+    box-shadow:
+      var(--space-1) var(--space-1) 0 var(--color-oak);
+  }
+
+  /* ── Features Section ─────────────────────────────────────────────────── */
+
+  .features {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: var(--space-7) var(--space-4);
+  }
+
+  .features-heading {
+    font-family: var(--font-heading);
+    font-size: var(--text-xl);
+    color: var(--color-accent);
+    text-align: center;
+    margin-bottom: var(--space-6);
+  }
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-5);
+  }
+
+  .feature-card {
+    background: var(--color-bg-mid);
+    border: var(--space-1) solid var(--color-border);
+    border-radius: var(--border-radius);
+    padding: var(--space-5);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .feature-title {
+    font-family: var(--font-heading);
+    font-size: var(--text-sm);
+    color: var(--color-primary);
+  }
+
+  .feature-desc {
+    font-family: var(--font-body);
+    font-size: var(--text-base);
+    color: var(--color-text-light);
+    margin: 0;
+    line-height: 1.6;
+  }
+
+  /* ── Bottom CTA ───────────────────────────────────────────────────────── */
+
+  .bottom-cta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-4);
+    padding: var(--space-7) var(--space-4);
+    background: var(--color-bg-mid);
+    border-top: var(--space-1) solid var(--color-border);
+    text-align: center;
+  }
+
+  .bottom-cta-text {
+    font-family: var(--font-heading);
+    font-size: var(--text-lg);
+    color: var(--color-accent);
+    margin: 0;
+  }
+
+  /* ── Responsive: mobile (375px+) ──────────────────────────────────────── */
+
+  @media (max-width: 640px) {
+    .hero-inner {
+      padding: var(--space-5) var(--space-3) var(--space-5);
+      gap: var(--space-3);
+    }
+
+    .hero-title {
+      font-size: var(--text-lg);
+    }
+
+    .hero-subtitle {
+      font-size: var(--text-base);
+    }
+
+    .cta-button {
+      font-size: var(--text-xs);
+      padding: var(--space-2) var(--space-5);
+    }
+
+    .features {
+      padding: var(--space-6) var(--space-3);
+    }
+
+    .features-heading {
+      font-size: var(--text-base);
+      margin-bottom: var(--space-5);
+    }
+
+    .features-grid {
+      grid-template-columns: 1fr;
+      gap: var(--space-4);
+    }
+
+    .feature-card {
+      padding: var(--space-4);
+    }
+
+    .feature-title {
+      font-size: var(--text-xs);
+    }
+
+    .feature-desc {
+      font-size: var(--text-sm);
+    }
+
+    .bottom-cta {
+      padding: var(--space-6) var(--space-3);
+    }
+
+    .bottom-cta-text {
+      font-size: var(--text-base);
+    }
+  }
+</style>

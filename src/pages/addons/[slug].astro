@@ -1,0 +1,569 @@
+---
+import type { Addon } from '../../types/addon';
+import NavHeader from '../../components/NavHeader.astro';
+import '../../styles/global.css';
+
+export async function getStaticPaths() {
+  const addons: Addon[] = (await import('../../data/addons.json')).default;
+  return addons.map((addon) => ({
+    params: { slug: addon.slug },
+    props: { addon },
+  }));
+}
+
+const { addon } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" />
+  <title>{addon.name} — Everything Addon</title>
+</head>
+<body>
+  <NavHeader />
+
+  <main class="detail-page">
+    <!-- ── Back Link ────────────────────────────────────────────────────── -->
+    <a class="back-link" href="/catalog">&larr; Back to Catalog</a>
+
+    <!-- ── Addon Title ──────────────────────────────────────────────────── -->
+    <h1 class="addon-title">{addon.name}</h1>
+
+    <!-- ── Two-Column Layout (gallery + sidebar) ────────────────────────── -->
+    <div class="detail-layout">
+
+      <!-- Gallery -->
+      <section class="gallery" aria-label="Screenshot gallery">
+        <div class="gallery-main">
+          <img
+            id="gallery-image"
+            class="gallery-image"
+            src={addon.gallery[0]}
+            alt={`${addon.name} screenshot 1 of ${addon.gallery.length}`}
+          />
+        </div>
+
+        {addon.gallery.length > 1 && (
+          <div class="gallery-controls">
+            <button
+              id="gallery-prev"
+              class="gallery-btn"
+              type="button"
+              aria-label="Previous screenshot"
+            >
+              &larr; Prev
+            </button>
+
+            <span id="gallery-counter" class="gallery-counter">
+              1 / {addon.gallery.length}
+            </span>
+
+            <button
+              id="gallery-next"
+              class="gallery-btn"
+              type="button"
+              aria-label="Next screenshot"
+            >
+              Next &rarr;
+            </button>
+          </div>
+        )}
+
+        <!-- Thumbnail selectors -->
+        <div class="gallery-thumbs">
+          {addon.gallery.map((src: string, i: number) => (
+            <button
+              class={`gallery-thumb ${i === 0 ? 'gallery-thumb--active' : ''}`}
+              type="button"
+              data-index={i}
+              aria-label={`View screenshot ${i + 1}`}
+            >
+              <img src={src} alt={`${addon.name} thumbnail ${i + 1}`} />
+            </button>
+          ))}
+        </div>
+      </section>
+
+      <!-- Sidebar: specs, price, cart -->
+      <aside class="sidebar">
+        <!-- Price -->
+        <p class="addon-price">${addon.price.toFixed(2)}</p>
+
+        <!-- Add to Cart -->
+        <button
+          id="cart-btn"
+          class="cart-btn"
+          type="button"
+          data-addon-id={addon.id}
+        >
+          Add to Cart
+        </button>
+
+        <!-- Specs -->
+        <section class="specs" aria-label="Addon specifications">
+          <h2 class="specs-heading">Specs</h2>
+          <dl class="specs-list">
+            <div class="specs-row">
+              <dt class="specs-label">MC Version</dt>
+              <dd class="specs-value">{addon.mcVersion}</dd>
+            </div>
+            <div class="specs-row">
+              <dt class="specs-label">Type</dt>
+              <dd class="specs-value">{addon.type}</dd>
+            </div>
+            <div class="specs-row">
+              <dt class="specs-label">File Size</dt>
+              <dd class="specs-value">{addon.fileSize}</dd>
+            </div>
+          </dl>
+        </section>
+      </aside>
+    </div>
+
+    <!-- ── Long Description ─────────────────────────────────────────────── -->
+    <section class="description" aria-label="Addon description">
+      <h2 class="description-heading">About This Addon</h2>
+      <p class="description-text">{addon.description.long}</p>
+    </section>
+  </main>
+
+  <!-- Hidden data for client script -->
+  <script
+    id="addon-data"
+    type="application/json"
+    set:html={JSON.stringify({ id: addon.id, gallery: addon.gallery, name: addon.name })}
+  />
+</body>
+</html>
+
+<style>
+  /* ── Page Container ──────────────────────────────────────────────────── */
+
+  .detail-page {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: var(--space-5) var(--space-4) var(--space-7);
+  }
+
+  /* ── Back Link ───────────────────────────────────────────────────────── */
+
+  .back-link {
+    display: inline-block;
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    color: var(--color-stone);
+    text-decoration: none;
+    margin-bottom: var(--space-4);
+    padding: var(--space-1) 0;
+    border-radius: var(--border-radius);
+    transition: color 0.15s;
+  }
+
+  .back-link:hover,
+  .back-link:focus-visible {
+    color: var(--color-accent);
+  }
+
+  /* ── Title ───────────────────────────────────────────────────────────── */
+
+  .addon-title {
+    font-family: var(--font-heading);
+    font-size: var(--text-2xl);
+    color: var(--color-primary);
+    margin-bottom: var(--space-5);
+    line-height: 1.3;
+  }
+
+  /* ── Two-Column Layout ───────────────────────────────────────────────── */
+
+  .detail-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+    margin-bottom: var(--space-6);
+  }
+
+  @media (min-width: 1024px) {
+    .detail-layout {
+      grid-template-columns: 3fr 2fr;
+    }
+  }
+
+  /* ── Gallery ─────────────────────────────────────────────────────────── */
+
+  .gallery {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .gallery-main {
+    background: var(--color-bg-mid);
+    border: var(--space-1) solid var(--color-border);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    aspect-ratio: 16 / 9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .gallery-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    border-radius: var(--border-radius);
+  }
+
+  .gallery-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-4);
+  }
+
+  .gallery-btn {
+    font-family: var(--font-heading);
+    font-size: var(--text-xs);
+    color: var(--color-text-light);
+    background: var(--color-bg-mid);
+    border: var(--space-1) solid var(--color-border);
+    border-radius: var(--border-radius);
+    padding: var(--space-2) var(--space-3);
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+  }
+
+  .gallery-btn:hover,
+  .gallery-btn:focus-visible {
+    background: var(--color-primary);
+    border-color: var(--color-moss);
+  }
+
+  .gallery-counter {
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    color: var(--color-stone);
+  }
+
+  .gallery-thumbs {
+    display: flex;
+    gap: var(--space-2);
+  }
+
+  .gallery-thumb {
+    width: 4.5rem;
+    height: 3rem;
+    padding: 0;
+    border: var(--space-1) solid var(--color-border);
+    border-radius: var(--border-radius);
+    background: var(--color-bg-mid);
+    cursor: pointer;
+    overflow: hidden;
+    opacity: 0.6;
+    transition: opacity 0.15s, border-color 0.15s;
+  }
+
+  .gallery-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    border-radius: var(--border-radius);
+  }
+
+  .gallery-thumb:hover,
+  .gallery-thumb:focus-visible {
+    opacity: 0.9;
+    border-color: var(--color-stone);
+  }
+
+  .gallery-thumb--active {
+    opacity: 1;
+    border-color: var(--color-primary);
+  }
+
+  /* ── Sidebar ─────────────────────────────────────────────────────────── */
+
+  .sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  /* ── Price ────────────────────────────────────────────────────────────── */
+
+  .addon-price {
+    font-family: var(--font-heading);
+    font-size: var(--text-2xl);
+    color: var(--color-accent);
+    margin: 0;
+  }
+
+  /* ── Cart Button ─────────────────────────────────────────────────────── */
+
+  .cart-btn {
+    font-family: var(--font-heading);
+    font-size: var(--text-sm);
+    color: var(--color-text-light);
+    background: var(--color-primary);
+    border: var(--space-1) solid var(--color-moss);
+    border-radius: var(--border-radius);
+    padding: var(--space-3) var(--space-5);
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+    box-shadow: var(--space-1) var(--space-1) 0 var(--color-moss);
+    text-align: center;
+  }
+
+  .cart-btn:hover,
+  .cart-btn:focus-visible {
+    background: var(--color-accent);
+    border-color: var(--color-oak);
+    box-shadow: var(--space-1) var(--space-1) 0 var(--color-oak);
+  }
+
+  .cart-btn--in-cart {
+    background: var(--color-stone);
+    border-color: var(--color-border);
+    box-shadow: none;
+    cursor: default;
+    opacity: 0.8;
+  }
+
+  .cart-btn--in-cart:hover,
+  .cart-btn--in-cart:focus-visible {
+    background: var(--color-stone);
+    border-color: var(--color-border);
+    box-shadow: none;
+  }
+
+  /* ── Specs ────────────────────────────────────────────────────────────── */
+
+  .specs {
+    background: var(--color-bg-mid);
+    border: var(--space-1) solid var(--color-border);
+    border-radius: var(--border-radius);
+    padding: var(--space-4);
+  }
+
+  .specs-heading {
+    font-family: var(--font-heading);
+    font-size: var(--text-sm);
+    color: var(--color-accent);
+    margin-bottom: var(--space-3);
+  }
+
+  .specs-list {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .specs-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: var(--space-2) 0;
+    border-bottom: var(--space-1) solid var(--color-border);
+  }
+
+  .specs-row:last-child {
+    border-bottom: none;
+  }
+
+  .specs-label {
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    color: var(--color-stone);
+    margin: 0;
+  }
+
+  .specs-value {
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    color: var(--color-text-light);
+    margin: 0;
+    text-transform: capitalize;
+  }
+
+  /* ── Description ─────────────────────────────────────────────────────── */
+
+  .description {
+    max-width: 48rem;
+  }
+
+  .description-heading {
+    font-family: var(--font-heading);
+    font-size: var(--text-base);
+    color: var(--color-accent);
+    margin-bottom: var(--space-3);
+  }
+
+  .description-text {
+    font-family: var(--font-body);
+    font-size: var(--text-base);
+    color: var(--color-text-light);
+    line-height: 1.7;
+    margin: 0;
+    white-space: pre-line;
+  }
+
+  /* ── Responsive: mobile (375px+) ─────────────────────────────────────── */
+
+  @media (max-width: 640px) {
+    .detail-page {
+      padding: var(--space-4) var(--space-3) var(--space-6);
+    }
+
+    .addon-title {
+      font-size: var(--text-lg);
+      margin-bottom: var(--space-4);
+    }
+
+    .addon-price {
+      font-size: var(--text-xl);
+    }
+
+    .cart-btn {
+      font-size: var(--text-xs);
+      padding: var(--space-2) var(--space-4);
+    }
+
+    .gallery-thumb {
+      width: 3.5rem;
+      height: 2.25rem;
+    }
+
+    .specs-heading {
+      font-size: var(--text-xs);
+    }
+
+    .specs-label,
+    .specs-value {
+      font-size: var(--text-xs);
+    }
+
+    .description-heading {
+      font-size: var(--text-sm);
+    }
+
+    .description-text {
+      font-size: var(--text-sm);
+    }
+  }
+</style>
+
+<script>
+  import { addToCart, isInCart, onCartChange } from '../../scripts/cart';
+
+  // ── Read addon data from embedded JSON ──────────────────────────────────
+  const dataEl = document.getElementById('addon-data');
+  if (!dataEl) throw new Error('Missing addon-data script element');
+
+  const addonData: { id: string; gallery: string[]; name: string } = JSON.parse(
+    dataEl.textContent || '{}',
+  );
+
+  const { id: addonId, gallery, name: addonName } = addonData;
+
+  // ── Gallery Navigation ──────────────────────────────────────────────────
+  const galleryImage = document.getElementById('gallery-image') as HTMLImageElement | null;
+  const prevBtn = document.getElementById('gallery-prev');
+  const nextBtn = document.getElementById('gallery-next');
+  const counter = document.getElementById('gallery-counter');
+  const thumbButtons = document.querySelectorAll<HTMLButtonElement>('.gallery-thumb');
+
+  let currentIndex = 0;
+
+  function updateGallery(index: number): void {
+    currentIndex = index;
+
+    if (galleryImage) {
+      galleryImage.src = gallery[currentIndex];
+      galleryImage.alt = `${addonName} screenshot ${currentIndex + 1} of ${gallery.length}`;
+    }
+
+    if (counter) {
+      counter.textContent = `${currentIndex + 1} / ${gallery.length}`;
+    }
+
+    thumbButtons.forEach((btn, i) => {
+      if (i === currentIndex) {
+        btn.classList.add('gallery-thumb--active');
+      } else {
+        btn.classList.remove('gallery-thumb--active');
+      }
+    });
+  }
+
+  if (prevBtn) {
+    prevBtn.addEventListener('click', () => {
+      const newIndex = currentIndex === 0 ? gallery.length - 1 : currentIndex - 1;
+      updateGallery(newIndex);
+    });
+  }
+
+  if (nextBtn) {
+    nextBtn.addEventListener('click', () => {
+      const newIndex = currentIndex === gallery.length - 1 ? 0 : currentIndex + 1;
+      updateGallery(newIndex);
+    });
+  }
+
+  thumbButtons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const index = Number(btn.dataset.index);
+      if (!Number.isNaN(index)) {
+        updateGallery(index);
+      }
+    });
+  });
+
+  // ── Cart Button ─────────────────────────────────────────────────────────
+  const cartBtn = document.getElementById('cart-btn') as HTMLButtonElement | null;
+
+  function setInCartState(): void {
+    if (!cartBtn) return;
+    cartBtn.textContent = 'In Cart';
+    cartBtn.classList.add('cart-btn--in-cart');
+    cartBtn.disabled = true;
+  }
+
+  function setAddToCartState(): void {
+    if (!cartBtn) return;
+    cartBtn.textContent = 'Add to Cart';
+    cartBtn.classList.remove('cart-btn--in-cart');
+    cartBtn.disabled = false;
+  }
+
+  // Set initial state
+  if (isInCart(addonId)) {
+    setInCartState();
+  }
+
+  // Handle click
+  if (cartBtn) {
+    cartBtn.addEventListener('click', () => {
+      addToCart(addonId);
+      setInCartState();
+    });
+  }
+
+  // Subscribe to cart changes (e.g., removal from another tab/component)
+  onCartChange(() => {
+    if (isInCart(addonId)) {
+      setInCartState();
+    } else {
+      setAddToCartState();
+    }
+  });
+</script>
