@@ -1,0 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+:root {
+  --font-heading: 'Press Start 2P', cursive;
+  --font-body: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}

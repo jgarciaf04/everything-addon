@@ -1,0 +1,85 @@
+/* ==========================================================================
+   Design Tokens - Minecraft-Inspired Theme
+   ==========================================================================
+   All custom properties are defined on :root for global access.
+   ========================================================================== */
+
+:root {
+
+  /* ========================================================================
+     Color Palette
+     ========================================================================
+     Earth-tone colors inspired by Minecraft's block palette:
+     dirt, oak/spruce/birch planks, grass, stone, and sand.
+     ======================================================================== */
+
+  /* Backgrounds */
+  --color-bg-dark:   #3b2d1e; /* Dark oak / dirt brown                      */
+  --color-bg-mid:    #6b5340; /* Spruce plank medium brown                  */
+  --color-bg-light:  #d6c4a1; /* Birch plank light tan / cream              */
+
+  /* Brand / Action */
+  --color-primary:   #5b8731; /* Grass-block green                          */
+  --color-accent:    #c6a84b; /* Sand / gold tan                            */
+
+  /* Text */
+  --color-text-light: #f0e6d2; /* Off-white, readable on dark backgrounds   */
+  --color-text-dark:  #2b2017; /* Very dark brown / charcoal                */
+
+  /* Borders & Dividers */
+  --color-border:    #7e7e76; /* Stone gray                                 */
+
+  /* Extended palette */
+  --color-stone:     #9a9a8e; /* Cobblestone / lighter stone                */
+  --color-oak:       #b08c4a; /* Oak plank warm brown                       */
+  --color-moss:      #4a6b2a; /* Moss / dark grass green                    */
+  --color-clay:      #8e6e52; /* Terracotta / clay brown                    */
+
+  /* ========================================================================
+     Spacing Scale
+     ========================================================================
+     Consistent 4px-based increments for margins, padding, and gaps.
+     ======================================================================== */
+
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  24px;
+  --space-6:  32px;
+  --space-7:  48px;
+  --space-8:  64px;
+
+  /* ========================================================================
+     Font-Size Scale
+     ========================================================================
+     Typographic scale from small labels up to large headings.
+     ======================================================================== */
+
+  --text-xs:   0.75rem;   /* 12px */
+  --text-sm:   0.875rem;  /* 14px */
+  --text-base: 1rem;      /* 16px */
+  --text-lg:   1.125rem;  /* 18px */
+  --text-xl:   1.25rem;   /* 20px */
+  --text-2xl:  1.5rem;    /* 24px */
+  --text-3xl:  1.875rem;  /* 30px */
+
+  /* ========================================================================
+     Border Radius
+     ========================================================================
+     Hard edges only - no rounded corners, true to the blocky aesthetic.
+     ======================================================================== */
+
+  --border-radius: 0;
+
+  /* ========================================================================
+     Breakpoints
+     ========================================================================
+     Reference values for responsive layouts.
+     NOTE: Custom properties cannot be used inside @media queries directly;
+     these are documented here as single-source-of-truth reference values.
+     ======================================================================== */
+
+  --breakpoint-mobile:  375px;
+  --breakpoint-desktop: 1280px;
+}
