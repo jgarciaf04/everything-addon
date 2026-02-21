@@ -1,0 +1,38 @@
+@import './tokens.css';
+@import './fonts.css';
+
+/* ==========================================================================
+   Global Reset & Base Styles
+   ==========================================================================
+   Minimal reset and body/heading defaults using design tokens.
+   No component styles, layout rules, or utility classes.
+   ========================================================================== */
+
+/* Box-sizing reset */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Body defaults */
+body {
+  background-color: var(--color-bg-dark);
+  color: var(--color-text-light);
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Heading defaults */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-heading);
+  margin: 0;
+  line-height: 1.2;
+}
