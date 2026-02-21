@@ -1,0 +1,411 @@
+---
+import type { Addon } from '../types/addon';
+import NavHeader from '../components/NavHeader.astro';
+import '../styles/global.css';
+import addons from '../data/addons.json';
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" />
+  <title>Catalog — Everything Addon</title>
+</head>
+<body>
+  <NavHeader />
+
+  <main class="catalog-page">
+    <!-- ── Page Heading ─────────────────────────────────────────────────── -->
+    <h1 class="catalog-title">Addon Catalog</h1>
+
+    <!-- ── Filter / Search Bar ──────────────────────────────────────────── -->
+    <div class="filter-bar">
+      <input
+        id="search-input"
+        class="search-input"
+        type="text"
+        placeholder="Search addons..."
+        aria-label="Search addons by name, description, or tags"
+      />
+
+      <div class="filter-buttons" role="group" aria-label="Filter by addon type">
+        <button class="filter-btn filter-btn--active" data-type="all" type="button" aria-pressed="true">All</button>
+        <button class="filter-btn" data-type="mob" type="button" aria-pressed="false">Mob</button>
+        <button class="filter-btn" data-type="item" type="button" aria-pressed="false">Item</button>
+        <button class="filter-btn" data-type="block" type="button" aria-pressed="false">Block</button>
+        <button class="filter-btn" data-type="system" type="button" aria-pressed="false">System</button>
+      </div>
+    </div>
+
+    <!-- ── Addon Card Grid ──────────────────────────────────────────────── -->
+    <div class="card-grid">
+      {addons.map((addon: Addon) => (
+        <div
+          class="addon-card"
+          data-type={addon.type}
+          data-name={addon.name}
+          data-description={addon.description.short}
+          data-tags={addon.tags.join(',')}
+          data-id={addon.id}
+          data-slug={addon.slug}
+        >
+          <a class="card-link" href={'/addons/' + addon.slug}>
+            <img src={addon.thumbnail} alt={addon.name} class="card-thumb" />
+            <div class="card-body">
+              <span class="type-badge">{addon.type}</span>
+              <h3 class="card-name">{addon.name}</h3>
+              <p class="card-desc">{addon.description.short}</p>
+              <span class="card-price">${addon.price.toFixed(2)}</span>
+            </div>
+          </a>
+          <button class="cart-btn" type="button" data-addon-id={addon.id}>Add to Cart</button>
+        </div>
+      ))}
+    </div>
+
+    <p id="no-results" class="no-results" hidden>No addons match your search.</p>
+  </main>
+</body>
+</html>
+
+<style>
+  /* ── Page Container ──────────────────────────────────────────────────── */
+
+  .catalog-page {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: var(--space-5) var(--space-4) var(--space-7);
+  }
+
+  /* ── Page Title ──────────────────────────────────────────────────────── */
+
+  .catalog-title {
+    font-family: var(--font-heading);
+    font-size: var(--text-2xl);
+    color: var(--color-primary);
+    margin-bottom: var(--space-5);
+  }
+
+  /* ── Filter / Search Bar ─────────────────────────────────────────────── */
+
+  .filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-3);
+    margin-bottom: var(--space-5);
+  }
+
+  .search-input {
+    flex: 1 1 240px;
+    font-family: var(--font-body);
+    font-size: var(--text-base);
+    color: var(--color-text-light);
+    background: var(--color-bg-mid);
+    border: var(--space-1) solid var(--color-border);
+    border-radius: var(--border-radius);
+    padding: var(--space-2) var(--space-3);
+    outline: none;
+    transition: border-color 0.15s;
+  }
+
+  .search-input::placeholder {
+    color: var(--color-stone);
+  }
+
+  .search-input:focus {
+    border-color: var(--color-primary);
+  }
+
+  .filter-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .filter-btn {
+    font-family: var(--font-heading);
+    font-size: var(--text-xs);
+    color: var(--color-text-light);
+    background: var(--color-bg-mid);
+    border: var(--space-1) solid var(--color-border);
+    border-radius: var(--border-radius);
+    padding: var(--space-2) var(--space-3);
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+    text-transform: capitalize;
+  }
+
+  .filter-btn:hover,
+  .filter-btn:focus-visible {
+    background: var(--color-primary);
+    border-color: var(--color-moss);
+  }
+
+  .filter-btn--active {
+    background: var(--color-primary);
+    border-color: var(--color-moss);
+    box-shadow: var(--space-1) var(--space-1) 0 var(--color-moss);
+  }
+
+  /* ── Card Grid ───────────────────────────────────────────────────────── */
+
+  .card-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+  }
+
+  @media (min-width: 640px) {
+    .card-grid {
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    }
+  }
+
+  /* ── Addon Card ──────────────────────────────────────────────────────── */
+
+  .addon-card {
+    display: flex;
+    flex-direction: column;
+    background: var(--color-bg-mid);
+    border: var(--space-1) solid var(--color-border);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    transition: border-color 0.15s;
+  }
+
+  .addon-card:hover {
+    border-color: var(--color-primary);
+  }
+
+  .card-link {
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+
+  .card-thumb {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    display: block;
+  }
+
+  .card-body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    padding: var(--space-3);
+    flex: 1;
+  }
+
+  /* ── Type Badge ──────────────────────────────────────────────────────── */
+
+  .type-badge {
+    display: inline-block;
+    align-self: flex-start;
+    font-family: var(--font-heading);
+    font-size: var(--text-xs);
+    color: var(--color-text-dark);
+    background: var(--color-accent);
+    border-radius: var(--border-radius);
+    padding: var(--space-1) var(--space-2);
+    text-transform: capitalize;
+    line-height: 1;
+  }
+
+  /* ── Card Text ───────────────────────────────────────────────────────── */
+
+  .card-name {
+    font-family: var(--font-heading);
+    font-size: var(--text-sm);
+    color: var(--color-text-light);
+    margin: 0;
+    line-height: 1.4;
+  }
+
+  .card-desc {
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    color: var(--color-stone);
+    margin: 0;
+    line-height: 1.5;
+    flex: 1;
+  }
+
+  .card-price {
+    font-family: var(--font-heading);
+    font-size: var(--text-sm);
+    color: var(--color-accent);
+  }
+
+  /* ── Cart Button ─────────────────────────────────────────────────────── */
+
+  .cart-btn {
+    font-family: var(--font-heading);
+    font-size: var(--text-xs);
+    color: var(--color-text-light);
+    background: var(--color-primary);
+    border: none;
+    border-top: var(--space-1) solid var(--color-moss);
+    border-radius: var(--border-radius);
+    padding: var(--space-2) var(--space-3);
+    cursor: pointer;
+    transition: background 0.15s;
+    text-align: center;
+  }
+
+  .cart-btn:hover,
+  .cart-btn:focus-visible {
+    background: var(--color-accent);
+  }
+
+  .cart-btn--in-cart {
+    background: var(--color-stone);
+    border-top-color: var(--color-border);
+    cursor: default;
+    opacity: 0.8;
+  }
+
+  .cart-btn--in-cart:hover,
+  .cart-btn--in-cart:focus-visible {
+    background: var(--color-stone);
+  }
+
+  /* ── No Results Message ─────────────────────────────────────────────── */
+
+  .no-results {
+    font-family: var(--font-body);
+    font-size: var(--text-lg);
+    color: var(--color-stone);
+    text-align: center;
+    padding: var(--space-7) var(--space-4);
+    margin: 0;
+  }
+
+  /* ── Responsive: mobile (375px+) ──────────────────────────────────────── */
+
+  @media (max-width: 640px) {
+    .catalog-page {
+      padding: var(--space-4) var(--space-3) var(--space-6);
+    }
+
+    .catalog-title {
+      font-size: var(--text-lg);
+      margin-bottom: var(--space-4);
+    }
+
+    .filter-bar {
+      gap: var(--space-2);
+      margin-bottom: var(--space-4);
+    }
+
+    .search-input {
+      font-size: var(--text-sm);
+      padding: var(--space-2);
+    }
+
+    .filter-btn {
+      padding: var(--space-1) var(--space-2);
+    }
+
+    .card-body {
+      padding: var(--space-2);
+    }
+
+    .card-name {
+      font-size: var(--text-xs);
+    }
+
+    .card-desc {
+      font-size: var(--text-xs);
+    }
+  }
+</style>
+
+<script>
+  import { addToCart, isInCart, onCartChange } from '../scripts/cart';
+
+  const searchInput = document.getElementById('search-input') as HTMLInputElement | null;
+  const filterBtns = document.querySelectorAll('.filter-btn');
+  const cards = document.querySelectorAll('.addon-card');
+  const cartBtns = document.querySelectorAll('.cart-btn');
+  const noResults = document.getElementById('no-results');
+
+  let activeType = 'all';
+
+  function filterCards() {
+    if (!searchInput) return;
+    const searchText = searchInput.value.toLowerCase();
+    let visibleCount = 0;
+
+    cards.forEach((card) => {
+      const el = card as HTMLElement;
+      const type = el.dataset.type || '';
+      const name = (el.dataset.name || '').toLowerCase();
+      const desc = (el.dataset.description || '').toLowerCase();
+      const tags = (el.dataset.tags || '').toLowerCase();
+
+      const matchesType = activeType === 'all' || type === activeType;
+      const matchesSearch = !searchText || name.includes(searchText) || desc.includes(searchText) || tags.includes(searchText);
+
+      const visible = matchesType && matchesSearch;
+      el.style.display = visible ? '' : 'none';
+      if (visible) visibleCount++;
+    });
+
+    if (noResults) {
+      noResults.hidden = visibleCount > 0;
+    }
+  }
+
+  if (searchInput) {
+    searchInput.addEventListener('input', filterCards);
+  }
+
+  filterBtns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      filterBtns.forEach((b) => {
+        b.classList.remove('filter-btn--active');
+        b.setAttribute('aria-pressed', 'false');
+      });
+      btn.classList.add('filter-btn--active');
+      btn.setAttribute('aria-pressed', 'true');
+      activeType = (btn as HTMLElement).dataset.type || 'all';
+      filterCards();
+    });
+  });
+
+  // Cart button handling
+  function updateCartBtn(btn: Element) {
+    const id = (btn as HTMLElement).dataset.addonId;
+    if (!id) return;
+    if (isInCart(id)) {
+      btn.textContent = 'In Cart';
+      btn.classList.add('cart-btn--in-cart');
+      (btn as HTMLButtonElement).disabled = true;
+    }
+  }
+
+  cartBtns.forEach((btn) => {
+    updateCartBtn(btn);
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const id = (btn as HTMLElement).dataset.addonId;
+      if (!id) return;
+      addToCart(id);
+      updateCartBtn(btn);
+    });
+  });
+
+  onCartChange(() => {
+    cartBtns.forEach((btn) => updateCartBtn(btn));
+  });
+</script>
