@@ -42,8 +42,8 @@ import addons from '../data/addons.json';
       <section class="pack-preview" aria-label="Addon pack preview">
         <div class="pack-frame">
           <div class="pack-header">
-            <span class="pack-icon">&#9776;</span>
-            <h2 class="pack-label">Your Addon Pack</h2>
+            <span class="pack-icon" aria-hidden="true">&#9776;</span>
+            <span class="pack-label">Your Addon Pack</span>
           </div>
           <div id="pack-grid" class="pack-grid"></div>
           <div class="pack-footer">
@@ -80,7 +80,7 @@ import addons from '../data/addons.json';
         <!-- Success State -->
         <div id="state-success" class="gen-state" hidden>
           <div class="success-block">
-            <span class="success-icon">&#10004;</span>
+            <span class="success-icon" aria-hidden="true">&#10004;</span>
             <h3 class="success-heading">Pack Ready!</h3>
             <p class="success-text">
               Your addon pack has been generated successfully.
@@ -511,8 +511,8 @@ import addons from '../data/addons.json';
 </style>
 
 <script>
-  import { getCartItems, onCartChange } from '../scripts/cart';
   import type { Addon } from '../types/addon';
+  import { getCartItems, onCartChange } from '../scripts/cart';
 
   // ── Read addon data from embedded JSON ──────────────────────────────────
   const dataEl = document.getElementById('addon-data');
@@ -537,9 +537,19 @@ import addons from '../data/addons.json';
 
   // ── Helpers ─────────────────────────────────────────────────────────────
 
+  const addonMap = new Map<string, Addon>();
+  for (const addon of allAddons) {
+    addonMap.set(addon.id, addon);
+  }
+
   function getCartAddons(): Addon[] {
     const cartIds = getCartItems();
-    return allAddons.filter((a) => cartIds.includes(a.id));
+    const result: Addon[] = [];
+    for (const id of cartIds) {
+      const addon = addonMap.get(id);
+      if (addon) result.push(addon);
+    }
+    return result;
   }
 
   function parseFileSize(size: string): number {
@@ -571,13 +581,27 @@ import addons from '../data/addons.json';
     cartAddons.forEach((addon) => {
       const li = document.createElement('li');
       li.className = 'addon-list-item';
-      li.innerHTML = `
-        <img class="addon-list-thumb" src="${addon.thumbnail}" alt="${addon.name}" />
-        <div class="addon-list-info">
-          <span class="addon-list-name">${addon.name}</span>
-          <span class="addon-list-type">${addon.type}</span>
-        </div>
-      `;
+
+      const img = document.createElement('img');
+      img.className = 'addon-list-thumb';
+      img.src = addon.thumbnail;
+      img.alt = addon.name;
+
+      const info = document.createElement('div');
+      info.className = 'addon-list-info';
+
+      const nameSpan = document.createElement('span');
+      nameSpan.className = 'addon-list-name';
+      nameSpan.textContent = addon.name;
+
+      const typeSpan = document.createElement('span');
+      typeSpan.className = 'addon-list-type';
+      typeSpan.textContent = addon.type;
+
+      info.appendChild(nameSpan);
+      info.appendChild(typeSpan);
+      li.appendChild(img);
+      li.appendChild(info);
       addonListEl.appendChild(li);
     });
 
@@ -587,7 +611,10 @@ import addons from '../data/addons.json';
       const slot = document.createElement('div');
       slot.className = 'pack-slot';
       slot.title = addon.name;
-      slot.innerHTML = `<img src="${addon.thumbnail}" alt="${addon.name}" />`;
+      const slotImg = document.createElement('img');
+      slotImg.src = addon.thumbnail;
+      slotImg.alt = addon.name;
+      slot.appendChild(slotImg);
       packGrid.appendChild(slot);
     });
 
@@ -623,8 +650,19 @@ import addons from '../data/addons.json';
     'Finalizing pack...',
   ];
 
+  let activeInterval: ReturnType<typeof setInterval> | null = null;
+
+  function cancelGeneration(): void {
+    if (activeInterval !== null) {
+      clearInterval(activeInterval);
+      activeInterval = null;
+    }
+  }
+
   function simulateGeneration(): void {
+    cancelGeneration();
     showState('loading');
+    generateBtn.disabled = true;
     progressBar.style.width = '0%';
     loadingText.textContent = loadingMessages[0];
 
@@ -634,7 +672,7 @@ import addons from '../data/addons.json';
 
     let currentStep = 0;
 
-    const interval = setInterval(() => {
+    activeInterval = setInterval(() => {
       currentStep++;
       const progress = Math.min((currentStep / steps) * 100, 100);
       progressBar.style.width = `${progress}%`;
@@ -644,7 +682,7 @@ import addons from '../data/addons.json';
       }
 
       if (currentStep >= steps) {
-        clearInterval(interval);
+        cancelGeneration();
         setTimeout(() => {
           showState('success');
         }, 300);
@@ -655,14 +693,19 @@ import addons from '../data/addons.json';
   // ── Event Listeners ─────────────────────────────────────────────────────
 
   generateBtn.addEventListener('click', () => {
+    if (activeInterval !== null) return;
     simulateGeneration();
   });
 
   resetBtn.addEventListener('click', () => {
+    cancelGeneration();
+    generateBtn.disabled = false;
     showState('default');
   });
 
   onCartChange(() => {
+    cancelGeneration();
+    generateBtn.disabled = false;
     render();
     showState('default');
   });
