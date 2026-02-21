@@ -29,14 +29,15 @@ import addons from '../data/addons.json';
         class="search-input"
         type="text"
         placeholder="Search addons..."
+        aria-label="Search addons by name, description, or tags"
       />
 
-      <div class="filter-buttons">
-        <button class="filter-btn filter-btn--active" data-type="all" type="button">All</button>
-        <button class="filter-btn" data-type="mob" type="button">Mob</button>
-        <button class="filter-btn" data-type="item" type="button">Item</button>
-        <button class="filter-btn" data-type="block" type="button">Block</button>
-        <button class="filter-btn" data-type="system" type="button">System</button>
+      <div class="filter-buttons" role="group" aria-label="Filter by addon type">
+        <button class="filter-btn filter-btn--active" data-type="all" type="button" aria-pressed="true">All</button>
+        <button class="filter-btn" data-type="mob" type="button" aria-pressed="false">Mob</button>
+        <button class="filter-btn" data-type="item" type="button" aria-pressed="false">Item</button>
+        <button class="filter-btn" data-type="block" type="button" aria-pressed="false">Block</button>
+        <button class="filter-btn" data-type="system" type="button" aria-pressed="false">System</button>
       </div>
     </div>
 
@@ -65,6 +66,8 @@ import addons from '../data/addons.json';
         </div>
       ))}
     </div>
+
+    <p id="no-results" class="no-results" hidden>No addons match your search.</p>
   </main>
 </body>
 </html>
@@ -275,6 +278,17 @@ import addons from '../data/addons.json';
     background: var(--color-stone);
   }
 
+  /* ── No Results Message ─────────────────────────────────────────────── */
+
+  .no-results {
+    font-family: var(--font-body);
+    font-size: var(--text-lg);
+    color: var(--color-stone);
+    text-align: center;
+    padding: var(--space-7) var(--space-4);
+    margin: 0;
+  }
+
   /* ── Responsive: mobile (375px+) ──────────────────────────────────────── */
 
   @media (max-width: 640px) {
@@ -318,15 +332,19 @@ import addons from '../data/addons.json';
 <script>
   import { addToCart, isInCart, onCartChange } from '../scripts/cart';
 
-  const searchInput = document.getElementById('search-input') as HTMLInputElement;
+  const searchInput = document.getElementById('search-input') as HTMLInputElement | null;
   const filterBtns = document.querySelectorAll('.filter-btn');
   const cards = document.querySelectorAll('.addon-card');
   const cartBtns = document.querySelectorAll('.cart-btn');
+  const noResults = document.getElementById('no-results');
 
   let activeType = 'all';
 
   function filterCards() {
+    if (!searchInput) return;
     const searchText = searchInput.value.toLowerCase();
+    let visibleCount = 0;
+
     cards.forEach((card) => {
       const el = card as HTMLElement;
       const type = el.dataset.type || '';
@@ -337,16 +355,28 @@ import addons from '../data/addons.json';
       const matchesType = activeType === 'all' || type === activeType;
       const matchesSearch = !searchText || name.includes(searchText) || desc.includes(searchText) || tags.includes(searchText);
 
-      el.style.display = matchesType && matchesSearch ? '' : 'none';
+      const visible = matchesType && matchesSearch;
+      el.style.display = visible ? '' : 'none';
+      if (visible) visibleCount++;
     });
+
+    if (noResults) {
+      noResults.hidden = visibleCount > 0;
+    }
   }
 
-  searchInput.addEventListener('input', filterCards);
+  if (searchInput) {
+    searchInput.addEventListener('input', filterCards);
+  }
 
   filterBtns.forEach((btn) => {
     btn.addEventListener('click', () => {
-      filterBtns.forEach((b) => b.classList.remove('filter-btn--active'));
+      filterBtns.forEach((b) => {
+        b.classList.remove('filter-btn--active');
+        b.setAttribute('aria-pressed', 'false');
+      });
       btn.classList.add('filter-btn--active');
+      btn.setAttribute('aria-pressed', 'true');
       activeType = (btn as HTMLElement).dataset.type || 'all';
       filterCards();
     });
@@ -354,7 +384,8 @@ import addons from '../data/addons.json';
 
   // Cart button handling
   function updateCartBtn(btn: Element) {
-    const id = (btn as HTMLElement).dataset.addonId || '';
+    const id = (btn as HTMLElement).dataset.addonId;
+    if (!id) return;
     if (isInCart(id)) {
       btn.textContent = 'In Cart';
       btn.classList.add('cart-btn--in-cart');
@@ -367,7 +398,8 @@ import addons from '../data/addons.json';
     btn.addEventListener('click', (e) => {
       e.preventDefault();
       e.stopPropagation();
-      const id = (btn as HTMLElement).dataset.addonId || '';
+      const id = (btn as HTMLElement).dataset.addonId;
+      if (!id) return;
       addToCart(id);
       updateCartBtn(btn);
     });

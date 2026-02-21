@@ -17,7 +17,11 @@ function loadCart(): string[] {
 }
 
 function saveCart(items: string[]): void {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+  } catch {
+    // localStorage unavailable or quota exceeded – continue in-memory only
+  }
   window.dispatchEvent(
     new CustomEvent(CART_EVENT, { detail: { count: items.length } }),
   );
