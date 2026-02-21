@@ -1,0 +1,715 @@
+---
+import type { Addon } from '../types/addon';
+import NavHeader from '../components/NavHeader.astro';
+import '../styles/global.css';
+import addons from '../data/addons.json';
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" />
+  <title>Preview &amp; Download — Everything Addon</title>
+</head>
+<body>
+  <NavHeader />
+
+  <main class="preview-page">
+    <!-- ── Page Heading ─────────────────────────────────────────────────── -->
+    <h1 class="preview-title">Preview &amp; Download</h1>
+
+    <!-- ── Empty State ────────────────────────────────────────────────── -->
+    <div id="empty-state" class="empty-state" hidden>
+      <p class="empty-message">Your cart is empty.</p>
+      <p class="empty-hint">Add some addons before generating a pack.</p>
+      <a class="empty-link" href="/catalog">Browse Catalog</a>
+    </div>
+
+    <!-- ── Content (shown when cart has items) ────────────────────────── -->
+    <div id="preview-content" hidden>
+
+      <!-- ── Addon Summary List ─────────────────────────────────────── -->
+      <section class="summary-section" aria-label="Cart summary">
+        <h2 class="section-heading">Addons in Your Pack</h2>
+        <ul id="addon-list" class="addon-list"></ul>
+      </section>
+
+      <!-- ── Visual Preview: Addon Pack ─────────────────────────────── -->
+      <section class="pack-preview" aria-label="Addon pack preview">
+        <div class="pack-frame">
+          <div class="pack-header">
+            <span class="pack-icon" aria-hidden="true">&#9776;</span>
+            <span class="pack-label">Your Addon Pack</span>
+          </div>
+          <div id="pack-grid" class="pack-grid"></div>
+          <div class="pack-footer">
+            <span class="pack-count" id="pack-count">0 items</span>
+            <span class="pack-separator">|</span>
+            <span class="pack-size" id="pack-size">0 MB</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── Generation Flow ────────────────────────────────────────── -->
+      <section class="generate-section" aria-label="Generate addon pack">
+
+        <!-- Default State -->
+        <div id="state-default" class="gen-state">
+          <p class="gen-info">
+            Ready to combine your selected addons into a single pack.
+          </p>
+          <button id="generate-btn" class="generate-btn" type="button">
+            Generate Addon Pack
+          </button>
+        </div>
+
+        <!-- Loading State -->
+        <div id="state-loading" class="gen-state" hidden>
+          <div class="loading-block">
+            <div class="progress-bar-track">
+              <div id="progress-bar" class="progress-bar-fill"></div>
+            </div>
+            <p class="loading-text" id="loading-text">Gathering resources...</p>
+          </div>
+        </div>
+
+        <!-- Success State -->
+        <div id="state-success" class="gen-state" hidden>
+          <div class="success-block">
+            <span class="success-icon" aria-hidden="true">&#10004;</span>
+            <h3 class="success-heading">Pack Ready!</h3>
+            <p class="success-text">
+              Your addon pack has been generated successfully.
+            </p>
+            <button id="reset-btn" class="reset-btn" type="button">
+              Generate Again
+            </button>
+          </div>
+        </div>
+
+      </section>
+    </div>
+  </main>
+
+  <!-- Embed addon data for client script -->
+  <script id="addon-data" type="application/json" set:html={JSON.stringify(addons)} />
+</body>
+</html>
+
+<style>
+  /* ── Page Container ──────────────────────────────────────────────────── */
+
+  .preview-page {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: var(--space-5) var(--space-4) var(--space-7);
+  }
+
+  /* ── Page Title ──────────────────────────────────────────────────────── */
+
+  .preview-title {
+    font-family: var(--font-heading);
+    font-size: var(--text-2xl);
+    color: var(--color-primary);
+    margin-bottom: var(--space-5);
+  }
+
+  /* ── Empty State ─────────────────────────────────────────────────────── */
+
+  .empty-state {
+    text-align: center;
+    padding: var(--space-7) var(--space-4);
+  }
+
+  .empty-message {
+    font-family: var(--font-heading);
+    font-size: var(--text-lg);
+    color: var(--color-text-light);
+    margin: 0 0 var(--space-3);
+  }
+
+  .empty-hint {
+    font-family: var(--font-body);
+    font-size: var(--text-base);
+    color: var(--color-stone);
+    margin: 0 0 var(--space-5);
+  }
+
+  .empty-link {
+    display: inline-block;
+    font-family: var(--font-heading);
+    font-size: var(--text-sm);
+    color: var(--color-text-light);
+    background: var(--color-primary);
+    border: var(--space-1) solid var(--color-moss);
+    border-radius: var(--border-radius);
+    padding: var(--space-3) var(--space-5);
+    text-decoration: none;
+    box-shadow: var(--space-1) var(--space-1) 0 var(--color-moss);
+    transition: background 0.15s, border-color 0.15s;
+  }
+
+  .empty-link:hover,
+  .empty-link:focus-visible {
+    background: var(--color-accent);
+    border-color: var(--color-oak);
+    box-shadow: var(--space-1) var(--space-1) 0 var(--color-oak);
+  }
+
+  /* ── Section Headings ────────────────────────────────────────────────── */
+
+  .section-heading {
+    font-family: var(--font-heading);
+    font-size: var(--text-base);
+    color: var(--color-accent);
+    margin-bottom: var(--space-3);
+  }
+
+  /* ── Addon Summary List ──────────────────────────────────────────────── */
+
+  .summary-section {
+    margin-bottom: var(--space-6);
+  }
+
+  .addon-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .addon-list-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    background: var(--color-bg-mid);
+    border: var(--space-1) solid var(--color-border);
+    border-radius: var(--border-radius);
+    padding: var(--space-2) var(--space-3);
+  }
+
+  .addon-list-thumb {
+    width: 3rem;
+    height: 3rem;
+    object-fit: cover;
+    border: var(--space-1) solid var(--color-border);
+    border-radius: var(--border-radius);
+    flex-shrink: 0;
+  }
+
+  .addon-list-info {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    min-width: 0;
+  }
+
+  .addon-list-name {
+    font-family: var(--font-heading);
+    font-size: var(--text-xs);
+    color: var(--color-text-light);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .addon-list-type {
+    font-family: var(--font-heading);
+    font-size: var(--text-xs);
+    color: var(--color-text-dark);
+    background: var(--color-accent);
+    border-radius: var(--border-radius);
+    padding: var(--space-1) var(--space-2);
+    text-transform: capitalize;
+    line-height: 1;
+    align-self: flex-start;
+  }
+
+  /* ── Pack Preview (Inventory / Crafting Result Style) ─────────────── */
+
+  .pack-preview {
+    margin-bottom: var(--space-6);
+  }
+
+  .pack-frame {
+    background: var(--color-bg-mid);
+    border: var(--space-1) solid var(--color-border);
+    border-radius: var(--border-radius);
+    box-shadow:
+      inset 0 0 0 var(--space-1) var(--color-clay),
+      var(--space-1) var(--space-1) 0 var(--color-border);
+    overflow: hidden;
+  }
+
+  .pack-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    background: var(--color-clay);
+    padding: var(--space-2) var(--space-3);
+    border-bottom: var(--space-1) solid var(--color-border);
+  }
+
+  .pack-icon {
+    font-size: var(--text-base);
+    color: var(--color-text-light);
+  }
+
+  .pack-label {
+    font-family: var(--font-heading);
+    font-size: var(--text-xs);
+    color: var(--color-text-light);
+    margin: 0;
+  }
+
+  .pack-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 4.5rem);
+    gap: var(--space-2);
+    padding: var(--space-4);
+    min-height: 6rem;
+    justify-content: center;
+  }
+
+  .pack-slot {
+    width: 4.5rem;
+    height: 4.5rem;
+    background: var(--color-bg-dark);
+    border: var(--space-1) solid var(--color-border);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    box-shadow:
+      inset var(--space-1) var(--space-1) 0 rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  .pack-slot img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    image-rendering: pixelated;
+  }
+
+  .pack-slot-empty {
+    opacity: 0.4;
+  }
+
+  .pack-footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-3);
+    background: var(--color-clay);
+    padding: var(--space-2) var(--space-3);
+    border-top: var(--space-1) solid var(--color-border);
+  }
+
+  .pack-count,
+  .pack-size {
+    font-family: var(--font-heading);
+    font-size: var(--text-xs);
+    color: var(--color-text-light);
+  }
+
+  .pack-separator {
+    color: var(--color-border);
+    font-size: var(--text-xs);
+  }
+
+  /* ── Generation Flow ─────────────────────────────────────────────────── */
+
+  .generate-section {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .gen-state {
+    text-align: center;
+  }
+
+  .gen-info {
+    font-family: var(--font-body);
+    font-size: var(--text-base);
+    color: var(--color-stone);
+    margin: 0 0 var(--space-4);
+  }
+
+  /* ── Generate Button ─────────────────────────────────────────────────── */
+
+  .generate-btn {
+    font-family: var(--font-heading);
+    font-size: var(--text-sm);
+    color: var(--color-text-light);
+    background: var(--color-primary);
+    border: var(--space-1) solid var(--color-moss);
+    border-radius: var(--border-radius);
+    padding: var(--space-3) var(--space-6);
+    cursor: pointer;
+    box-shadow: var(--space-1) var(--space-1) 0 var(--color-moss);
+    transition: background 0.15s, border-color 0.15s;
+  }
+
+  .generate-btn:hover,
+  .generate-btn:focus-visible {
+    background: var(--color-accent);
+    border-color: var(--color-oak);
+    box-shadow: var(--space-1) var(--space-1) 0 var(--color-oak);
+  }
+
+  .generate-btn:active {
+    box-shadow: none;
+    transform: translate(var(--space-1), var(--space-1));
+  }
+
+  /* ── Loading State ───────────────────────────────────────────────────── */
+
+  .loading-block {
+    padding: var(--space-4);
+  }
+
+  .progress-bar-track {
+    width: 100%;
+    height: var(--space-4);
+    background: var(--color-bg-dark);
+    border: var(--space-1) solid var(--color-border);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    margin-bottom: var(--space-3);
+    box-shadow: inset var(--space-1) var(--space-1) 0 rgba(0, 0, 0, 0.3);
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    width: 0%;
+    background: var(--color-primary);
+    transition: width 0.3s linear;
+    box-shadow: inset 0 calc(-1 * var(--space-1)) 0 var(--color-moss);
+  }
+
+  .loading-text {
+    font-family: var(--font-heading);
+    font-size: var(--text-xs);
+    color: var(--color-accent);
+    margin: 0;
+    animation: blink 1s steps(2, start) infinite;
+  }
+
+  @keyframes blink {
+    50% { opacity: 0.4; }
+  }
+
+  /* ── Success State ───────────────────────────────────────────────────── */
+
+  .success-block {
+    background: var(--color-bg-mid);
+    border: var(--space-1) solid var(--color-primary);
+    border-radius: var(--border-radius);
+    padding: var(--space-5) var(--space-4);
+    box-shadow: var(--space-1) var(--space-1) 0 var(--color-moss);
+  }
+
+  .success-icon {
+    display: inline-block;
+    font-size: var(--text-3xl);
+    color: var(--color-primary);
+    margin-bottom: var(--space-3);
+  }
+
+  .success-heading {
+    font-family: var(--font-heading);
+    font-size: var(--text-lg);
+    color: var(--color-primary);
+    margin-bottom: var(--space-3);
+  }
+
+  .success-text {
+    font-family: var(--font-body);
+    font-size: var(--text-base);
+    color: var(--color-text-light);
+    margin: 0 0 var(--space-5);
+  }
+
+  .reset-btn {
+    font-family: var(--font-heading);
+    font-size: var(--text-xs);
+    color: var(--color-text-light);
+    background: var(--color-bg-mid);
+    border: var(--space-1) solid var(--color-border);
+    border-radius: var(--border-radius);
+    padding: var(--space-2) var(--space-4);
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+  }
+
+  .reset-btn:hover,
+  .reset-btn:focus-visible {
+    background: var(--color-primary);
+    border-color: var(--color-moss);
+  }
+
+  /* ── Responsive: mobile (375px+) ──────────────────────────────────────── */
+
+  @media (max-width: 640px) {
+    .preview-page {
+      padding: var(--space-4) var(--space-3) var(--space-6);
+    }
+
+    .preview-title {
+      font-size: var(--text-lg);
+      margin-bottom: var(--space-4);
+    }
+
+    .section-heading {
+      font-size: var(--text-sm);
+    }
+
+    .pack-grid {
+      grid-template-columns: repeat(auto-fill, 3.5rem);
+      gap: var(--space-1);
+      padding: var(--space-3);
+    }
+
+    .pack-slot {
+      width: 3.5rem;
+      height: 3.5rem;
+    }
+
+    .addon-list-thumb {
+      width: 2.5rem;
+      height: 2.5rem;
+    }
+
+    .generate-btn {
+      font-size: var(--text-xs);
+      padding: var(--space-2) var(--space-4);
+      width: 100%;
+    }
+
+    .empty-message {
+      font-size: var(--text-base);
+    }
+
+    .empty-hint {
+      font-size: var(--text-sm);
+    }
+
+    .empty-link {
+      font-size: var(--text-xs);
+      padding: var(--space-2) var(--space-4);
+    }
+  }
+</style>
+
+<script>
+  import type { Addon } from '../types/addon';
+  import { getCartItems, onCartChange } from '../scripts/cart';
+
+  // ── Read addon data from embedded JSON ──────────────────────────────────
+  const dataEl = document.getElementById('addon-data');
+  if (!dataEl) throw new Error('Missing addon-data script element');
+  const allAddons: Addon[] = JSON.parse(dataEl.textContent || '[]');
+
+  // ── DOM references ──────────────────────────────────────────────────────
+  const emptyState = document.getElementById('empty-state') as HTMLElement;
+  const previewContent = document.getElementById('preview-content') as HTMLElement;
+  const addonListEl = document.getElementById('addon-list') as HTMLUListElement;
+  const packGrid = document.getElementById('pack-grid') as HTMLElement;
+  const packCount = document.getElementById('pack-count') as HTMLElement;
+  const packSize = document.getElementById('pack-size') as HTMLElement;
+
+  const stateDefault = document.getElementById('state-default') as HTMLElement;
+  const stateLoading = document.getElementById('state-loading') as HTMLElement;
+  const stateSuccess = document.getElementById('state-success') as HTMLElement;
+  const generateBtn = document.getElementById('generate-btn') as HTMLButtonElement;
+  const resetBtn = document.getElementById('reset-btn') as HTMLButtonElement;
+  const progressBar = document.getElementById('progress-bar') as HTMLElement;
+  const loadingText = document.getElementById('loading-text') as HTMLElement;
+
+  // ── Helpers ─────────────────────────────────────────────────────────────
+
+  const addonMap = new Map<string, Addon>();
+  for (const addon of allAddons) {
+    addonMap.set(addon.id, addon);
+  }
+
+  function getCartAddons(): Addon[] {
+    const cartIds = getCartItems();
+    const result: Addon[] = [];
+    for (const id of cartIds) {
+      const addon = addonMap.get(id);
+      if (addon) result.push(addon);
+    }
+    return result;
+  }
+
+  function parseFileSize(size: string): number {
+    const match = size.match(/([\d.]+)\s*(MB|KB|GB)/i);
+    if (!match) return 0;
+    const value = parseFloat(match[1]);
+    const unit = match[2].toUpperCase();
+    if (unit === 'KB') return value / 1024;
+    if (unit === 'GB') return value * 1024;
+    return value;
+  }
+
+  // ── Render ──────────────────────────────────────────────────────────────
+
+  function render(): void {
+    const cartAddons = getCartAddons();
+
+    if (cartAddons.length === 0) {
+      emptyState.hidden = false;
+      previewContent.hidden = true;
+      return;
+    }
+
+    emptyState.hidden = true;
+    previewContent.hidden = false;
+
+    // Build addon summary list
+    addonListEl.innerHTML = '';
+    cartAddons.forEach((addon) => {
+      const li = document.createElement('li');
+      li.className = 'addon-list-item';
+
+      const img = document.createElement('img');
+      img.className = 'addon-list-thumb';
+      img.src = addon.thumbnail;
+      img.alt = addon.name;
+
+      const info = document.createElement('div');
+      info.className = 'addon-list-info';
+
+      const nameSpan = document.createElement('span');
+      nameSpan.className = 'addon-list-name';
+      nameSpan.textContent = addon.name;
+
+      const typeSpan = document.createElement('span');
+      typeSpan.className = 'addon-list-type';
+      typeSpan.textContent = addon.type;
+
+      info.appendChild(nameSpan);
+      info.appendChild(typeSpan);
+      li.appendChild(img);
+      li.appendChild(info);
+      addonListEl.appendChild(li);
+    });
+
+    // Build pack grid (inventory-style thumbnail slots)
+    packGrid.innerHTML = '';
+    cartAddons.forEach((addon) => {
+      const slot = document.createElement('div');
+      slot.className = 'pack-slot';
+      slot.title = addon.name;
+      const slotImg = document.createElement('img');
+      slotImg.src = addon.thumbnail;
+      slotImg.alt = addon.name;
+      slot.appendChild(slotImg);
+      packGrid.appendChild(slot);
+    });
+
+    // Add empty slots to fill out the grid (minimum 9 slots like a crafting grid)
+    const totalSlots = Math.max(9, cartAddons.length);
+    for (let i = cartAddons.length; i < totalSlots; i++) {
+      const slot = document.createElement('div');
+      slot.className = 'pack-slot pack-slot-empty';
+      packGrid.appendChild(slot);
+    }
+
+    // Update footer stats
+    packCount.textContent = `${cartAddons.length} item${cartAddons.length === 1 ? '' : 's'}`;
+
+    const totalMB = cartAddons.reduce((sum, a) => sum + parseFileSize(a.fileSize), 0);
+    packSize.textContent = `${totalMB.toFixed(1)} MB`;
+  }
+
+  // ── Generation Flow ─────────────────────────────────────────────────────
+
+  function showState(state: 'default' | 'loading' | 'success'): void {
+    stateDefault.hidden = state !== 'default';
+    stateLoading.hidden = state !== 'loading';
+    stateSuccess.hidden = state !== 'success';
+  }
+
+  const loadingMessages = [
+    'Gathering resources...',
+    'Combining behavior packs...',
+    'Merging resource packs...',
+    'Resolving dependencies...',
+    'Compiling addon manifest...',
+    'Finalizing pack...',
+  ];
+
+  let activeInterval: ReturnType<typeof setInterval> | null = null;
+
+  function cancelGeneration(): void {
+    if (activeInterval !== null) {
+      clearInterval(activeInterval);
+      activeInterval = null;
+    }
+  }
+
+  function simulateGeneration(): void {
+    cancelGeneration();
+    showState('loading');
+    generateBtn.disabled = true;
+    progressBar.style.width = '0%';
+    loadingText.textContent = loadingMessages[0];
+
+    const totalDuration = 2500;
+    const steps = loadingMessages.length;
+    const stepDuration = totalDuration / steps;
+
+    let currentStep = 0;
+
+    activeInterval = setInterval(() => {
+      currentStep++;
+      const progress = Math.min((currentStep / steps) * 100, 100);
+      progressBar.style.width = `${progress}%`;
+
+      if (currentStep < steps) {
+        loadingText.textContent = loadingMessages[currentStep];
+      }
+
+      if (currentStep >= steps) {
+        cancelGeneration();
+        setTimeout(() => {
+          showState('success');
+        }, 300);
+      }
+    }, stepDuration);
+  }
+
+  // ── Event Listeners ─────────────────────────────────────────────────────
+
+  generateBtn.addEventListener('click', () => {
+    if (activeInterval !== null) return;
+    simulateGeneration();
+  });
+
+  resetBtn.addEventListener('click', () => {
+    cancelGeneration();
+    generateBtn.disabled = false;
+    showState('default');
+  });
+
+  onCartChange(() => {
+    cancelGeneration();
+    generateBtn.disabled = false;
+    render();
+    showState('default');
+  });
+
+  // ── Initial Render ──────────────────────────────────────────────────────
+  render();
+</script>
