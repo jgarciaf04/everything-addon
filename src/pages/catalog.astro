@@ -514,6 +514,7 @@ import addons from '../data/addons.json';
   const cards = document.querySelectorAll('.addon-card');
   const cartBtns = document.querySelectorAll('.cart-btn');
   const noResults = document.getElementById('no-results');
+  const ctaCard = document.querySelector('.cta-card') as HTMLElement | null;
 
   let activeType = 'all';
 
@@ -539,6 +540,9 @@ import addons from '../data/addons.json';
 
     if (noResults) {
       noResults.hidden = visibleCount > 0;
+    }
+    if (ctaCard) {
+      ctaCard.style.display = visibleCount > 0 ? '' : 'none';
     }
   }
 
@@ -567,6 +571,10 @@ import addons from '../data/addons.json';
       btn.textContent = 'In Cart';
       btn.classList.add('cart-btn--in-cart');
       (btn as HTMLButtonElement).disabled = true;
+    } else {
+      btn.textContent = 'Add to Cart';
+      btn.classList.remove('cart-btn--in-cart');
+      (btn as HTMLButtonElement).disabled = false;
     }
   }
 

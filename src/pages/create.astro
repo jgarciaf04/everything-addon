@@ -59,7 +59,7 @@ import '../styles/global.css';
       <div class="result-card">
         <img
           class="result-thumb"
-          src="/images/addons/netherite-trident/netherite-trident-thumb.png"
+          src="/images/addons/netherite-trident-thumb.png"
           alt="Lightning Blade"
         />
         <div class="result-body">
@@ -392,7 +392,7 @@ import '../styles/global.css';
       long: 'Forged in the heart of a thunderstorm...',
     },
     price: 0.10,
-    thumbnail: '/images/addons/netherite-trident/netherite-trident-thumb.png',
+    thumbnail: '/images/addons/netherite-trident-thumb.png',
     gallery: [],
     tags: ['weapon', 'custom', 'ai-generated'],
     mcVersion: '1.20+',
@@ -501,6 +501,10 @@ import '../styles/global.css';
 
   addToCartBtn.addEventListener('click', () => {
     addToCart(generatedAddon.id);
+    // Store generated addon data so the cart page can resolve it
+    try {
+      localStorage.setItem('ea-generated-addon', JSON.stringify(generatedAddon));
+    } catch (_) { /* storage unavailable */ }
     updateCartBtn();
   });
 
