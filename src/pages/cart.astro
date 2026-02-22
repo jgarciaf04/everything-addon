@@ -107,6 +107,74 @@ import addons from '../data/addons.json';
 
       </section>
     </div>
+
+    <!-- ── Preview & Generate Section (hidden until toggled) ────────────── -->
+    <div id="preview-section" class="preview-section" hidden>
+
+      <!-- ── Divider ──────────────────────────────────────────────────── -->
+      <hr class="section-divider" />
+
+      <!-- ── Addon Summary List ───────────────────────────────────────── -->
+      <section class="summary-section" aria-label="Pack summary">
+        <h2 class="section-heading">Addons in Your Pack</h2>
+        <ul id="addon-list" class="addon-list"></ul>
+      </section>
+
+      <!-- ── Visual Preview: Addon Pack ───────────────────────────────── -->
+      <section class="pack-preview" aria-label="Addon pack preview">
+        <div class="pack-frame">
+          <div class="pack-header">
+            <span class="pack-icon" aria-hidden="true">&#9776;</span>
+            <span class="pack-label">Your Addon Pack</span>
+          </div>
+          <div id="pack-grid" class="pack-grid"></div>
+          <div class="pack-footer">
+            <span class="pack-count" id="pack-count">0 items</span>
+            <span class="pack-separator">|</span>
+            <span class="pack-size" id="pack-size">0 MB</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── Generation Flow ──────────────────────────────────────────── -->
+      <section class="generate-section" aria-label="Generate addon pack">
+
+        <!-- Default State -->
+        <div id="state-default" class="gen-state">
+          <p class="gen-info">
+            Ready to combine your selected addons into a single pack.
+          </p>
+          <button id="generate-btn" class="generate-btn" type="button">
+            Generate Addon Pack
+          </button>
+        </div>
+
+        <!-- Loading State -->
+        <div id="state-loading" class="gen-state" hidden>
+          <div class="loading-block">
+            <div class="progress-bar-track">
+              <div id="progress-bar" class="progress-bar-fill"></div>
+            </div>
+            <p class="loading-text" id="loading-text">Gathering resources...</p>
+          </div>
+        </div>
+
+        <!-- Success State -->
+        <div id="state-success" class="gen-state" hidden>
+          <div class="success-block">
+            <span class="success-icon" aria-hidden="true">&#10004;</span>
+            <h3 class="success-heading">Pack Ready!</h3>
+            <p class="success-text">
+              Your addon pack has been generated successfully.
+            </p>
+            <button id="reset-btn" class="reset-btn" type="button">
+              Generate Again
+            </button>
+          </div>
+        </div>
+
+      </section>
+    </div>
   </main>
 
   <!-- Hidden addon data for client script -->
