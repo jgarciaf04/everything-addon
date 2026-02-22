@@ -30,6 +30,9 @@ import NavHeader from '../components/NavHeader.astro';
 
       <!-- Decorative pixel grid overlay -->
       <div class="hero-pixels" aria-hidden="true"></div>
+
+      <!-- Decorative pixel-art Creeper face -->
+      <div class="pixel-art-creeper" aria-hidden="true"></div>
     </section>
 
     <!-- ── Features Section ─────────────────────────────────────────────── -->
@@ -230,6 +233,93 @@ import NavHeader from '../components/NavHeader.astro';
     margin: 0;
   }
 
+  /* ── Pixel-Art Creeper Face (8×8 grid, 8px per pixel = 64×64) ─────── */
+
+  .pixel-art-creeper {
+    position: absolute;
+    right: 10%;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1;
+    width: 8px;
+    height: 8px;
+    background: var(--color-primary);
+    opacity: 0.35;
+    pointer-events: none;
+    box-shadow:
+      /* Row 0 — full light face */
+       8px 0 0 0 var(--color-primary),
+      16px 0 0 0 var(--color-primary),
+      24px 0 0 0 var(--color-primary),
+      32px 0 0 0 var(--color-primary),
+      40px 0 0 0 var(--color-primary),
+      48px 0 0 0 var(--color-primary),
+      56px 0 0 0 var(--color-primary),
+      /* Row 1 — eyes row top */
+       0px 8px 0 0 var(--color-primary),
+       8px 8px 0 0 var(--color-moss),
+      16px 8px 0 0 var(--color-moss),
+      24px 8px 0 0 var(--color-primary),
+      32px 8px 0 0 var(--color-primary),
+      40px 8px 0 0 var(--color-moss),
+      48px 8px 0 0 var(--color-moss),
+      56px 8px 0 0 var(--color-primary),
+      /* Row 2 — eyes row bottom */
+       0px 16px 0 0 var(--color-primary),
+       8px 16px 0 0 var(--color-moss),
+      16px 16px 0 0 var(--color-moss),
+      24px 16px 0 0 var(--color-primary),
+      32px 16px 0 0 var(--color-primary),
+      40px 16px 0 0 var(--color-moss),
+      48px 16px 0 0 var(--color-moss),
+      56px 16px 0 0 var(--color-primary),
+      /* Row 3 — nose bridge */
+       0px 24px 0 0 var(--color-primary),
+       8px 24px 0 0 var(--color-primary),
+      16px 24px 0 0 var(--color-primary),
+      24px 24px 0 0 var(--color-moss),
+      32px 24px 0 0 var(--color-moss),
+      40px 24px 0 0 var(--color-primary),
+      48px 24px 0 0 var(--color-primary),
+      56px 24px 0 0 var(--color-primary),
+      /* Row 4 — mouth top */
+       0px 32px 0 0 var(--color-primary),
+       8px 32px 0 0 var(--color-primary),
+      16px 32px 0 0 var(--color-moss),
+      24px 32px 0 0 var(--color-moss),
+      32px 32px 0 0 var(--color-moss),
+      40px 32px 0 0 var(--color-moss),
+      48px 32px 0 0 var(--color-primary),
+      56px 32px 0 0 var(--color-primary),
+      /* Row 5 — mouth middle */
+       0px 40px 0 0 var(--color-primary),
+       8px 40px 0 0 var(--color-primary),
+      16px 40px 0 0 var(--color-moss),
+      24px 40px 0 0 var(--color-primary),
+      32px 40px 0 0 var(--color-primary),
+      40px 40px 0 0 var(--color-moss),
+      48px 40px 0 0 var(--color-primary),
+      56px 40px 0 0 var(--color-primary),
+      /* Row 6 — mouth bottom */
+       0px 48px 0 0 var(--color-primary),
+       8px 48px 0 0 var(--color-primary),
+      16px 48px 0 0 var(--color-moss),
+      24px 48px 0 0 var(--color-primary),
+      32px 48px 0 0 var(--color-primary),
+      40px 48px 0 0 var(--color-moss),
+      48px 48px 0 0 var(--color-primary),
+      56px 48px 0 0 var(--color-primary),
+      /* Row 7 — full light face */
+       0px 56px 0 0 var(--color-primary),
+       8px 56px 0 0 var(--color-primary),
+      16px 56px 0 0 var(--color-primary),
+      24px 56px 0 0 var(--color-primary),
+      32px 56px 0 0 var(--color-primary),
+      40px 56px 0 0 var(--color-primary),
+      48px 56px 0 0 var(--color-primary),
+      56px 56px 0 0 var(--color-primary);
+  }
+
   /* ── Responsive: mobile (375px+) ──────────────────────────────────────── */
 
   @media (max-width: 640px) {
@@ -283,6 +373,10 @@ import NavHeader from '../components/NavHeader.astro';
 
     .bottom-cta-text {
       font-size: var(--text-base);
+    }
+
+    .pixel-art-creeper {
+      display: none;
     }
   }
 </style>

@@ -92,7 +92,7 @@ const { addon } = Astro.props;
       <!-- Sidebar: specs, price, cart -->
       <aside class="sidebar">
         <!-- Price -->
-        <p class="addon-price">${addon.price.toFixed(2)}</p>
+        <p class="addon-price">&euro;{addon.price.toFixed(2)}</p>
 
         <!-- Add to Cart -->
         <button

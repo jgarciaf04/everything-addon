@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Design Tokens - Minecraft-Inspired Theme
+   Design Tokens - Blue-Family Theme
    ==========================================================================
    All custom properties are defined on :root for global access.
    ========================================================================== */
@@ -9,31 +9,31 @@
   /* ========================================================================
      Color Palette
      ========================================================================
-     Earth-tone colors inspired by Minecraft's block palette:
-     dirt, oak/spruce/birch planks, grass, stone, and sand.
+     Blue-family palette ranging from deep navy to light ice blue,
+     with gold and teal accents.
      ======================================================================== */
 
   /* Backgrounds */
-  --color-bg-dark:   #3b2d1e; /* Dark oak / dirt brown                      */
-  --color-bg-mid:    #6b5340; /* Spruce plank medium brown                  */
-  --color-bg-light:  #d6c4a1; /* Birch plank light tan / cream              */
+  --color-bg-dark:   #0a1628; /* Deep navy                                  */
+  --color-bg-mid:    #1a3a5c; /* Mid slate blue                             */
+  --color-bg-light:  #b8d4e8; /* Light ice blue                             */
 
   /* Brand / Action */
-  --color-primary:   #6a9b38; /* Grass-block green (WCAG AA on dark bg)     */
-  --color-accent:    #c6a84b; /* Sand / gold tan                            */
+  --color-primary:   #2d7dd2; /* Lapis blue                                 */
+  --color-accent:    #f0c040; /* Gold accent                                */
 
   /* Text */
-  --color-text-light: #f0e6d2; /* Off-white, readable on dark backgrounds   */
-  --color-text-dark:  #2b2017; /* Very dark brown / charcoal                */
+  --color-text-light: #e8f0f8; /* Light blue-white                          */
+  --color-text-dark:  #0a1220; /* Very dark navy                            */
 
   /* Borders & Dividers */
-  --color-border:    #7e7e76; /* Stone gray                                 */
+  --color-border:    #4a6a8a; /* Blue-gray                                  */
 
   /* Extended palette */
-  --color-stone:     #9a9a8e; /* Cobblestone / lighter stone                */
-  --color-oak:       #b08c4a; /* Oak plank warm brown                       */
-  --color-moss:      #4a6b2a; /* Moss / dark grass green                    */
-  --color-clay:      #8e6e52; /* Terracotta / clay brown                    */
+  --color-stone:     #6b8ba8; /* Lighter blue-gray                          */
+  --color-oak:       #3a8fb7; /* Teal accent                                */
+  --color-moss:      #142d4f; /* Deep blue shadow                           */
+  --color-clay:      #3d6080; /* Mid-blue                                   */
 
   /* ========================================================================
      Spacing Scale
