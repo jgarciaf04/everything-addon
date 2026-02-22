@@ -40,6 +40,25 @@ import '../styles/global.css';
           Generate
         </button>
       </div>
+
+      <!-- ── Examples ───────────────────────────────────────────────────── -->
+      <div class="examples-section">
+        <h2 class="examples-heading">Examples</h2>
+        <div class="examples-grid">
+          <div class="example-card">
+            <img class="example-thumb" src="/images/addons/golden-butterfly-thumb.jpg" alt="Golden Butterfly" />
+            <p class="example-prompt">A golden butterfly that helps brew flying potions</p>
+          </div>
+          <div class="example-card">
+            <img class="example-thumb" src="/images/addons/pixel-toothbrush-thumb.jpg" alt="Pixel Toothbrush" />
+            <p class="example-prompt">A pixel toothbrush that gives you an extra heart</p>
+          </div>
+          <div class="example-card">
+            <img class="example-thumb" src="/images/addons/loyal-hound-companion-thumb.jpg" alt="Loyal Hound Companion" />
+            <p class="example-prompt">A loyal dog like a wolf but never gets angry</p>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- ── Loading State ────────────────────────────────────────────────── -->
@@ -189,6 +208,59 @@ import '../styles/global.css';
   .create-generate-btn:disabled {
     opacity: 0.6;
     cursor: default;
+  }
+
+  /* ── Examples Section ─────────────────────────────────────────────── */
+
+  .examples-section {
+    margin-top: var(--space-5);
+    text-align: left;
+  }
+
+  .examples-heading {
+    font-family: var(--font-heading);
+    font-size: var(--text-xs);
+    color: var(--color-accent);
+    text-align: left;
+    margin: 0 0 var(--space-3);
+  }
+
+  .examples-grid {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  @media (min-width: 641px) {
+    .examples-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-3);
+    }
+  }
+
+  .example-card {
+    background: var(--color-bg-mid);
+    border: var(--space-1) solid var(--color-border);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+  }
+
+  .example-thumb {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    display: block;
+  }
+
+  .example-prompt {
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    color: var(--color-stone);
+    margin: 0;
+    padding: var(--space-3);
+    line-height: 1.5;
+    word-break: break-word;
   }
 
   /* ── Loading State ───────────────────────────────────────────────────── */
@@ -405,6 +477,11 @@ import '../styles/global.css';
 
     .result-desc {
       font-size: var(--text-xs);
+    }
+
+    .example-prompt {
+      font-size: var(--text-xs);
+      padding: var(--space-2);
     }
   }
 </style>
