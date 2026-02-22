@@ -1,0 +1,2727 @@
+diff --git a/docs/PRD.md b/docs/PRD.md
+index 9cb773f..73ab1b0 100644
+--- a/docs/PRD.md
++++ b/docs/PRD.md
+@@ -29,7 +29,7 @@ All stack decisions are final constraints, not recommendations.
+ 
+ ## 3. Pages and Features
+ 
+-The site MUST consist of exactly five pages. All pages MUST share a persistent navigation header that includes links to the Landing Page, Addon Catalog Page, and Cart Page, plus a cart item count indicator. Each page is described below with its required content and behavior.
++The site MUST consist of exactly four pages. All pages MUST share a persistent navigation header that includes links to the Landing Page, Addon Catalog Page, and Cart Page, plus a cart item count indicator. Each page is described below with its required content and behavior.
+ 
+ ### 3.1 Landing Page
+ 
+@@ -37,11 +37,13 @@ The site MUST consist of exactly five pages. All pages MUST share a persistent n
+ 
+ **Required Elements**:
+ - Hero banner containing Minecraft-themed visuals, a headline, and a subheadline describing the product value proposition.
++- A pixel-art Minecraft character or mob decorative element present within the hero section.
+ - Features section listing the selling points of the addon store (minimum three distinct feature highlights).
+ - A primary call-to-action (CTA) button that navigates the user to the Addon Catalog Page.
+ 
+ **Acceptance Criteria**:
+ - [ ] The hero banner is visible on page load without scrolling on both mobile and desktop viewports.
++- [ ] A pixel-art Minecraft character or mob decorative element is visible within the hero section without scrolling on both mobile and desktop viewports.
+ - [ ] The features section displays a minimum of three feature highlights.
+ - [ ] The CTA button navigates to the Addon Catalog Page when clicked.
+ - [ ] No broken image references exist on the page.
+@@ -53,12 +55,15 @@ The site MUST consist of exactly five pages. All pages MUST share a persistent n
+ **Purpose**: Allow users to browse, filter, and search available addons, and add them to their cart.
+ 
+ **Required Elements**:
++- A pixel-art decorative element in the page header area.
+ - A grid displaying between 15 and 20 mock addon cards.
+ - Each addon card MUST show: thumbnail image, addon name, type badge, short description, price, and an "Add to Cart" button.
+ - A filter control allowing users to filter the grid by type: `mob`, `item`, `block`, `system`. Selecting a type shows only addons of that type. A default "All" state shows every addon.
+ - A search bar that filters the visible grid in real time by matching the user's input against addon name, short description, and tags fields.
++- A "Create Your Own Item" CTA card or button that is visually distinct from the regular addon grid cards and links to the Create Page.
+ 
+ **Acceptance Criteria**:
++- [ ] A pixel-art decorative element is present in the page header area.
+ - [ ] The grid renders between 15 and 20 addon cards on initial load with no filter or search active.
+ - [ ] Each card displays all six required elements: thumbnail, name, type badge, short description, price, "Add to Cart" button.
+ - [ ] Selecting a type filter reduces the grid to only cards matching that type.
+@@ -67,6 +72,7 @@ The site MUST consist of exactly five pages. All pages MUST share a persistent n
+ - [ ] Combining a type filter and a search term applies both constraints simultaneously.
+ - [ ] Clicking "Add to Cart" on a card adds that addon to the cart state. The button MUST reflect an "added" state if the addon is already in the cart (e.g., disabled or label change).
+ - [ ] Clicking an addon card (outside the "Add to Cart" button) navigates to that addon's Detail Page.
++- [ ] The "Create Your Own Item" CTA is visually distinguishable from regular addon cards and navigates to the Create Page when clicked.
+ 
+ ---
+ 
+@@ -93,42 +99,60 @@ The site MUST consist of exactly five pages. All pages MUST share a persistent n
+ 
+ ---
+ 
+-### 3.4 Cart Page
++### 3.4 Cart & Preview Page
+ 
+-**Purpose**: Display the user's selected addons and allow them to proceed to the preview and generation step.
++**Purpose**: Display the user's selected addons and provide an inline preview and simulated generation flow without navigating away from the page.
+ 
+ **Required Elements**:
+ - A list of all addons currently in the cart. Each list item MUST show: addon name, price, and a remove button.
+-- A total price value calculated as the sum of all addon prices in the cart.
+-- A "Preview & Generate" button that navigates to the Preview & Download Page.
++- A total price value calculated as item count × 0.10.
++- A "Preview & Generate" CTA that, when activated, reveals an inline preview section directly below the cart list without navigating to a new page.
++- The inline preview section MUST contain: a summary list of all addons included in the pack, a visual preview element representing the combined addon pack, a "Generate Addon" button, and a mocked success state displayed after the simulated generation completes.
+ 
+ **Acceptance Criteria**:
+ - [ ] The page displays all addons currently in the cart.
+ - [ ] Each cart item shows the addon name and price.
+ - [ ] Clicking the remove button on a cart item removes that addon from the cart and updates the list and total immediately without a page reload.
+-- [ ] The total price reflects the sum of all current cart item prices.
+-- [ ] If the cart is empty, the page displays an empty state message and the "Preview & Generate" button is disabled or hidden.
+-- [ ] Clicking "Preview & Generate" navigates to the Preview & Download Page.
++- [ ] The total price reflects item count × 0.10.
++- [ ] If the cart is empty, the page displays an empty state message and the "Preview & Generate" CTA is disabled or hidden.
++- [ ] Activating "Preview & Generate" reveals the inline preview section on the same page; no navigation event occurs.
++- [ ] The inline preview section displays the names of all addons in the current cart.
++- [ ] The visual preview element is present within the inline preview section.
++- [ ] Clicking "Generate Addon" triggers a visible loading or processing state.
++- [ ] After the simulated process completes, a success state is displayed (e.g., a success message or mock download confirmation).
++- [ ] No real file is generated or downloaded. The success state is entirely cosmetic and mocked.
+ 
+ ---
+ 
+-### 3.5 Preview & Download Page
++### 3.5 Create Your Own Item Page
++
++**Purpose**: Present a mocked AI-driven addon creation experience. No real AI, network request, or server-side logic is involved at any point.
+ 
+-**Purpose**: Present a final summary of selected addons and simulate the addon pack generation and download.
++**File**: `src/pages/create.astro`
+ 
+ **Required Elements**:
+-- A summary list of all addons included in the generated pack.
+-- A visual preview element representing the combined addon pack.
+-- A "Generate Addon" button that, when clicked, triggers a simulated generation process.
+-- A mocked success state displayed after the simulated generation completes, representing a successful download or pack creation.
++- A text input where the user describes the desired addon.
++- A "Generate" button that initiates the fake generation flow.
++- A 2–4 second fake generation animation consisting of a progress bar and rotating status messages. The animation style MUST match the preview simulation style used on the Cart & Preview Page.
++- After the animation completes, a pre-made static addon card is displayed as if AI-generated. This card is identical in structure to regular addon cards and MUST display: name, description, type badge, thumbnail, "Add to Cart" button, and price of €0.10.
++
++**Constraints**:
++- MUST NOT call any external API.
++- MUST NOT execute any server-side logic.
++- MUST NOT generate real content of any kind.
++- MUST NOT issue any network request during the entire flow.
++- The displayed result card MUST be a pre-authored static asset; it is always the same regardless of the text input value.
+ 
+ **Acceptance Criteria**:
+-- [ ] The page displays the names of all addons in the current cart.
+-- [ ] The visual preview element is present on the page.
+-- [ ] Clicking "Generate Addon" triggers a visible loading or processing state.
+-- [ ] After the simulated process completes, a success state is displayed (e.g., a success message or mock download confirmation).
+-- [ ] No real file is generated or downloaded. The success state is entirely cosmetic and mocked.
+-- [ ] If the cart is empty when this page is reached, the page displays an appropriate empty state or redirects to the Cart Page.
++- [ ] The page is reachable from the Addon Catalog Page via the "Create Your Own Item" CTA.
++- [ ] A text input and a "Generate" button are present on the page.
++- [ ] Clicking "Generate" starts the fake animation; the animation lasts between 2 and 4 seconds.
++- [ ] The animation includes a visible progress bar and at least two distinct rotating status messages.
++- [ ] After the animation completes, the pre-made static addon card is displayed.
++- [ ] The result card displays: name, description, type badge, thumbnail, "Add to Cart" button, and price €0.10.
++- [ ] Clicking "Add to Cart" on the result card adds that static addon to the cart state.
++- [ ] No network request is issued at any point during the flow (verifiable via browser DevTools Network tab showing zero requests).
++- [ ] The displayed result is identical on every invocation, regardless of the text input value.
+ 
+ ---
+ 
+@@ -162,10 +186,10 @@ All visual design decisions MUST follow the Minecraft-inspired aesthetic defined
+ | Attribute | Requirement |
+ |-----------|-------------|
+ | Visual style | Pixelated; textures and icons MUST use pixel-art style assets |
+-| Color palette | Earth tones (browns, tans, greens, grays) consistent with Minecraft's block palette |
++| Color palette | Blue-based palette (sky, water, lapis, diamond tones) consistent with Minecraft's block palette |
+ | Typography | Minecraft-style fonts for headings and display text; legible system or web font acceptable for body text |
+ | UI elements | Block-like; rectangular components with sharp corners; no rounded buttons or card corners |
+-| Responsiveness | All five pages MUST render correctly on mobile (minimum 375px wide) and desktop (minimum 1280px wide) viewports |
++| Responsiveness | All four pages MUST render correctly on mobile (minimum 375px wide) and desktop (minimum 1280px wide) viewports |
+ 
+ ---
+ 
+@@ -173,8 +197,10 @@ All visual design decisions MUST follow the Minecraft-inspired aesthetic defined
+ 
+ All pricing displayed in this POC is mocked. No real payment processing exists or is integrated.
+ 
++- All addons are priced at a flat €0.10 per addon.
++- All price displays use the EUR currency symbol (€) throughout the site.
++- Cart total is calculated as item count × 0.10.
+ - Addon prices are numeric mock values stored in the mock JSON data.
+-- The cart total is a calculated sum of mock prices.
+ - Payment gateways, checkout flows, and financial transactions of any kind MUST NOT be implemented in the POC.
+ - Any UI element that resembles a payment action (e.g., a "Buy" button) MUST either be absent or clearly non-functional in the POC scope.
+ 
+@@ -184,12 +210,14 @@ All pricing displayed in this POC is mocked. No real payment processing exists o
+ 
+ ### In Scope
+ 
+-- Five static pages as defined in Section 3.
++- Four static pages as defined in Section 3.
+ - Addon catalog rendered from static mock JSON.
+ - Client-side cart state (in-memory or browser storage; no server persistence required).
+ - Type filtering and name/short-description/tags search on the catalog.
+ - Addon detail pages with gallery and specs.
+ - Simulated generation and mocked download success state.
++- Mocked AI item creation feature (static, no real AI).
++- Pixel-art Minecraft character/mob decorative elements.
+ - Minecraft-inspired visual design system.
+ - Responsive layout for mobile and desktop.
+ 
+@@ -199,6 +227,7 @@ The following MUST NOT be implemented in the POC:
+ 
+ - Real payment processing of any kind.
+ - Real addon file generation, merging, or packaging.
++- Real AI or LLM integration of any kind.
+ - User authentication, accounts, or session management.
+ - Database, API, or any server-side backend.
+ - Addon compatibility checking between selected items.
+diff --git a/src/data/addons.json b/src/data/addons.json
+index 94459ae..6a8c836 100644
+--- a/src/data/addons.json
++++ b/src/data/addons.json
+@@ -8,7 +8,7 @@
+       "short": "Tame a baby Ender Dragon that fights alongside you and grows stronger over time.",
+       "long": "Hatch your very own Ender Dragon from a dragon egg and raise it as a loyal companion. Your dragon starts small but grows through three stages, gaining new abilities like fire breath and aerial attacks. Feed it chorus fruit to accelerate growth and unlock a rideable form for soaring across the End dimension and beyond."
+     },
+-    "price": 4.99,
++    "price": 0.10,
+     "thumbnail": "/images/addons/ender-dragon-companion-thumb.png",
+     "gallery": [
+       "/images/addons/ender-dragon-companion-gallery-1.png",
+@@ -28,7 +28,7 @@
+       "short": "Summon a tamed Warden to patrol your base and obliterate hostile mobs on sight.",
+       "long": "Craft a sculk totem to bind a Warden to your will as the ultimate base defender. The Warden Guardian patrols a configurable radius around the totem, using its sonic boom attack against any hostile mob that dares approach. Upgrade its armor with reinforced deepslate plating to make it nearly indestructible. Includes custom idle and alert animations."
+     },
+-    "price": 4.99,
++    "price": 0.10,
+     "thumbnail": "/images/addons/warden-guardian-thumb.png",
+     "gallery": [
+       "/images/addons/warden-guardian-gallery-1.png",
+@@ -48,7 +48,7 @@
+       "short": "Ride a spectral Phantom mount with custom wing animations and dive-bomb attacks.",
+       "long": "Capture and tame Phantoms using a new enchanted membrane lure. Once tamed, your Phantom becomes a rideable flying mount with smooth wing animations and responsive aerial controls. Execute devastating dive-bomb attacks on ground targets for massive damage. The Phantom also grants slow falling to its rider when dismounting mid-air."
+     },
+-    "price": 2.49,
++    "price": 0.10,
+     "thumbnail": "/images/addons/phantom-wings-thumb.png",
+     "gallery": [
+       "/images/addons/phantom-wings-gallery-1.png",
+@@ -67,7 +67,7 @@
+       "short": "Recruit an armored Blaze warrior that wields dual blaze rods in melee combat.",
+       "long": "Forge a nether star scepter to summon the Blaze Rod Warrior, a heavily armored Blaze variant that fights with dual blaze rod weapons in close quarters. Unlike regular Blazes, this warrior charges into melee range, spinning its rods in devastating combos. It is immune to fire and lava, making it the perfect companion for Nether expeditions and fortress raids."
+     },
+-    "price": 2.49,
++    "price": 0.10,
+     "thumbnail": "/images/addons/blaze-rod-warrior-thumb.png",
+     "gallery": [
+       "/images/addons/blaze-rod-warrior-gallery-1.png",
+@@ -87,7 +87,7 @@
+       "short": "A fearsome Drowned boss mob that commands an undead crew and guards ocean treasure.",
+       "long": "Encounter the Drowned Captain, a new mini-boss that spawns in ocean ruins and shipwrecks with a crew of elite Drowned soldiers. The Captain wields a corrupted trident with chain lightning and can summon tidal waves to sweep players off their feet. Defeat the Captain to earn unique loot including nautilus shell armor and the Captain's enchanted trident."
+     },
+-    "price": 7.99,
++    "price": 0.10,
+     "thumbnail": "/images/addons/drowned-captain-thumb.png",
+     "gallery": [
+       "/images/addons/drowned-captain-gallery-1.png",
+@@ -107,7 +107,7 @@
+       "short": "An elite Wither Skeleton with full netherite armor, a shield, and wither aura attacks.",
+       "long": "The Wither Skeleton Knight is a formidable Nether fortress guardian clad in custom netherite plate armor and wielding a wither-infused greatsword. It blocks incoming attacks with a bone shield and radiates a wither aura that debuffs nearby players. Defeating it drops rare wither bones used to craft the Witherbane sword, a weapon that deals bonus damage to all undead mobs."
+     },
+-    "price": 7.99,
++    "price": 0.10,
+     "thumbnail": "/images/addons/wither-skeleton-knight-thumb.png",
+     "gallery": [
+       "/images/addons/wither-skeleton-knight-gallery-1.png",
+@@ -126,7 +126,7 @@
+       "short": "Upgrade your trident with netherite for devastating thrown and melee damage.",
+       "long": "Combine a trident with a netherite ingot at a smithing table to forge the Netherite Trident, the most powerful throwable weapon in the game. It deals 12 base damage in melee, returns faster when thrown, and is immune to fire and lava destruction. Includes a unique dark metallic texture and custom throw animation with purple particle trails."
+     },
+-    "price": 2.49,
++    "price": 0.10,
+     "thumbnail": "/images/addons/netherite-trident-thumb.png",
+     "gallery": [
+       "/images/addons/netherite-trident-gallery-1.png",
+@@ -145,7 +145,7 @@
+       "short": "A crystalline bow that fires piercing amethyst shards with a satisfying chime.",
+       "long": "Craft the Amethyst Bow using amethyst shards and string at a crafting table. This elegant weapon fires custom amethyst shard projectiles that pierce through up to two targets and emit the iconic amethyst chime on impact. Fully charged shots apply a brief slowness effect, making it ideal for crowd control. The bow features a translucent purple crystal model with subtle glow effects."
+     },
+-    "price": 2.49,
++    "price": 0.10,
+     "thumbnail": "/images/addons/amethyst-bow-thumb.png",
+     "gallery": [
+       "/images/addons/amethyst-bow-gallery-1.png",
+@@ -165,7 +165,7 @@
+       "short": "Channel sculk energy through this staff to unleash sonic boom blasts at range.",
+       "long": "The Echo Shard Staff is a rare weapon crafted from echo shards and a blaze rod. Right-click to charge and release a directional sonic boom that damages and knocks back all entities in a line. The staff has a cooldown between uses and consumes durability, but can be repaired with echo shards. Its sculk-themed design pulses with teal energy when fully charged."
+     },
+-    "price": 4.99,
++    "price": 0.10,
+     "thumbnail": "/images/addons/echo-shard-staff-thumb.png",
+     "gallery": [
+       "/images/addons/echo-shard-staff-gallery-1.png",
+@@ -184,7 +184,7 @@
+       "short": "A vibration-powered crossbow that locks onto nearby mobs and fires homing bolts.",
+       "long": "Infuse a crossbow with sculk catalysts to create the Sculk Crossbow, a weapon that detects vibrations to lock onto targets. When aimed near a mob, the crosshair snaps to the target and fired bolts curve toward them with mild homing capability. Bolts apply darkness for 3 seconds on hit, disorienting enemies. The crossbow features animated sculk veins that spread across its surface."
+     },
+-    "price": 4.99,
++    "price": 0.10,
+     "thumbnail": "/images/addons/sculk-crossbow-thumb.png",
+     "gallery": [
+       "/images/addons/sculk-crossbow-gallery-1.png",
+@@ -204,7 +204,7 @@
+       "short": "A full set of copper tools that oxidize over time, gaining unique enchantment bonuses.",
+       "long": "This pack adds a complete copper tool tier including pickaxe, axe, shovel, hoe, and sword. Copper tools start with baseline stats between stone and iron but oxidize through four stages over time, each stage granting a different passive bonus like fortune, efficiency, or looting. Wax your tools with honeycomb to lock in your preferred oxidation stage. Includes all four patina color variants."
+     },
+-    "price": 4.99,
++    "price": 0.10,
+     "thumbnail": "/images/addons/copper-pickaxe-set-thumb.png",
+     "gallery": [
+       "/images/addons/copper-pickaxe-set-gallery-1.png",
+@@ -224,7 +224,7 @@
+       "short": "A handheld device that rapid-fires ender pearls for fast, precise teleportation.",
+       "long": "The Ender Pearl Launcher is a redstone-powered handheld cannon that loads up to 8 ender pearls and fires them in quick succession with pinpoint accuracy. Unlike hand-thrown pearls, launched pearls travel in a flat trajectory at high speed, making long-range teleportation reliable and precise. The launcher features a reload animation and an ammo counter displayed on the item tooltip. Perfect for PvP and parkour maps."
+     },
+-    "price": 7.99,
++    "price": 0.10,
+     "thumbnail": "/images/addons/ender-pearl-launcher-thumb.png",
+     "gallery": [
+       "/images/addons/ender-pearl-launcher-gallery-1.png",
+@@ -243,7 +243,7 @@
+       "short": "Over 40 deepslate dungeon blocks including pillars, arches, chains, and trap floors.",
+       "long": "Transform your builds into atmospheric underground dungeons with this comprehensive deepslate block set. Includes carved pillars, crumbling arches, iron-grate floors, wall-mounted chains, moss-covered bricks, and hidden trap blocks that collapse under player weight. All blocks connect seamlessly with vanilla deepslate variants and support waterlogging. Ideal for adventure maps, RPG servers, and survival base decoration."
+     },
+-    "price": 9.99,
++    "price": 0.10,
+     "thumbnail": "/images/addons/deepslate-dungeon-set-thumb.png",
+     "gallery": [
+       "/images/addons/deepslate-dungeon-set-gallery-1.png",
+@@ -263,7 +263,7 @@
+       "short": "Elegant cherry wood furniture including tables, chairs, shelves, and lanterns.",
+       "long": "Decorate your cherry grove home with this beautiful furniture set crafted from cherry wood planks. Includes dining tables, cushioned chairs, bookshelves, wall lanterns, flower vases, kitchen counters, and a kotatsu-style low table. All pieces feature the signature pink cherry wood aesthetic with subtle petal particle effects. Furniture blocks are interactable where appropriate, with chairs you can sit in and shelves that display items."
+     },
+-    "price": 7.99,
++    "price": 0.10,
+     "thumbnail": "/images/addons/cherry-blossom-furniture-thumb.png",
+     "gallery": [
+       "/images/addons/cherry-blossom-furniture-gallery-1.png",
+@@ -283,7 +283,7 @@
+       "short": "Decorative amethyst blocks with glowing crystals, chimes, and geode formations.",
+       "long": "Expand the amethyst geode aesthetic with 25 new crystal block variants. This pack includes large crystal formations, glowing amethyst lamps, crystal chime wind catchers, polished amethyst slabs and stairs, and hollow geode shell blocks. All blocks emit a soft purple glow and play gentle chime sounds when players walk nearby. Crystal clusters can be oriented in any direction for maximum creative flexibility."
+     },
+-    "price": 4.99,
++    "price": 0.10,
+     "thumbnail": "/images/addons/amethyst-crystal-pack-thumb.png",
+     "gallery": [
+       "/images/addons/amethyst-crystal-pack-gallery-1.png",
+@@ -302,7 +302,7 @@
+       "short": "Advanced sculk sensor blocks for building wireless redstone and detection systems.",
+       "long": "Take sculk technology to the next level with specialized sensor blocks that filter and relay vibrations with precision. This pack includes directional sensors, frequency filters, signal amplifiers, and sculk relay nodes that transmit redstone signals wirelessly up to 64 blocks. Build sophisticated alarm systems, automatic doors, and hidden mechanisms without a single piece of redstone dust. Includes a guidebook item with circuit diagrams and tutorials."
+     },
+-    "price": 9.99,
++    "price": 0.10,
+     "thumbnail": "/images/addons/sculk-sensor-array-thumb.png",
+     "gallery": [
+       "/images/addons/sculk-sensor-array-gallery-1.png",
+@@ -322,7 +322,7 @@
+       "short": "Buildable copper pipe blocks that transport items, water, and redstone signals.",
+       "long": "Construct elaborate pipe networks using connectable copper pipe blocks that automatically route items between containers. Pipes oxidize through four visual stages just like vanilla copper, and different oxidation levels affect transport speed. The pack includes straight pipes, elbows, T-junctions, valves, and filter blocks that sort items by type. Water pipes can irrigate farmland in a radius, and redstone pipes carry signals around corners without repeaters."
+     },
+-    "price": 9.99,
++    "price": 0.10,
+     "thumbnail": "/images/addons/copper-pipe-network-thumb.png",
+     "gallery": [
+       "/images/addons/copper-pipe-network-gallery-1.png",
+@@ -342,7 +342,7 @@
+       "short": "Tropical mangrove blocks with stilted foundations, rope bridges, and thatched roofs.",
+       "long": "Build stunning tropical villages and swamp outposts with this mangrove-themed construction set. Includes stilted foundation posts, woven rope bridges, thatched roof panels, mangrove root lattice walls, hanging vine curtains, and mud-brick accent blocks. All pieces blend naturally with vanilla mangrove wood and muddy mangrove roots. The set is designed for elevated builds over water, with foundation blocks that snap to varying heights for an organic, uneven look."
+     },
+-    "price": 7.99,
++    "price": 0.10,
+     "thumbnail": "/images/addons/mangrove-building-set-thumb.png",
+     "gallery": [
+       "/images/addons/mangrove-building-set-gallery-1.png",
+@@ -362,7 +362,7 @@
+       "short": "A comprehensive in-game UI for managing world rules, difficulty, mob spawning, and tick speed without commands.",
+       "long": "The World Settings Manager adds a sleek, touch-friendly settings panel accessible from a custom craftable tablet item or the pause menu. Operators and world owners can toggle game rules, adjust difficulty, control mob spawning categories, set random tick speed, manage weather cycles, and configure player permissions — all without typing a single slash command. Changes are logged with timestamps and player names so server admins can audit who changed what. The addon also supports preset profiles that can be saved, loaded, and shared as exportable files, making it easy to switch between survival, creative building, and minigame configurations instantly."
+     },
+-    "price": 4.99,
++    "price": 0.10,
+     "thumbnail": "/images/addons/world-settings-manager-thumb.png",
+     "gallery": [
+       "/images/addons/world-settings-manager-gallery-1.png",
+diff --git a/src/pages/addons/[slug].astro b/src/pages/addons/[slug].astro
+index 32dcd3c..3ddff89 100644
+--- a/src/pages/addons/[slug].astro
++++ b/src/pages/addons/[slug].astro
+@@ -92,7 +92,7 @@ const { addon } = Astro.props;
+       <!-- Sidebar: specs, price, cart -->
+       <aside class="sidebar">
+         <!-- Price -->
+-        <p class="addon-price">${addon.price.toFixed(2)}</p>
++        <p class="addon-price">&euro;{addon.price.toFixed(2)}</p>
+ 
+         <!-- Add to Cart -->
+         <button
+diff --git a/src/pages/cart.astro b/src/pages/cart.astro
+index 630560c..5e7772d 100644
+--- a/src/pages/cart.astro
++++ b/src/pages/cart.astro
+@@ -29,9 +29,9 @@ import addons from '../data/addons.json';
+     <div id="cart-summary" class="cart-summary" hidden>
+       <div class="cart-total-row">
+         <span class="cart-total-label">Total</span>
+-        <span id="cart-total" class="cart-total-value">$0.00</span>
++        <span id="cart-total" class="cart-total-value">&euro;0.00</span>
+       </div>
+-      <a id="preview-btn" class="preview-btn" href="/preview">Preview &amp; Generate</a>
++      <button id="preview-btn" class="preview-btn" type="button">Preview &amp; Generate</button>
+     </div>
+ 
+     <!-- ── Empty State ──────────────────────────────────────────────────── -->
+@@ -39,6 +39,74 @@ import addons from '../data/addons.json';
+       <p class="cart-empty-message">Your cart is empty</p>
+       <a class="cart-empty-link" href="/catalog">Browse the Catalog</a>
+     </div>
++
++    <!-- ── Preview & Generate Section (hidden until toggled) ────────────── -->
++    <div id="preview-section" class="preview-section" hidden>
++
++      <!-- ── Divider ──────────────────────────────────────────────────── -->
++      <hr class="section-divider" />
++
++      <!-- ── Addon Summary List ───────────────────────────────────────── -->
++      <section class="summary-section" aria-label="Pack summary">
++        <h2 class="section-heading">Addons in Your Pack</h2>
++        <ul id="addon-list" class="addon-list"></ul>
++      </section>
++
++      <!-- ── Visual Preview: Addon Pack ───────────────────────────────── -->
++      <section class="pack-preview" aria-label="Addon pack preview">
++        <div class="pack-frame">
++          <div class="pack-header">
++            <span class="pack-icon" aria-hidden="true">&#9776;</span>
++            <span class="pack-label">Your Addon Pack</span>
++          </div>
++          <div id="pack-grid" class="pack-grid"></div>
++          <div class="pack-footer">
++            <span class="pack-count" id="pack-count">0 items</span>
++            <span class="pack-separator">|</span>
++            <span class="pack-size" id="pack-size">0 MB</span>
++          </div>
++        </div>
++      </section>
++
++      <!-- ── Generation Flow ──────────────────────────────────────────── -->
++      <section class="generate-section" aria-label="Generate addon pack">
++
++        <!-- Default State -->
++        <div id="state-default" class="gen-state">
++          <p class="gen-info">
++            Ready to combine your selected addons into a single pack.
++          </p>
++          <button id="generate-btn" class="generate-btn" type="button">
++            Generate Addon Pack
++          </button>
++        </div>
++
++        <!-- Loading State -->
++        <div id="state-loading" class="gen-state" hidden>
++          <div class="loading-block">
++            <div class="progress-bar-track">
++              <div id="progress-bar" class="progress-bar-fill"></div>
++            </div>
++            <p class="loading-text" id="loading-text">Gathering resources...</p>
++          </div>
++        </div>
++
++        <!-- Success State -->
++        <div id="state-success" class="gen-state" hidden>
++          <div class="success-block">
++            <span class="success-icon" aria-hidden="true">&#10004;</span>
++            <h3 class="success-heading">Pack Ready!</h3>
++            <p class="success-text">
++              Your addon pack has been generated successfully.
++            </p>
++            <button id="reset-btn" class="reset-btn" type="button">
++              Generate Again
++            </button>
++          </div>
++        </div>
++
++      </section>
++    </div>
+   </main>
+ 
+   <!-- Hidden addon data for client script -->
+@@ -174,6 +242,7 @@ import addons from '../data/addons.json';
+ 
+   .preview-btn {
+     display: block;
++    width: 100%;
+     font-family: var(--font-heading);
+     font-size: var(--text-sm);
+     color: var(--color-text-light);
+@@ -230,6 +299,315 @@ import addons from '../data/addons.json';
+     box-shadow: var(--space-1) var(--space-1) 0 var(--color-oak);
+   }
+ 
++  /* ── Preview Section ───────────────────────────────────────────────── */
++
++  .preview-section {
++    margin-top: var(--space-5);
++  }
++
++  .section-divider {
++    border: none;
++    border-top: var(--space-1) solid var(--color-border);
++    margin: 0 0 var(--space-5);
++  }
++
++  /* ── Section Headings ──────────────────────────────────────────────── */
++
++  .section-heading {
++    font-family: var(--font-heading);
++    font-size: var(--text-base);
++    color: var(--color-accent);
++    margin-bottom: var(--space-3);
++  }
++
++  /* ── Addon Summary List ────────────────────────────────────────────── */
++
++  .summary-section {
++    margin-bottom: var(--space-6);
++  }
++
++  .addon-list {
++    list-style: none;
++    margin: 0;
++    padding: 0;
++    display: flex;
++    flex-direction: column;
++    gap: var(--space-2);
++  }
++
++  .addon-list-item {
++    display: flex;
++    align-items: center;
++    gap: var(--space-3);
++    background: var(--color-bg-mid);
++    border: var(--space-1) solid var(--color-border);
++    border-radius: var(--border-radius);
++    padding: var(--space-2) var(--space-3);
++  }
++
++  .addon-list-thumb {
++    width: 3rem;
++    height: 3rem;
++    object-fit: cover;
++    border: var(--space-1) solid var(--color-border);
++    border-radius: var(--border-radius);
++    flex-shrink: 0;
++  }
++
++  .addon-list-info {
++    display: flex;
++    flex-direction: column;
++    gap: var(--space-1);
++    min-width: 0;
++  }
++
++  .addon-list-name {
++    font-family: var(--font-heading);
++    font-size: var(--text-xs);
++    color: var(--color-text-light);
++    white-space: nowrap;
++    overflow: hidden;
++    text-overflow: ellipsis;
++  }
++
++  .addon-list-type {
++    font-family: var(--font-heading);
++    font-size: var(--text-xs);
++    color: var(--color-text-dark);
++    background: var(--color-accent);
++    border-radius: var(--border-radius);
++    padding: var(--space-1) var(--space-2);
++    text-transform: capitalize;
++    line-height: 1;
++    align-self: flex-start;
++  }
++
++  /* ── Pack Preview (Inventory / Crafting Result Style) ─────────────── */
++
++  .pack-preview {
++    margin-bottom: var(--space-6);
++  }
++
++  .pack-frame {
++    background: var(--color-bg-mid);
++    border: var(--space-1) solid var(--color-border);
++    border-radius: var(--border-radius);
++    box-shadow:
++      inset 0 0 0 var(--space-1) var(--color-clay),
++      var(--space-1) var(--space-1) 0 var(--color-border);
++    overflow: hidden;
++  }
++
++  .pack-header {
++    display: flex;
++    align-items: center;
++    gap: var(--space-2);
++    background: var(--color-clay);
++    padding: var(--space-2) var(--space-3);
++    border-bottom: var(--space-1) solid var(--color-border);
++  }
++
++  .pack-icon {
++    font-size: var(--text-base);
++    color: var(--color-text-light);
++  }
++
++  .pack-label {
++    font-family: var(--font-heading);
++    font-size: var(--text-xs);
++    color: var(--color-text-light);
++    margin: 0;
++  }
++
++  .pack-grid {
++    display: grid;
++    grid-template-columns: repeat(auto-fill, 4.5rem);
++    gap: var(--space-2);
++    padding: var(--space-4);
++    min-height: 6rem;
++    justify-content: center;
++  }
++
++  .pack-slot {
++    width: 4.5rem;
++    height: 4.5rem;
++    background: var(--color-bg-dark);
++    border: var(--space-1) solid var(--color-border);
++    border-radius: var(--border-radius);
++    overflow: hidden;
++    box-shadow:
++      inset var(--space-1) var(--space-1) 0 rgba(0, 0, 0, 0.3);
++    display: flex;
++    align-items: center;
++    justify-content: center;
++    position: relative;
++  }
++
++  .pack-slot img {
++    width: 100%;
++    height: 100%;
++    object-fit: cover;
++    display: block;
++    image-rendering: pixelated;
++  }
++
++  .pack-slot-empty {
++    opacity: 0.4;
++  }
++
++  .pack-footer {
++    display: flex;
++    align-items: center;
++    justify-content: center;
++    gap: var(--space-3);
++    background: var(--color-clay);
++    padding: var(--space-2) var(--space-3);
++    border-top: var(--space-1) solid var(--color-border);
++  }
++
++  .pack-count,
++  .pack-size {
++    font-family: var(--font-heading);
++    font-size: var(--text-xs);
++    color: var(--color-text-light);
++  }
++
++  .pack-separator {
++    color: var(--color-border);
++    font-size: var(--text-xs);
++  }
++
++  /* ── Generation Flow ───────────────────────────────────────────────── */
++
++  .generate-section {
++    max-width: 600px;
++    margin: 0 auto;
++  }
++
++  .gen-state {
++    text-align: center;
++  }
++
++  .gen-info {
++    font-family: var(--font-body);
++    font-size: var(--text-base);
++    color: var(--color-stone);
++    margin: 0 0 var(--space-4);
++  }
++
++  /* ── Generate Button ───────────────────────────────────────────────── */
++
++  .generate-btn {
++    font-family: var(--font-heading);
++    font-size: var(--text-sm);
++    color: var(--color-text-light);
++    background: var(--color-primary);
++    border: var(--space-1) solid var(--color-moss);
++    border-radius: var(--border-radius);
++    padding: var(--space-3) var(--space-6);
++    cursor: pointer;
++    box-shadow: var(--space-1) var(--space-1) 0 var(--color-moss);
++    transition: background 0.15s, border-color 0.15s;
++  }
++
++  .generate-btn:hover,
++  .generate-btn:focus-visible {
++    background: var(--color-accent);
++    border-color: var(--color-oak);
++    box-shadow: var(--space-1) var(--space-1) 0 var(--color-oak);
++  }
++
++  .generate-btn:active {
++    box-shadow: none;
++    transform: translate(var(--space-1), var(--space-1));
++  }
++
++  /* ── Loading State ─────────────────────────────────────────────────── */
++
++  .loading-block {
++    padding: var(--space-4);
++  }
++
++  .progress-bar-track {
++    width: 100%;
++    height: var(--space-4);
++    background: var(--color-bg-dark);
++    border: var(--space-1) solid var(--color-border);
++    border-radius: var(--border-radius);
++    overflow: hidden;
++    margin-bottom: var(--space-3);
++    box-shadow: inset var(--space-1) var(--space-1) 0 rgba(0, 0, 0, 0.3);
++  }
++
++  .progress-bar-fill {
++    height: 100%;
++    width: 0%;
++    background: var(--color-primary);
++    transition: width 0.3s linear;
++    box-shadow: inset 0 calc(-1 * var(--space-1)) 0 var(--color-moss);
++  }
++
++  .loading-text {
++    font-family: var(--font-heading);
++    font-size: var(--text-xs);
++    color: var(--color-accent);
++    margin: 0;
++    animation: blink 1s steps(2, start) infinite;
++  }
++
++  @keyframes blink {
++    50% { opacity: 0.4; }
++  }
++
++  /* ── Success State ─────────────────────────────────────────────────── */
++
++  .success-block {
++    background: var(--color-bg-mid);
++    border: var(--space-1) solid var(--color-primary);
++    border-radius: var(--border-radius);
++    padding: var(--space-5) var(--space-4);
++    box-shadow: var(--space-1) var(--space-1) 0 var(--color-moss);
++  }
++
++  .success-icon {
++    display: inline-block;
++    font-size: var(--text-3xl);
++    color: var(--color-primary);
++    margin-bottom: var(--space-3);
++  }
++
++  .success-heading {
++    font-family: var(--font-heading);
++    font-size: var(--text-lg);
++    color: var(--color-primary);
++    margin-bottom: var(--space-3);
++  }
++
++  .success-text {
++    font-family: var(--font-body);
++    font-size: var(--text-base);
++    color: var(--color-text-light);
++    margin: 0 0 var(--space-5);
++  }
++
++  .reset-btn {
++    font-family: var(--font-heading);
++    font-size: var(--text-xs);
++    color: var(--color-text-light);
++    background: var(--color-bg-mid);
++    border: var(--space-1) solid var(--color-border);
++    border-radius: var(--border-radius);
++    padding: var(--space-2) var(--space-4);
++    cursor: pointer;
++    transition: background 0.15s, border-color 0.15s;
++  }
++
++  .reset-btn:hover,
++  .reset-btn:focus-visible {
++    background: var(--color-primary);
++    border-color: var(--color-moss);
++  }
++
+   /* ── Responsive: mobile (375px+) ──────────────────────────────────── */
+ 
+   @media (max-width: 640px) {
+@@ -275,6 +653,32 @@ import addons from '../data/addons.json';
+       font-size: var(--text-xs);
+       padding: var(--space-2) var(--space-4);
+     }
++
++    .section-heading {
++      font-size: var(--text-sm);
++    }
++
++    .pack-grid {
++      grid-template-columns: repeat(auto-fill, 3.5rem);
++      gap: var(--space-1);
++      padding: var(--space-3);
++    }
++
++    .pack-slot {
++      width: 3.5rem;
++      height: 3.5rem;
++    }
++
++    .addon-list-thumb {
++      width: 2.5rem;
++      height: 2.5rem;
++    }
++
++    .generate-btn {
++      font-size: var(--text-xs);
++      padding: var(--space-2) var(--space-4);
++      width: 100%;
++    }
+   }
+ </style>
+ 
+@@ -288,10 +692,28 @@ import addons from '../data/addons.json';
+ 
+   const allAddons: Addon[] = JSON.parse(dataEl.textContent || '[]');
+ 
++  // ── DOM references: Cart ────────────────────────────────────────────────
+   const cartList = document.getElementById('cart-list') as HTMLDivElement;
+   const cartSummary = document.getElementById('cart-summary') as HTMLDivElement;
+   const cartTotal = document.getElementById('cart-total') as HTMLSpanElement;
+   const cartEmpty = document.getElementById('cart-empty') as HTMLDivElement;
++  const previewBtn = document.getElementById('preview-btn') as HTMLButtonElement;
++
++  // ── DOM references: Preview Section ─────────────────────────────────────
++  const previewSection = document.getElementById('preview-section') as HTMLDivElement;
++  const addonListEl = document.getElementById('addon-list') as HTMLUListElement;
++  const packGrid = document.getElementById('pack-grid') as HTMLElement;
++  const packCount = document.getElementById('pack-count') as HTMLElement;
++  const packSize = document.getElementById('pack-size') as HTMLElement;
++
++  // ── DOM references: Generation Flow ─────────────────────────────────────
++  const stateDefault = document.getElementById('state-default') as HTMLElement;
++  const stateLoading = document.getElementById('state-loading') as HTMLElement;
++  const stateSuccess = document.getElementById('state-success') as HTMLElement;
++  const generateBtn = document.getElementById('generate-btn') as HTMLButtonElement;
++  const resetBtn = document.getElementById('reset-btn') as HTMLButtonElement;
++  const progressBar = document.getElementById('progress-bar') as HTMLElement;
++  const loadingText = document.getElementById('loading-text') as HTMLElement;
+ 
+   /** Build an addon lookup map for fast access by id. */
+   const addonMap = new Map<string, Addon>();
+@@ -299,6 +721,30 @@ import addons from '../data/addons.json';
+     addonMap.set(addon.id, addon);
+   }
+ 
++  /** Get cart addons as full Addon objects. */
++  function getCartAddons(): Addon[] {
++    const cartIds = getCartItems();
++    const result: Addon[] = [];
++    for (const id of cartIds) {
++      const addon = addonMap.get(id);
++      if (addon) result.push(addon);
++    }
++    return result;
++  }
++
++  /** Parse a fileSize string like "2.5 MB" into a numeric MB value. */
++  function parseFileSize(size: string): number {
++    const match = size.match(/([\d.]+)\s*(MB|KB|GB)/i);
++    if (!match) return 0;
++    const value = parseFloat(match[1]);
++    const unit = match[2].toUpperCase();
++    if (unit === 'KB') return value / 1024;
++    if (unit === 'GB') return value * 1024;
++    return value;
++  }
++
++  // ── Render: Cart ────────────────────────────────────────────────────────
++
+   /** Render the full cart UI based on current cart state. */
+   function renderCart(): void {
+     const ids = getCartItems();
+@@ -307,6 +753,7 @@ import addons from '../data/addons.json';
+     if (ids.length === 0) {
+       cartSummary.hidden = true;
+       cartEmpty.hidden = false;
++      previewSection.hidden = true;
+       return;
+     }
+ 
+@@ -333,7 +780,7 @@ import addons from '../data/addons.json';
+ 
+       const price = document.createElement('span');
+       price.className = 'card-item-price';
+-      price.textContent = `$${addon.price.toFixed(2)}`;
++      price.textContent = `\u20AC${addon.price.toFixed(2)}`;
+ 
+       info.appendChild(name);
+       info.appendChild(price);
+@@ -352,14 +799,174 @@ import addons from '../data/addons.json';
+       cartList.appendChild(row);
+     }
+ 
+-    cartTotal.textContent = `$${total.toFixed(2)}`;
++    cartTotal.textContent = `\u20AC${total.toFixed(2)}`;
+   }
+ 
+-  // Initial render
+-  renderCart();
++  // ── Render: Preview Section ─────────────────────────────────────────────
++
++  /** Render the preview section (addon summary list, pack grid, metadata). */
++  function renderPreview(): void {
++    const cartAddons = getCartAddons();
++
++    // Build addon summary list
++    addonListEl.innerHTML = '';
++    cartAddons.forEach((addon) => {
++      const li = document.createElement('li');
++      li.className = 'addon-list-item';
++
++      const img = document.createElement('img');
++      img.className = 'addon-list-thumb';
++      img.src = addon.thumbnail;
++      img.alt = addon.name;
++
++      const info = document.createElement('div');
++      info.className = 'addon-list-info';
++
++      const nameSpan = document.createElement('span');
++      nameSpan.className = 'addon-list-name';
++      nameSpan.textContent = addon.name;
++
++      const typeSpan = document.createElement('span');
++      typeSpan.className = 'addon-list-type';
++      typeSpan.textContent = addon.type;
++
++      info.appendChild(nameSpan);
++      info.appendChild(typeSpan);
++      li.appendChild(img);
++      li.appendChild(info);
++      addonListEl.appendChild(li);
++    });
++
++    // Build pack grid (inventory-style thumbnail slots)
++    packGrid.innerHTML = '';
++    cartAddons.forEach((addon) => {
++      const slot = document.createElement('div');
++      slot.className = 'pack-slot';
++      slot.title = addon.name;
++      const slotImg = document.createElement('img');
++      slotImg.src = addon.thumbnail;
++      slotImg.alt = addon.name;
++      slot.appendChild(slotImg);
++      packGrid.appendChild(slot);
++    });
++
++    // Add empty slots to fill out the grid (minimum 9 slots like a crafting grid)
++    const totalSlots = Math.max(9, cartAddons.length);
++    for (let i = cartAddons.length; i < totalSlots; i++) {
++      const slot = document.createElement('div');
++      slot.className = 'pack-slot pack-slot-empty';
++      packGrid.appendChild(slot);
++    }
++
++    // Update footer stats
++    packCount.textContent = `${cartAddons.length} item${cartAddons.length === 1 ? '' : 's'}`;
++
++    const totalMB = cartAddons.reduce((sum, a) => sum + parseFileSize(a.fileSize), 0);
++    packSize.textContent = `${totalMB.toFixed(1)} MB`;
++  }
++
++  // ── Generation Flow ─────────────────────────────────────────────────────
++
++  function showState(state: 'default' | 'loading' | 'success'): void {
++    stateDefault.hidden = state !== 'default';
++    stateLoading.hidden = state !== 'loading';
++    stateSuccess.hidden = state !== 'success';
++  }
++
++  const loadingMessages = [
++    'Gathering resources...',
++    'Combining behavior packs...',
++    'Merging resource packs...',
++    'Resolving dependencies...',
++    'Compiling addon manifest...',
++    'Finalizing pack...',
++  ];
++
++  let activeInterval: ReturnType<typeof setInterval> | null = null;
++
++  function cancelGeneration(): void {
++    if (activeInterval !== null) {
++      clearInterval(activeInterval);
++      activeInterval = null;
++    }
++  }
++
++  function simulateGeneration(): void {
++    cancelGeneration();
++    showState('loading');
++    generateBtn.disabled = true;
++    progressBar.style.width = '0%';
++    loadingText.textContent = loadingMessages[0];
++
++    const totalDuration = 2500;
++    const steps = loadingMessages.length;
++    const stepDuration = totalDuration / steps;
++
++    let currentStep = 0;
++
++    activeInterval = setInterval(() => {
++      currentStep++;
++      const progress = Math.min((currentStep / steps) * 100, 100);
++      progressBar.style.width = `${progress}%`;
++
++      if (currentStep < steps) {
++        loadingText.textContent = loadingMessages[currentStep];
++      }
++
++      if (currentStep >= steps) {
++        cancelGeneration();
++        setTimeout(() => {
++          showState('success');
++        }, 300);
++      }
++    }, stepDuration);
++  }
++
++  // ── Event Listeners ─────────────────────────────────────────────────────
++
++  /** Toggle preview section visibility and scroll to it. */
++  previewBtn.addEventListener('click', () => {
++    if (previewSection.hidden) {
++      renderPreview();
++      previewSection.hidden = false;
++      previewSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
++    } else {
++      previewSection.hidden = true;
++      cancelGeneration();
++      generateBtn.disabled = false;
++      showState('default');
++    }
++  });
++
++  generateBtn.addEventListener('click', () => {
++    if (activeInterval !== null) return;
++    simulateGeneration();
++  });
++
++  resetBtn.addEventListener('click', () => {
++    cancelGeneration();
++    generateBtn.disabled = false;
++    showState('default');
++  });
++
++  // ── Cart Change Handler ─────────────────────────────────────────────────
+ 
+-  // Subscribe to cart changes for cross-tab sync
+   onCartChange(() => {
++    cancelGeneration();
++    generateBtn.disabled = false;
+     renderCart();
++    // If preview section is open, re-render it; hide if cart is now empty
++    if (!previewSection.hidden) {
++      const ids = getCartItems();
++      if (ids.length === 0) {
++        previewSection.hidden = true;
++      } else {
++        renderPreview();
++        showState('default');
++      }
++    }
+   });
++
++  // ── Initial Render ──────────────────────────────────────────────────────
++  renderCart();
+ </script>
+diff --git a/src/pages/catalog.astro b/src/pages/catalog.astro
+index 8c6b844..19d9d77 100644
+--- a/src/pages/catalog.astro
++++ b/src/pages/catalog.astro
+@@ -20,7 +20,11 @@ import addons from '../data/addons.json';
+ 
+   <main class="catalog-page">
+     <!-- ── Page Heading ─────────────────────────────────────────────────── -->
+-    <h1 class="catalog-title">Addon Catalog</h1>
++    <div class="catalog-header">
++      <h1 class="catalog-title">Addon Catalog</h1>
++      <!-- Decorative pixel-art diamond sword -->
++      <div class="pixel-art-sword" aria-hidden="true"></div>
++    </div>
+ 
+     <!-- ── Filter / Search Bar ──────────────────────────────────────────── -->
+     <div class="filter-bar">
+@@ -59,12 +63,22 @@ import addons from '../data/addons.json';
+               <span class="type-badge">{addon.type}</span>
+               <h3 class="card-name">{addon.name}</h3>
+               <p class="card-desc">{addon.description.short}</p>
+-              <span class="card-price">${addon.price.toFixed(2)}</span>
++              <span class="card-price">&euro;{addon.price.toFixed(2)}</span>
+             </div>
+           </a>
+           <button class="cart-btn" type="button" data-addon-id={addon.id}>Add to Cart</button>
+         </div>
+       ))}
++
++      <!-- ── Create Your Own Item CTA Card ────────────────────────────────── -->
++      <a class="cta-card" href="/create">
++        <div class="cta-card-icon" aria-hidden="true">&#10024;</div>
++        <div class="cta-card-body">
++          <h3 class="cta-card-title">Create Your Own Item</h3>
++          <p class="cta-card-desc">Use AI to generate a custom addon</p>
++        </div>
++        <span class="cta-card-arrow" aria-hidden="true">&#10132;</span>
++      </a>
+     </div>
+ 
+     <p id="no-results" class="no-results" hidden>No addons match your search.</p>
+@@ -81,13 +95,78 @@ import addons from '../data/addons.json';
+     padding: var(--space-5) var(--space-4) var(--space-7);
+   }
+ 
++  /* ── Page Header ─────────────────────────────────────────────────────── */
++
++  .catalog-header {
++    display: flex;
++    align-items: center;
++    gap: var(--space-4);
++    margin-bottom: var(--space-5);
++  }
++
+   /* ── Page Title ──────────────────────────────────────────────────────── */
+ 
+   .catalog-title {
+     font-family: var(--font-heading);
+     font-size: var(--text-2xl);
+     color: var(--color-primary);
+-    margin-bottom: var(--space-5);
++    margin-bottom: 0;
++  }
++
++  /* ── Pixel-Art Diamond Sword (16 rows x 5 cols, 6px per pixel) ─────── */
++
++  .pixel-art-sword {
++    flex-shrink: 0;
++    width: 6px;
++    height: 6px;
++    opacity: 0.55;
++    pointer-events: none;
++    /* Element itself is transparent; all pixels rendered via box-shadow */
++    background: transparent;
++    box-shadow:
++      /* Row 0 — blade tip */
++      12px 0px 0 0 var(--color-oak),
++      /* Row 1 — blade */
++       6px 6px 0 0 var(--color-primary),
++      12px 6px 0 0 var(--color-oak),
++      /* Row 2 — blade */
++      12px 12px 0 0 var(--color-primary),
++      18px 12px 0 0 var(--color-oak),
++      /* Row 3 — blade */
++       6px 18px 0 0 var(--color-primary),
++      12px 18px 0 0 var(--color-oak),
++      /* Row 4 — blade */
++      12px 24px 0 0 var(--color-primary),
++      18px 24px 0 0 var(--color-oak),
++      /* Row 5 — blade */
++       6px 30px 0 0 var(--color-primary),
++      12px 30px 0 0 var(--color-oak),
++      /* Row 6 — blade */
++      12px 36px 0 0 var(--color-primary),
++      18px 36px 0 0 var(--color-oak),
++      /* Row 7 — blade */
++       6px 42px 0 0 var(--color-primary),
++      12px 42px 0 0 var(--color-oak),
++      /* Row 8 — blade lower */
++      12px 48px 0 0 var(--color-primary),
++      /* Row 9 — guard */
++       6px 54px 0 0 var(--color-accent),
++      12px 54px 0 0 var(--color-accent),
++      18px 54px 0 0 var(--color-accent),
++      /* Row 10 — guard wide */
++       0px 60px 0 0 var(--color-accent),
++       6px 60px 0 0 var(--color-accent),
++      12px 60px 0 0 var(--color-accent),
++      18px 60px 0 0 var(--color-accent),
++      24px 60px 0 0 var(--color-accent),
++      /* Row 11 — handle */
++      12px 66px 0 0 var(--color-stone),
++      /* Row 12 — handle */
++      12px 72px 0 0 var(--color-stone),
++      /* Row 13 — handle */
++      12px 78px 0 0 var(--color-stone),
++      /* Row 14 — pommel */
++      12px 84px 0 0 var(--color-accent);
+   }
+ 
+   /* ── Filter / Search Bar ─────────────────────────────────────────────── */
+@@ -278,6 +357,79 @@ import addons from '../data/addons.json';
+     background: var(--color-stone);
+   }
+ 
++  /* ── Create Your Own Item CTA Card ──────────────────────────────────── */
++
++  .cta-card {
++    display: flex;
++    flex-direction: column;
++    align-items: center;
++    justify-content: center;
++    gap: var(--space-3);
++    background: linear-gradient(
++      135deg,
++      var(--color-bg-mid) 0%,
++      var(--color-moss) 100%
++    );
++    border: var(--space-1) solid var(--color-accent);
++    border-radius: var(--border-radius);
++    padding: var(--space-5) var(--space-4);
++    text-decoration: none;
++    color: inherit;
++    transition: border-color 0.15s, box-shadow 0.15s, transform 0.15s;
++    box-shadow:
++      var(--space-1) var(--space-1) 0 var(--color-oak),
++      inset 0 0 0 var(--space-1) rgba(240, 192, 64, 0.1);
++    min-height: 260px;
++    text-align: center;
++    cursor: pointer;
++  }
++
++  .cta-card:hover,
++  .cta-card:focus-visible {
++    border-color: var(--color-primary);
++    box-shadow:
++      var(--space-1) var(--space-1) 0 var(--color-moss),
++      inset 0 0 0 var(--space-1) rgba(45, 125, 210, 0.2);
++    transform: translateY(calc(-1 * var(--space-1)));
++  }
++
++  .cta-card-icon {
++    font-size: var(--text-3xl);
++    line-height: 1;
++  }
++
++  .cta-card-body {
++    display: flex;
++    flex-direction: column;
++    gap: var(--space-2);
++  }
++
++  .cta-card-title {
++    font-family: var(--font-heading);
++    font-size: var(--text-sm);
++    color: var(--color-accent);
++    margin: 0;
++    line-height: 1.4;
++  }
++
++  .cta-card-desc {
++    font-family: var(--font-body);
++    font-size: var(--text-sm);
++    color: var(--color-text-light);
++    margin: 0;
++    line-height: 1.5;
++  }
++
++  .cta-card-arrow {
++    font-size: var(--text-lg);
++    color: var(--color-accent);
++    transition: transform 0.15s;
++  }
++
++  .cta-card:hover .cta-card-arrow {
++    transform: translateX(var(--space-2));
++  }
++
+   /* ── No Results Message ─────────────────────────────────────────────── */
+ 
+   .no-results {
+@@ -298,9 +450,17 @@ import addons from '../data/addons.json';
+ 
+     .catalog-title {
+       font-size: var(--text-lg);
++      margin-bottom: 0;
++    }
++
++    .catalog-header {
+       margin-bottom: var(--space-4);
+     }
+ 
++    .pixel-art-sword {
++      display: none;
++    }
++
+     .filter-bar {
+       gap: var(--space-2);
+       margin-bottom: var(--space-4);
+@@ -326,6 +486,23 @@ import addons from '../data/addons.json';
+     .card-desc {
+       font-size: var(--text-xs);
+     }
++
++    .cta-card {
++      padding: var(--space-4) var(--space-3);
++      min-height: 200px;
++    }
++
++    .cta-card-icon {
++      font-size: var(--text-2xl);
++    }
++
++    .cta-card-title {
++      font-size: var(--text-xs);
++    }
++
++    .cta-card-desc {
++      font-size: var(--text-xs);
++    }
+   }
+ </style>
+ 
+diff --git a/src/pages/create.astro b/src/pages/create.astro
+new file mode 100644
+index 0000000..1727097
+--- /dev/null
++++ b/src/pages/create.astro
+@@ -0,0 +1,510 @@
++---
++import NavHeader from '../components/NavHeader.astro';
++import '../styles/global.css';
++---
++
++<!DOCTYPE html>
++<html lang="en">
++<head>
++  <meta charset="utf-8" />
++  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
++  <link rel="preconnect" href="https://fonts.googleapis.com" />
++  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
++  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" />
++  <title>Create Your Own Item — Everything Addon</title>
++</head>
++<body>
++  <NavHeader />
++
++  <main class="create-page">
++    <!-- ── Page Heading ─────────────────────────────────────────────────── -->
++    <h1 class="create-title">Create Your Own Item</h1>
++
++    <!-- ── Form State ───────────────────────────────────────────────────── -->
++    <div id="state-form" class="create-state">
++      <p class="create-instructions">
++        Describe the item you want to create and our AI will generate a custom
++        addon for your Minecraft world. Be as creative as you like!
++      </p>
++
++      <div class="create-form">
++        <label class="create-label" for="item-description">Describe your item</label>
++        <input
++          id="item-description"
++          class="create-input"
++          type="text"
++          placeholder="A diamond sword that shoots lightning..."
++          aria-label="Describe your item"
++        />
++        <button id="generate-btn" class="create-generate-btn" type="button">
++          Generate
++        </button>
++      </div>
++    </div>
++
++    <!-- ── Loading State ────────────────────────────────────────────────── -->
++    <div id="state-loading" class="create-state" hidden>
++      <div class="loading-block">
++        <div class="progress-bar-track">
++          <div id="progress-bar" class="progress-bar-fill"></div>
++        </div>
++        <p class="loading-text" id="loading-text">Analyzing description...</p>
++      </div>
++    </div>
++
++    <!-- ── Success State ────────────────────────────────────────────────── -->
++    <div id="state-success" class="create-state" hidden>
++      <p class="result-subtitle" id="result-subtitle"></p>
++
++      <div class="result-card">
++        <img
++          class="result-thumb"
++          src="/images/addons/netherite-trident/netherite-trident-thumb.png"
++          alt="Lightning Blade"
++        />
++        <div class="result-body">
++          <span class="result-type-badge">item</span>
++          <h3 class="result-name">Lightning Blade</h3>
++          <p class="result-desc">A mystical blade crackling with electrical energy</p>
++          <span class="result-price">&euro;0.10</span>
++        </div>
++        <button id="add-to-cart-btn" class="result-cart-btn" type="button">
++          Add to Cart
++        </button>
++      </div>
++
++      <a class="back-link" href="/catalog">&larr; Back to Catalog</a>
++    </div>
++  </main>
++</body>
++</html>
++
++<style>
++  /* ── Page Container ──────────────────────────────────────────────────── */
++
++  .create-page {
++    max-width: 640px;
++    margin: 0 auto;
++    padding: var(--space-5) var(--space-4) var(--space-7);
++  }
++
++  /* ── Page Title ──────────────────────────────────────────────────────── */
++
++  .create-title {
++    font-family: var(--font-heading);
++    font-size: var(--text-2xl);
++    color: var(--color-primary);
++    margin-bottom: var(--space-5);
++  }
++
++  /* ── State Containers ────────────────────────────────────────────────── */
++
++  .create-state {
++    text-align: center;
++  }
++
++  /* ── Form State ──────────────────────────────────────────────────────── */
++
++  .create-instructions {
++    font-family: var(--font-body);
++    font-size: var(--text-base);
++    color: var(--color-stone);
++    margin: 0 0 var(--space-5);
++    line-height: 1.6;
++    text-align: left;
++  }
++
++  .create-form {
++    display: flex;
++    flex-direction: column;
++    gap: var(--space-3);
++  }
++
++  .create-label {
++    font-family: var(--font-heading);
++    font-size: var(--text-xs);
++    color: var(--color-accent);
++    text-align: left;
++  }
++
++  .create-input {
++    font-family: var(--font-body);
++    font-size: var(--text-base);
++    color: var(--color-text-light);
++    background: var(--color-bg-mid);
++    border: var(--space-1) solid var(--color-border);
++    border-radius: var(--border-radius);
++    padding: var(--space-3);
++    outline: none;
++    transition: border-color 0.15s;
++  }
++
++  .create-input::placeholder {
++    color: var(--color-stone);
++  }
++
++  .create-input:focus {
++    border-color: var(--color-primary);
++  }
++
++  .create-generate-btn {
++    font-family: var(--font-heading);
++    font-size: var(--text-sm);
++    color: var(--color-text-light);
++    background: var(--color-primary);
++    border: var(--space-1) solid var(--color-moss);
++    border-radius: var(--border-radius);
++    padding: var(--space-3) var(--space-6);
++    cursor: pointer;
++    box-shadow: var(--space-1) var(--space-1) 0 var(--color-moss);
++    transition: background 0.15s, border-color 0.15s;
++  }
++
++  .create-generate-btn:hover,
++  .create-generate-btn:focus-visible {
++    background: var(--color-accent);
++    border-color: var(--color-oak);
++    box-shadow: var(--space-1) var(--space-1) 0 var(--color-oak);
++  }
++
++  .create-generate-btn:active {
++    box-shadow: none;
++    transform: translate(var(--space-1), var(--space-1));
++  }
++
++  .create-generate-btn:disabled {
++    opacity: 0.6;
++    cursor: default;
++  }
++
++  /* ── Loading State ───────────────────────────────────────────────────── */
++
++  .loading-block {
++    padding: var(--space-5) 0;
++  }
++
++  .progress-bar-track {
++    width: 100%;
++    height: var(--space-4);
++    background: var(--color-bg-dark);
++    border: var(--space-1) solid var(--color-border);
++    border-radius: var(--border-radius);
++    overflow: hidden;
++    margin-bottom: var(--space-3);
++    box-shadow: inset var(--space-1) var(--space-1) 0 rgba(0, 0, 0, 0.3);
++  }
++
++  .progress-bar-fill {
++    height: 100%;
++    width: 0%;
++    background: var(--color-primary);
++    transition: width 0.3s linear;
++    box-shadow: inset 0 calc(-1 * var(--space-1)) 0 var(--color-moss);
++  }
++
++  .loading-text {
++    font-family: var(--font-heading);
++    font-size: var(--text-xs);
++    color: var(--color-accent);
++    margin: 0;
++    animation: blink 1s steps(2, start) infinite;
++  }
++
++  @keyframes blink {
++    50% { opacity: 0.4; }
++  }
++
++  /* ── Success State ───────────────────────────────────────────────────── */
++
++  .result-subtitle {
++    font-family: var(--font-body);
++    font-size: var(--text-sm);
++    color: var(--color-stone);
++    margin: 0 0 var(--space-4);
++    font-style: italic;
++  }
++
++  .result-card {
++    display: flex;
++    flex-direction: column;
++    background: var(--color-bg-mid);
++    border: var(--space-1) solid var(--color-primary);
++    border-radius: var(--border-radius);
++    overflow: hidden;
++    box-shadow: var(--space-1) var(--space-1) 0 var(--color-moss);
++    margin-bottom: var(--space-5);
++  }
++
++  .result-thumb {
++    width: 100%;
++    aspect-ratio: 16 / 9;
++    object-fit: cover;
++    display: block;
++  }
++
++  .result-body {
++    display: flex;
++    flex-direction: column;
++    gap: var(--space-2);
++    padding: var(--space-3);
++    text-align: left;
++  }
++
++  .result-type-badge {
++    display: inline-block;
++    align-self: flex-start;
++    font-family: var(--font-heading);
++    font-size: var(--text-xs);
++    color: var(--color-text-dark);
++    background: var(--color-accent);
++    border-radius: var(--border-radius);
++    padding: var(--space-1) var(--space-2);
++    text-transform: capitalize;
++    line-height: 1;
++  }
++
++  .result-name {
++    font-family: var(--font-heading);
++    font-size: var(--text-sm);
++    color: var(--color-text-light);
++    margin: 0;
++    line-height: 1.4;
++  }
++
++  .result-desc {
++    font-family: var(--font-body);
++    font-size: var(--text-sm);
++    color: var(--color-stone);
++    margin: 0;
++    line-height: 1.5;
++  }
++
++  .result-price {
++    font-family: var(--font-heading);
++    font-size: var(--text-sm);
++    color: var(--color-accent);
++  }
++
++  .result-cart-btn {
++    font-family: var(--font-heading);
++    font-size: var(--text-xs);
++    color: var(--color-text-light);
++    background: var(--color-primary);
++    border: none;
++    border-top: var(--space-1) solid var(--color-moss);
++    border-radius: var(--border-radius);
++    padding: var(--space-2) var(--space-3);
++    cursor: pointer;
++    transition: background 0.15s;
++    text-align: center;
++  }
++
++  .result-cart-btn:hover,
++  .result-cart-btn:focus-visible {
++    background: var(--color-accent);
++  }
++
++  .result-cart-btn--in-cart {
++    background: var(--color-stone);
++    border-top-color: var(--color-border);
++    cursor: default;
++    opacity: 0.8;
++  }
++
++  .result-cart-btn--in-cart:hover,
++  .result-cart-btn--in-cart:focus-visible {
++    background: var(--color-stone);
++  }
++
++  /* ── Back Link ───────────────────────────────────────────────────────── */
++
++  .back-link {
++    display: inline-block;
++    font-family: var(--font-heading);
++    font-size: var(--text-xs);
++    color: var(--color-text-light);
++    background: var(--color-bg-mid);
++    border: var(--space-1) solid var(--color-border);
++    border-radius: var(--border-radius);
++    padding: var(--space-2) var(--space-4);
++    text-decoration: none;
++    transition: background 0.15s, border-color 0.15s;
++  }
++
++  .back-link:hover,
++  .back-link:focus-visible {
++    background: var(--color-primary);
++    border-color: var(--color-moss);
++  }
++
++  /* ── Responsive: mobile (375px+) ──────────────────────────────────────── */
++
++  @media (max-width: 640px) {
++    .create-page {
++      padding: var(--space-4) var(--space-3) var(--space-6);
++    }
++
++    .create-title {
++      font-size: var(--text-lg);
++      margin-bottom: var(--space-4);
++    }
++
++    .create-instructions {
++      font-size: var(--text-sm);
++    }
++
++    .create-input {
++      font-size: var(--text-sm);
++      padding: var(--space-2);
++    }
++
++    .create-generate-btn {
++      font-size: var(--text-xs);
++      padding: var(--space-2) var(--space-4);
++      width: 100%;
++    }
++
++    .result-body {
++      padding: var(--space-2);
++    }
++
++    .result-name {
++      font-size: var(--text-xs);
++    }
++
++    .result-desc {
++      font-size: var(--text-xs);
++    }
++  }
++</style>
++
++<script>
++  import { addToCart, isInCart, onCartChange } from '../scripts/cart';
++
++  // ── Hardcoded generated addon ─────────────────────────────────────────
++  const generatedAddon = {
++    id: 'ai-generated-001',
++    name: 'Lightning Blade',
++    slug: 'lightning-blade',
++    type: 'item',
++    description: {
++      short: 'A mystical blade crackling with electrical energy',
++      long: 'Forged in the heart of a thunderstorm...',
++    },
++    price: 0.10,
++    thumbnail: '/images/addons/netherite-trident/netherite-trident-thumb.png',
++    gallery: [],
++    tags: ['weapon', 'custom', 'ai-generated'],
++    mcVersion: '1.20+',
++    fileSize: '1.2 MB',
++  };
++
++  // ── DOM references ────────────────────────────────────────────────────
++  const stateForm = document.getElementById('state-form') as HTMLElement;
++  const stateLoading = document.getElementById('state-loading') as HTMLElement;
++  const stateSuccess = document.getElementById('state-success') as HTMLElement;
++
++  const descriptionInput = document.getElementById('item-description') as HTMLInputElement;
++  const generateBtn = document.getElementById('generate-btn') as HTMLButtonElement;
++  const progressBar = document.getElementById('progress-bar') as HTMLElement;
++  const loadingText = document.getElementById('loading-text') as HTMLElement;
++  const resultSubtitle = document.getElementById('result-subtitle') as HTMLElement;
++  const addToCartBtn = document.getElementById('add-to-cart-btn') as HTMLButtonElement;
++
++  // ── State management ──────────────────────────────────────────────────
++
++  function showState(state: 'form' | 'loading' | 'success'): void {
++    stateForm.hidden = state !== 'form';
++    stateLoading.hidden = state !== 'loading';
++    stateSuccess.hidden = state !== 'success';
++  }
++
++  // ── Loading messages ──────────────────────────────────────────────────
++
++  const loadingMessages = [
++    'Analyzing description...',
++    'Generating textures...',
++    'Building addon structure...',
++    'Applying enchantments...',
++    'Finalizing item...',
++  ];
++
++  let activeInterval: ReturnType<typeof setInterval> | null = null;
++
++  function cancelGeneration(): void {
++    if (activeInterval !== null) {
++      clearInterval(activeInterval);
++      activeInterval = null;
++    }
++  }
++
++  // ── Simulate generation ───────────────────────────────────────────────
++
++  function simulateGeneration(): void {
++    cancelGeneration();
++    showState('loading');
++    generateBtn.disabled = true;
++    progressBar.style.width = '0%';
++    loadingText.textContent = loadingMessages[0];
++
++    const totalDuration = 3000;
++    const steps = loadingMessages.length;
++    const stepDuration = totalDuration / steps;
++
++    let currentStep = 0;
++
++    activeInterval = setInterval(() => {
++      currentStep++;
++      const progress = Math.min((currentStep / steps) * 100, 100);
++      progressBar.style.width = `${progress}%`;
++
++      if (currentStep < steps) {
++        loadingText.textContent = loadingMessages[currentStep];
++      }
++
++      if (currentStep >= steps) {
++        cancelGeneration();
++        setTimeout(() => {
++          showState('success');
++          updateCartBtn();
++        }, 300);
++      }
++    }, stepDuration);
++  }
++
++  // ── Cart button handling ──────────────────────────────────────────────
++
++  function updateCartBtn(): void {
++    if (isInCart(generatedAddon.id)) {
++      addToCartBtn.textContent = 'In Cart';
++      addToCartBtn.classList.add('result-cart-btn--in-cart');
++      addToCartBtn.disabled = true;
++    } else {
++      addToCartBtn.textContent = 'Add to Cart';
++      addToCartBtn.classList.remove('result-cart-btn--in-cart');
++      addToCartBtn.disabled = false;
++    }
++  }
++
++  // ── Event listeners ───────────────────────────────────────────────────
++
++  generateBtn.addEventListener('click', () => {
++    const description = descriptionInput.value.trim();
++    if (!description) {
++      descriptionInput.focus();
++      return;
++    }
++
++    resultSubtitle.textContent = `Generated from: "${description}"`;
++    simulateGeneration();
++  });
++
++  addToCartBtn.addEventListener('click', () => {
++    addToCart(generatedAddon.id);
++    updateCartBtn();
++  });
++
++  onCartChange(() => {
++    updateCartBtn();
++  });
++</script>
+diff --git a/src/pages/index.astro b/src/pages/index.astro
+index 0857376..f9c7c31 100644
+--- a/src/pages/index.astro
++++ b/src/pages/index.astro
+@@ -30,6 +30,9 @@ import NavHeader from '../components/NavHeader.astro';
+ 
+       <!-- Decorative pixel grid overlay -->
+       <div class="hero-pixels" aria-hidden="true"></div>
++
++      <!-- Decorative pixel-art Creeper face -->
++      <div class="pixel-art-creeper" aria-hidden="true"></div>
+     </section>
+ 
+     <!-- ── Features Section ─────────────────────────────────────────────── -->
+@@ -230,6 +233,93 @@ import NavHeader from '../components/NavHeader.astro';
+     margin: 0;
+   }
+ 
++  /* ── Pixel-Art Creeper Face (8×8 grid, 8px per pixel = 64×64) ─────── */
++
++  .pixel-art-creeper {
++    position: absolute;
++    right: 10%;
++    top: 50%;
++    transform: translateY(-50%);
++    z-index: 1;
++    width: 8px;
++    height: 8px;
++    background: var(--color-primary);
++    opacity: 0.35;
++    pointer-events: none;
++    box-shadow:
++      /* Row 0 — full light face */
++       8px 0 0 0 var(--color-primary),
++      16px 0 0 0 var(--color-primary),
++      24px 0 0 0 var(--color-primary),
++      32px 0 0 0 var(--color-primary),
++      40px 0 0 0 var(--color-primary),
++      48px 0 0 0 var(--color-primary),
++      56px 0 0 0 var(--color-primary),
++      /* Row 1 — eyes row top */
++       0px 8px 0 0 var(--color-primary),
++       8px 8px 0 0 var(--color-moss),
++      16px 8px 0 0 var(--color-moss),
++      24px 8px 0 0 var(--color-primary),
++      32px 8px 0 0 var(--color-primary),
++      40px 8px 0 0 var(--color-moss),
++      48px 8px 0 0 var(--color-moss),
++      56px 8px 0 0 var(--color-primary),
++      /* Row 2 — eyes row bottom */
++       0px 16px 0 0 var(--color-primary),
++       8px 16px 0 0 var(--color-moss),
++      16px 16px 0 0 var(--color-moss),
++      24px 16px 0 0 var(--color-primary),
++      32px 16px 0 0 var(--color-primary),
++      40px 16px 0 0 var(--color-moss),
++      48px 16px 0 0 var(--color-moss),
++      56px 16px 0 0 var(--color-primary),
++      /* Row 3 — nose bridge */
++       0px 24px 0 0 var(--color-primary),
++       8px 24px 0 0 var(--color-primary),
++      16px 24px 0 0 var(--color-primary),
++      24px 24px 0 0 var(--color-moss),
++      32px 24px 0 0 var(--color-moss),
++      40px 24px 0 0 var(--color-primary),
++      48px 24px 0 0 var(--color-primary),
++      56px 24px 0 0 var(--color-primary),
++      /* Row 4 — mouth top */
++       0px 32px 0 0 var(--color-primary),
++       8px 32px 0 0 var(--color-primary),
++      16px 32px 0 0 var(--color-moss),
++      24px 32px 0 0 var(--color-moss),
++      32px 32px 0 0 var(--color-moss),
++      40px 32px 0 0 var(--color-moss),
++      48px 32px 0 0 var(--color-primary),
++      56px 32px 0 0 var(--color-primary),
++      /* Row 5 — mouth middle */
++       0px 40px 0 0 var(--color-primary),
++       8px 40px 0 0 var(--color-primary),
++      16px 40px 0 0 var(--color-moss),
++      24px 40px 0 0 var(--color-primary),
++      32px 40px 0 0 var(--color-primary),
++      40px 40px 0 0 var(--color-moss),
++      48px 40px 0 0 var(--color-primary),
++      56px 40px 0 0 var(--color-primary),
++      /* Row 6 — mouth bottom */
++       0px 48px 0 0 var(--color-primary),
++       8px 48px 0 0 var(--color-primary),
++      16px 48px 0 0 var(--color-moss),
++      24px 48px 0 0 var(--color-primary),
++      32px 48px 0 0 var(--color-primary),
++      40px 48px 0 0 var(--color-moss),
++      48px 48px 0 0 var(--color-primary),
++      56px 48px 0 0 var(--color-primary),
++      /* Row 7 — full light face */
++       0px 56px 0 0 var(--color-primary),
++       8px 56px 0 0 var(--color-primary),
++      16px 56px 0 0 var(--color-primary),
++      24px 56px 0 0 var(--color-primary),
++      32px 56px 0 0 var(--color-primary),
++      40px 56px 0 0 var(--color-primary),
++      48px 56px 0 0 var(--color-primary),
++      56px 56px 0 0 var(--color-primary);
++  }
++
+   /* ── Responsive: mobile (375px+) ──────────────────────────────────────── */
+ 
+   @media (max-width: 640px) {
+@@ -284,5 +374,9 @@ import NavHeader from '../components/NavHeader.astro';
+     .bottom-cta-text {
+       font-size: var(--text-base);
+     }
++
++    .pixel-art-creeper {
++      display: none;
++    }
+   }
+ </style>
+diff --git a/src/pages/preview.astro b/src/pages/preview.astro
+deleted file mode 100644
+index f130c4c..0000000
+--- a/src/pages/preview.astro
++++ /dev/null
+@@ -1,715 +0,0 @@
+----
+-import type { Addon } from '../types/addon';
+-import NavHeader from '../components/NavHeader.astro';
+-import '../styles/global.css';
+-import addons from '../data/addons.json';
+----
+-
+-<!DOCTYPE html>
+-<html lang="en">
+-<head>
+-  <meta charset="utf-8" />
+-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+-  <link rel="preconnect" href="https://fonts.googleapis.com" />
+-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" />
+-  <title>Preview &amp; Download — Everything Addon</title>
+-</head>
+-<body>
+-  <NavHeader />
+-
+-  <main class="preview-page">
+-    <!-- ── Page Heading ─────────────────────────────────────────────────── -->
+-    <h1 class="preview-title">Preview &amp; Download</h1>
+-
+-    <!-- ── Empty State ────────────────────────────────────────────────── -->
+-    <div id="empty-state" class="empty-state" hidden>
+-      <p class="empty-message">Your cart is empty.</p>
+-      <p class="empty-hint">Add some addons before generating a pack.</p>
+-      <a class="empty-link" href="/catalog">Browse Catalog</a>
+-    </div>
+-
+-    <!-- ── Content (shown when cart has items) ────────────────────────── -->
+-    <div id="preview-content" hidden>
+-
+-      <!-- ── Addon Summary List ─────────────────────────────────────── -->
+-      <section class="summary-section" aria-label="Cart summary">
+-        <h2 class="section-heading">Addons in Your Pack</h2>
+-        <ul id="addon-list" class="addon-list"></ul>
+-      </section>
+-
+-      <!-- ── Visual Preview: Addon Pack ─────────────────────────────── -->
+-      <section class="pack-preview" aria-label="Addon pack preview">
+-        <div class="pack-frame">
+-          <div class="pack-header">
+-            <span class="pack-icon" aria-hidden="true">&#9776;</span>
+-            <span class="pack-label">Your Addon Pack</span>
+-          </div>
+-          <div id="pack-grid" class="pack-grid"></div>
+-          <div class="pack-footer">
+-            <span class="pack-count" id="pack-count">0 items</span>
+-            <span class="pack-separator">|</span>
+-            <span class="pack-size" id="pack-size">0 MB</span>
+-          </div>
+-        </div>
+-      </section>
+-
+-      <!-- ── Generation Flow ────────────────────────────────────────── -->
+-      <section class="generate-section" aria-label="Generate addon pack">
+-
+-        <!-- Default State -->
+-        <div id="state-default" class="gen-state">
+-          <p class="gen-info">
+-            Ready to combine your selected addons into a single pack.
+-          </p>
+-          <button id="generate-btn" class="generate-btn" type="button">
+-            Generate Addon Pack
+-          </button>
+-        </div>
+-
+-        <!-- Loading State -->
+-        <div id="state-loading" class="gen-state" hidden>
+-          <div class="loading-block">
+-            <div class="progress-bar-track">
+-              <div id="progress-bar" class="progress-bar-fill"></div>
+-            </div>
+-            <p class="loading-text" id="loading-text">Gathering resources...</p>
+-          </div>
+-        </div>
+-
+-        <!-- Success State -->
+-        <div id="state-success" class="gen-state" hidden>
+-          <div class="success-block">
+-            <span class="success-icon" aria-hidden="true">&#10004;</span>
+-            <h3 class="success-heading">Pack Ready!</h3>
+-            <p class="success-text">
+-              Your addon pack has been generated successfully.
+-            </p>
+-            <button id="reset-btn" class="reset-btn" type="button">
+-              Generate Again
+-            </button>
+-          </div>
+-        </div>
+-
+-      </section>
+-    </div>
+-  </main>
+-
+-  <!-- Embed addon data for client script -->
+-  <script id="addon-data" type="application/json" set:html={JSON.stringify(addons)} />
+-</body>
+-</html>
+-
+-<style>
+-  /* ── Page Container ──────────────────────────────────────────────────── */
+-
+-  .preview-page {
+-    max-width: 1280px;
+-    margin: 0 auto;
+-    padding: var(--space-5) var(--space-4) var(--space-7);
+-  }
+-
+-  /* ── Page Title ──────────────────────────────────────────────────────── */
+-
+-  .preview-title {
+-    font-family: var(--font-heading);
+-    font-size: var(--text-2xl);
+-    color: var(--color-primary);
+-    margin-bottom: var(--space-5);
+-  }
+-
+-  /* ── Empty State ─────────────────────────────────────────────────────── */
+-
+-  .empty-state {
+-    text-align: center;
+-    padding: var(--space-7) var(--space-4);
+-  }
+-
+-  .empty-message {
+-    font-family: var(--font-heading);
+-    font-size: var(--text-lg);
+-    color: var(--color-text-light);
+-    margin: 0 0 var(--space-3);
+-  }
+-
+-  .empty-hint {
+-    font-family: var(--font-body);
+-    font-size: var(--text-base);
+-    color: var(--color-stone);
+-    margin: 0 0 var(--space-5);
+-  }
+-
+-  .empty-link {
+-    display: inline-block;
+-    font-family: var(--font-heading);
+-    font-size: var(--text-sm);
+-    color: var(--color-text-light);
+-    background: var(--color-primary);
+-    border: var(--space-1) solid var(--color-moss);
+-    border-radius: var(--border-radius);
+-    padding: var(--space-3) var(--space-5);
+-    text-decoration: none;
+-    box-shadow: var(--space-1) var(--space-1) 0 var(--color-moss);
+-    transition: background 0.15s, border-color 0.15s;
+-  }
+-
+-  .empty-link:hover,
+-  .empty-link:focus-visible {
+-    background: var(--color-accent);
+-    border-color: var(--color-oak);
+-    box-shadow: var(--space-1) var(--space-1) 0 var(--color-oak);
+-  }
+-
+-  /* ── Section Headings ────────────────────────────────────────────────── */
+-
+-  .section-heading {
+-    font-family: var(--font-heading);
+-    font-size: var(--text-base);
+-    color: var(--color-accent);
+-    margin-bottom: var(--space-3);
+-  }
+-
+-  /* ── Addon Summary List ──────────────────────────────────────────────── */
+-
+-  .summary-section {
+-    margin-bottom: var(--space-6);
+-  }
+-
+-  .addon-list {
+-    list-style: none;
+-    margin: 0;
+-    padding: 0;
+-    display: flex;
+-    flex-direction: column;
+-    gap: var(--space-2);
+-  }
+-
+-  .addon-list-item {
+-    display: flex;
+-    align-items: center;
+-    gap: var(--space-3);
+-    background: var(--color-bg-mid);
+-    border: var(--space-1) solid var(--color-border);
+-    border-radius: var(--border-radius);
+-    padding: var(--space-2) var(--space-3);
+-  }
+-
+-  .addon-list-thumb {
+-    width: 3rem;
+-    height: 3rem;
+-    object-fit: cover;
+-    border: var(--space-1) solid var(--color-border);
+-    border-radius: var(--border-radius);
+-    flex-shrink: 0;
+-  }
+-
+-  .addon-list-info {
+-    display: flex;
+-    flex-direction: column;
+-    gap: var(--space-1);
+-    min-width: 0;
+-  }
+-
+-  .addon-list-name {
+-    font-family: var(--font-heading);
+-    font-size: var(--text-xs);
+-    color: var(--color-text-light);
+-    white-space: nowrap;
+-    overflow: hidden;
+-    text-overflow: ellipsis;
+-  }
+-
+-  .addon-list-type {
+-    font-family: var(--font-heading);
+-    font-size: var(--text-xs);
+-    color: var(--color-text-dark);
+-    background: var(--color-accent);
+-    border-radius: var(--border-radius);
+-    padding: var(--space-1) var(--space-2);
+-    text-transform: capitalize;
+-    line-height: 1;
+-    align-self: flex-start;
+-  }
+-
+-  /* ── Pack Preview (Inventory / Crafting Result Style) ─────────────── */
+-
+-  .pack-preview {
+-    margin-bottom: var(--space-6);
+-  }
+-
+-  .pack-frame {
+-    background: var(--color-bg-mid);
+-    border: var(--space-1) solid var(--color-border);
+-    border-radius: var(--border-radius);
+-    box-shadow:
+-      inset 0 0 0 var(--space-1) var(--color-clay),
+-      var(--space-1) var(--space-1) 0 var(--color-border);
+-    overflow: hidden;
+-  }
+-
+-  .pack-header {
+-    display: flex;
+-    align-items: center;
+-    gap: var(--space-2);
+-    background: var(--color-clay);
+-    padding: var(--space-2) var(--space-3);
+-    border-bottom: var(--space-1) solid var(--color-border);
+-  }
+-
+-  .pack-icon {
+-    font-size: var(--text-base);
+-    color: var(--color-text-light);
+-  }
+-
+-  .pack-label {
+-    font-family: var(--font-heading);
+-    font-size: var(--text-xs);
+-    color: var(--color-text-light);
+-    margin: 0;
+-  }
+-
+-  .pack-grid {
+-    display: grid;
+-    grid-template-columns: repeat(auto-fill, 4.5rem);
+-    gap: var(--space-2);
+-    padding: var(--space-4);
+-    min-height: 6rem;
+-    justify-content: center;
+-  }
+-
+-  .pack-slot {
+-    width: 4.5rem;
+-    height: 4.5rem;
+-    background: var(--color-bg-dark);
+-    border: var(--space-1) solid var(--color-border);
+-    border-radius: var(--border-radius);
+-    overflow: hidden;
+-    box-shadow:
+-      inset var(--space-1) var(--space-1) 0 rgba(0, 0, 0, 0.3);
+-    display: flex;
+-    align-items: center;
+-    justify-content: center;
+-    position: relative;
+-  }
+-
+-  .pack-slot img {
+-    width: 100%;
+-    height: 100%;
+-    object-fit: cover;
+-    display: block;
+-    image-rendering: pixelated;
+-  }
+-
+-  .pack-slot-empty {
+-    opacity: 0.4;
+-  }
+-
+-  .pack-footer {
+-    display: flex;
+-    align-items: center;
+-    justify-content: center;
+-    gap: var(--space-3);
+-    background: var(--color-clay);
+-    padding: var(--space-2) var(--space-3);
+-    border-top: var(--space-1) solid var(--color-border);
+-  }
+-
+-  .pack-count,
+-  .pack-size {
+-    font-family: var(--font-heading);
+-    font-size: var(--text-xs);
+-    color: var(--color-text-light);
+-  }
+-
+-  .pack-separator {
+-    color: var(--color-border);
+-    font-size: var(--text-xs);
+-  }
+-
+-  /* ── Generation Flow ─────────────────────────────────────────────────── */
+-
+-  .generate-section {
+-    max-width: 600px;
+-    margin: 0 auto;
+-  }
+-
+-  .gen-state {
+-    text-align: center;
+-  }
+-
+-  .gen-info {
+-    font-family: var(--font-body);
+-    font-size: var(--text-base);
+-    color: var(--color-stone);
+-    margin: 0 0 var(--space-4);
+-  }
+-
+-  /* ── Generate Button ─────────────────────────────────────────────────── */
+-
+-  .generate-btn {
+-    font-family: var(--font-heading);
+-    font-size: var(--text-sm);
+-    color: var(--color-text-light);
+-    background: var(--color-primary);
+-    border: var(--space-1) solid var(--color-moss);
+-    border-radius: var(--border-radius);
+-    padding: var(--space-3) var(--space-6);
+-    cursor: pointer;
+-    box-shadow: var(--space-1) var(--space-1) 0 var(--color-moss);
+-    transition: background 0.15s, border-color 0.15s;
+-  }
+-
+-  .generate-btn:hover,
+-  .generate-btn:focus-visible {
+-    background: var(--color-accent);
+-    border-color: var(--color-oak);
+-    box-shadow: var(--space-1) var(--space-1) 0 var(--color-oak);
+-  }
+-
+-  .generate-btn:active {
+-    box-shadow: none;
+-    transform: translate(var(--space-1), var(--space-1));
+-  }
+-
+-  /* ── Loading State ───────────────────────────────────────────────────── */
+-
+-  .loading-block {
+-    padding: var(--space-4);
+-  }
+-
+-  .progress-bar-track {
+-    width: 100%;
+-    height: var(--space-4);
+-    background: var(--color-bg-dark);
+-    border: var(--space-1) solid var(--color-border);
+-    border-radius: var(--border-radius);
+-    overflow: hidden;
+-    margin-bottom: var(--space-3);
+-    box-shadow: inset var(--space-1) var(--space-1) 0 rgba(0, 0, 0, 0.3);
+-  }
+-
+-  .progress-bar-fill {
+-    height: 100%;
+-    width: 0%;
+-    background: var(--color-primary);
+-    transition: width 0.3s linear;
+-    box-shadow: inset 0 calc(-1 * var(--space-1)) 0 var(--color-moss);
+-  }
+-
+-  .loading-text {
+-    font-family: var(--font-heading);
+-    font-size: var(--text-xs);
+-    color: var(--color-accent);
+-    margin: 0;
+-    animation: blink 1s steps(2, start) infinite;
+-  }
+-
+-  @keyframes blink {
+-    50% { opacity: 0.4; }
+-  }
+-
+-  /* ── Success State ───────────────────────────────────────────────────── */
+-
+-  .success-block {
+-    background: var(--color-bg-mid);
+-    border: var(--space-1) solid var(--color-primary);
+-    border-radius: var(--border-radius);
+-    padding: var(--space-5) var(--space-4);
+-    box-shadow: var(--space-1) var(--space-1) 0 var(--color-moss);
+-  }
+-
+-  .success-icon {
+-    display: inline-block;
+-    font-size: var(--text-3xl);
+-    color: var(--color-primary);
+-    margin-bottom: var(--space-3);
+-  }
+-
+-  .success-heading {
+-    font-family: var(--font-heading);
+-    font-size: var(--text-lg);
+-    color: var(--color-primary);
+-    margin-bottom: var(--space-3);
+-  }
+-
+-  .success-text {
+-    font-family: var(--font-body);
+-    font-size: var(--text-base);
+-    color: var(--color-text-light);
+-    margin: 0 0 var(--space-5);
+-  }
+-
+-  .reset-btn {
+-    font-family: var(--font-heading);
+-    font-size: var(--text-xs);
+-    color: var(--color-text-light);
+-    background: var(--color-bg-mid);
+-    border: var(--space-1) solid var(--color-border);
+-    border-radius: var(--border-radius);
+-    padding: var(--space-2) var(--space-4);
+-    cursor: pointer;
+-    transition: background 0.15s, border-color 0.15s;
+-  }
+-
+-  .reset-btn:hover,
+-  .reset-btn:focus-visible {
+-    background: var(--color-primary);
+-    border-color: var(--color-moss);
+-  }
+-
+-  /* ── Responsive: mobile (375px+) ──────────────────────────────────────── */
+-
+-  @media (max-width: 640px) {
+-    .preview-page {
+-      padding: var(--space-4) var(--space-3) var(--space-6);
+-    }
+-
+-    .preview-title {
+-      font-size: var(--text-lg);
+-      margin-bottom: var(--space-4);
+-    }
+-
+-    .section-heading {
+-      font-size: var(--text-sm);
+-    }
+-
+-    .pack-grid {
+-      grid-template-columns: repeat(auto-fill, 3.5rem);
+-      gap: var(--space-1);
+-      padding: var(--space-3);
+-    }
+-
+-    .pack-slot {
+-      width: 3.5rem;
+-      height: 3.5rem;
+-    }
+-
+-    .addon-list-thumb {
+-      width: 2.5rem;
+-      height: 2.5rem;
+-    }
+-
+-    .generate-btn {
+-      font-size: var(--text-xs);
+-      padding: var(--space-2) var(--space-4);
+-      width: 100%;
+-    }
+-
+-    .empty-message {
+-      font-size: var(--text-base);
+-    }
+-
+-    .empty-hint {
+-      font-size: var(--text-sm);
+-    }
+-
+-    .empty-link {
+-      font-size: var(--text-xs);
+-      padding: var(--space-2) var(--space-4);
+-    }
+-  }
+-</style>
+-
+-<script>
+-  import type { Addon } from '../types/addon';
+-  import { getCartItems, onCartChange } from '../scripts/cart';
+-
+-  // ── Read addon data from embedded JSON ──────────────────────────────────
+-  const dataEl = document.getElementById('addon-data');
+-  if (!dataEl) throw new Error('Missing addon-data script element');
+-  const allAddons: Addon[] = JSON.parse(dataEl.textContent || '[]');
+-
+-  // ── DOM references ──────────────────────────────────────────────────────
+-  const emptyState = document.getElementById('empty-state') as HTMLElement;
+-  const previewContent = document.getElementById('preview-content') as HTMLElement;
+-  const addonListEl = document.getElementById('addon-list') as HTMLUListElement;
+-  const packGrid = document.getElementById('pack-grid') as HTMLElement;
+-  const packCount = document.getElementById('pack-count') as HTMLElement;
+-  const packSize = document.getElementById('pack-size') as HTMLElement;
+-
+-  const stateDefault = document.getElementById('state-default') as HTMLElement;
+-  const stateLoading = document.getElementById('state-loading') as HTMLElement;
+-  const stateSuccess = document.getElementById('state-success') as HTMLElement;
+-  const generateBtn = document.getElementById('generate-btn') as HTMLButtonElement;
+-  const resetBtn = document.getElementById('reset-btn') as HTMLButtonElement;
+-  const progressBar = document.getElementById('progress-bar') as HTMLElement;
+-  const loadingText = document.getElementById('loading-text') as HTMLElement;
+-
+-  // ── Helpers ─────────────────────────────────────────────────────────────
+-
+-  const addonMap = new Map<string, Addon>();
+-  for (const addon of allAddons) {
+-    addonMap.set(addon.id, addon);
+-  }
+-
+-  function getCartAddons(): Addon[] {
+-    const cartIds = getCartItems();
+-    const result: Addon[] = [];
+-    for (const id of cartIds) {
+-      const addon = addonMap.get(id);
+-      if (addon) result.push(addon);
+-    }
+-    return result;
+-  }
+-
+-  function parseFileSize(size: string): number {
+-    const match = size.match(/([\d.]+)\s*(MB|KB|GB)/i);
+-    if (!match) return 0;
+-    const value = parseFloat(match[1]);
+-    const unit = match[2].toUpperCase();
+-    if (unit === 'KB') return value / 1024;
+-    if (unit === 'GB') return value * 1024;
+-    return value;
+-  }
+-
+-  // ── Render ──────────────────────────────────────────────────────────────
+-
+-  function render(): void {
+-    const cartAddons = getCartAddons();
+-
+-    if (cartAddons.length === 0) {
+-      emptyState.hidden = false;
+-      previewContent.hidden = true;
+-      return;
+-    }
+-
+-    emptyState.hidden = true;
+-    previewContent.hidden = false;
+-
+-    // Build addon summary list
+-    addonListEl.innerHTML = '';
+-    cartAddons.forEach((addon) => {
+-      const li = document.createElement('li');
+-      li.className = 'addon-list-item';
+-
+-      const img = document.createElement('img');
+-      img.className = 'addon-list-thumb';
+-      img.src = addon.thumbnail;
+-      img.alt = addon.name;
+-
+-      const info = document.createElement('div');
+-      info.className = 'addon-list-info';
+-
+-      const nameSpan = document.createElement('span');
+-      nameSpan.className = 'addon-list-name';
+-      nameSpan.textContent = addon.name;
+-
+-      const typeSpan = document.createElement('span');
+-      typeSpan.className = 'addon-list-type';
+-      typeSpan.textContent = addon.type;
+-
+-      info.appendChild(nameSpan);
+-      info.appendChild(typeSpan);
+-      li.appendChild(img);
+-      li.appendChild(info);
+-      addonListEl.appendChild(li);
+-    });
+-
+-    // Build pack grid (inventory-style thumbnail slots)
+-    packGrid.innerHTML = '';
+-    cartAddons.forEach((addon) => {
+-      const slot = document.createElement('div');
+-      slot.className = 'pack-slot';
+-      slot.title = addon.name;
+-      const slotImg = document.createElement('img');
+-      slotImg.src = addon.thumbnail;
+-      slotImg.alt = addon.name;
+-      slot.appendChild(slotImg);
+-      packGrid.appendChild(slot);
+-    });
+-
+-    // Add empty slots to fill out the grid (minimum 9 slots like a crafting grid)
+-    const totalSlots = Math.max(9, cartAddons.length);
+-    for (let i = cartAddons.length; i < totalSlots; i++) {
+-      const slot = document.createElement('div');
+-      slot.className = 'pack-slot pack-slot-empty';
+-      packGrid.appendChild(slot);
+-    }
+-
+-    // Update footer stats
+-    packCount.textContent = `${cartAddons.length} item${cartAddons.length === 1 ? '' : 's'}`;
+-
+-    const totalMB = cartAddons.reduce((sum, a) => sum + parseFileSize(a.fileSize), 0);
+-    packSize.textContent = `${totalMB.toFixed(1)} MB`;
+-  }
+-
+-  // ── Generation Flow ─────────────────────────────────────────────────────
+-
+-  function showState(state: 'default' | 'loading' | 'success'): void {
+-    stateDefault.hidden = state !== 'default';
+-    stateLoading.hidden = state !== 'loading';
+-    stateSuccess.hidden = state !== 'success';
+-  }
+-
+-  const loadingMessages = [
+-    'Gathering resources...',
+-    'Combining behavior packs...',
+-    'Merging resource packs...',
+-    'Resolving dependencies...',
+-    'Compiling addon manifest...',
+-    'Finalizing pack...',
+-  ];
+-
+-  let activeInterval: ReturnType<typeof setInterval> | null = null;
+-
+-  function cancelGeneration(): void {
+-    if (activeInterval !== null) {
+-      clearInterval(activeInterval);
+-      activeInterval = null;
+-    }
+-  }
+-
+-  function simulateGeneration(): void {
+-    cancelGeneration();
+-    showState('loading');
+-    generateBtn.disabled = true;
+-    progressBar.style.width = '0%';
+-    loadingText.textContent = loadingMessages[0];
+-
+-    const totalDuration = 2500;
+-    const steps = loadingMessages.length;
+-    const stepDuration = totalDuration / steps;
+-
+-    let currentStep = 0;
+-
+-    activeInterval = setInterval(() => {
+-      currentStep++;
+-      const progress = Math.min((currentStep / steps) * 100, 100);
+-      progressBar.style.width = `${progress}%`;
+-
+-      if (currentStep < steps) {
+-        loadingText.textContent = loadingMessages[currentStep];
+-      }
+-
+-      if (currentStep >= steps) {
+-        cancelGeneration();
+-        setTimeout(() => {
+-          showState('success');
+-        }, 300);
+-      }
+-    }, stepDuration);
+-  }
+-
+-  // ── Event Listeners ─────────────────────────────────────────────────────
+-
+-  generateBtn.addEventListener('click', () => {
+-    if (activeInterval !== null) return;
+-    simulateGeneration();
+-  });
+-
+-  resetBtn.addEventListener('click', () => {
+-    cancelGeneration();
+-    generateBtn.disabled = false;
+-    showState('default');
+-  });
+-
+-  onCartChange(() => {
+-    cancelGeneration();
+-    generateBtn.disabled = false;
+-    render();
+-    showState('default');
+-  });
+-
+-  // ── Initial Render ──────────────────────────────────────────────────────
+-  render();
+-</script>
+diff --git a/src/styles/tokens.css b/src/styles/tokens.css
+index 34d0943..db4fad0 100644
+--- a/src/styles/tokens.css
++++ b/src/styles/tokens.css
+@@ -1,5 +1,5 @@
+ /* ==========================================================================
+-   Design Tokens - Minecraft-Inspired Theme
++   Design Tokens - Blue-Family Theme
+    ==========================================================================
+    All custom properties are defined on :root for global access.
+    ========================================================================== */
+@@ -9,31 +9,31 @@
+   /* ========================================================================
+      Color Palette
+      ========================================================================
+-     Earth-tone colors inspired by Minecraft's block palette:
+-     dirt, oak/spruce/birch planks, grass, stone, and sand.
++     Blue-family palette ranging from deep navy to light ice blue,
++     with gold and teal accents.
+      ======================================================================== */
+ 
+   /* Backgrounds */
+-  --color-bg-dark:   #3b2d1e; /* Dark oak / dirt brown                      */
+-  --color-bg-mid:    #6b5340; /* Spruce plank medium brown                  */
+-  --color-bg-light:  #d6c4a1; /* Birch plank light tan / cream              */
++  --color-bg-dark:   #0a1628; /* Deep navy                                  */
++  --color-bg-mid:    #1a3a5c; /* Mid slate blue                             */
++  --color-bg-light:  #b8d4e8; /* Light ice blue                             */
+ 
+   /* Brand / Action */
+-  --color-primary:   #6a9b38; /* Grass-block green (WCAG AA on dark bg)     */
+-  --color-accent:    #c6a84b; /* Sand / gold tan                            */
++  --color-primary:   #2d7dd2; /* Lapis blue                                 */
++  --color-accent:    #f0c040; /* Gold accent                                */
+ 
+   /* Text */
+-  --color-text-light: #f0e6d2; /* Off-white, readable on dark backgrounds   */
+-  --color-text-dark:  #2b2017; /* Very dark brown / charcoal                */
++  --color-text-light: #e8f0f8; /* Light blue-white                          */
++  --color-text-dark:  #0a1220; /* Very dark navy                            */
+ 
+   /* Borders & Dividers */
+-  --color-border:    #7e7e76; /* Stone gray                                 */
++  --color-border:    #4a6a8a; /* Blue-gray                                  */
+ 
+   /* Extended palette */
+-  --color-stone:     #9a9a8e; /* Cobblestone / lighter stone                */
+-  --color-oak:       #b08c4a; /* Oak plank warm brown                       */
+-  --color-moss:      #4a6b2a; /* Moss / dark grass green                    */
+-  --color-clay:      #8e6e52; /* Terracotta / clay brown                    */
++  --color-stone:     #6b8ba8; /* Lighter blue-gray                          */
++  --color-oak:       #3a8fb7; /* Teal accent                                */
++  --color-moss:      #142d4f; /* Deep blue shadow                           */
++  --color-clay:      #3d6080; /* Mid-blue                                   */
+ 
+   /* ========================================================================
+      Spacing Scale

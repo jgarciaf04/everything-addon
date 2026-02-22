@@ -1,0 +1,514 @@
+---
+import NavHeader from '../components/NavHeader.astro';
+import '../styles/global.css';
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" />
+  <title>Create Your Own Item — Everything Addon</title>
+</head>
+<body>
+  <NavHeader />
+
+  <main class="create-page">
+    <!-- ── Page Heading ─────────────────────────────────────────────────── -->
+    <h1 class="create-title">Create Your Own Item</h1>
+
+    <!-- ── Form State ───────────────────────────────────────────────────── -->
+    <div id="state-form" class="create-state">
+      <p class="create-instructions">
+        Describe the item you want to create and our AI will generate a custom
+        addon for your Minecraft world. Be as creative as you like!
+      </p>
+
+      <div class="create-form">
+        <label class="create-label" for="item-description">Describe your item</label>
+        <input
+          id="item-description"
+          class="create-input"
+          type="text"
+          placeholder="A diamond sword that shoots lightning..."
+          aria-label="Describe your item"
+        />
+        <button id="generate-btn" class="create-generate-btn" type="button">
+          Generate
+        </button>
+      </div>
+    </div>
+
+    <!-- ── Loading State ────────────────────────────────────────────────── -->
+    <div id="state-loading" class="create-state" hidden>
+      <div class="loading-block">
+        <div class="progress-bar-track">
+          <div id="progress-bar" class="progress-bar-fill"></div>
+        </div>
+        <p class="loading-text" id="loading-text">Analyzing description...</p>
+      </div>
+    </div>
+
+    <!-- ── Success State ────────────────────────────────────────────────── -->
+    <div id="state-success" class="create-state" hidden>
+      <p class="result-subtitle" id="result-subtitle"></p>
+
+      <div class="result-card">
+        <img
+          class="result-thumb"
+          src="/images/addons/netherite-trident-thumb.png"
+          alt="Lightning Blade"
+        />
+        <div class="result-body">
+          <span class="result-type-badge">item</span>
+          <h3 class="result-name">Lightning Blade</h3>
+          <p class="result-desc">A mystical blade crackling with electrical energy</p>
+          <span class="result-price">&euro;0.10</span>
+        </div>
+        <button id="add-to-cart-btn" class="result-cart-btn" type="button">
+          Add to Cart
+        </button>
+      </div>
+
+      <a class="back-link" href="/catalog">&larr; Back to Catalog</a>
+    </div>
+  </main>
+</body>
+</html>
+
+<style>
+  /* ── Page Container ──────────────────────────────────────────────────── */
+
+  .create-page {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: var(--space-5) var(--space-4) var(--space-7);
+  }
+
+  /* ── Page Title ──────────────────────────────────────────────────────── */
+
+  .create-title {
+    font-family: var(--font-heading);
+    font-size: var(--text-2xl);
+    color: var(--color-primary);
+    margin-bottom: var(--space-5);
+  }
+
+  /* ── State Containers ────────────────────────────────────────────────── */
+
+  .create-state {
+    text-align: center;
+  }
+
+  /* ── Form State ──────────────────────────────────────────────────────── */
+
+  .create-instructions {
+    font-family: var(--font-body);
+    font-size: var(--text-base);
+    color: var(--color-stone);
+    margin: 0 0 var(--space-5);
+    line-height: 1.6;
+    text-align: left;
+  }
+
+  .create-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .create-label {
+    font-family: var(--font-heading);
+    font-size: var(--text-xs);
+    color: var(--color-accent);
+    text-align: left;
+  }
+
+  .create-input {
+    font-family: var(--font-body);
+    font-size: var(--text-base);
+    color: var(--color-text-light);
+    background: var(--color-bg-mid);
+    border: var(--space-1) solid var(--color-border);
+    border-radius: var(--border-radius);
+    padding: var(--space-3);
+    outline: none;
+    transition: border-color 0.15s;
+  }
+
+  .create-input::placeholder {
+    color: var(--color-stone);
+  }
+
+  .create-input:focus {
+    border-color: var(--color-primary);
+  }
+
+  .create-generate-btn {
+    font-family: var(--font-heading);
+    font-size: var(--text-sm);
+    color: var(--color-text-light);
+    background: var(--color-primary);
+    border: var(--space-1) solid var(--color-moss);
+    border-radius: var(--border-radius);
+    padding: var(--space-3) var(--space-6);
+    cursor: pointer;
+    box-shadow: var(--space-1) var(--space-1) 0 var(--color-moss);
+    transition: background 0.15s, border-color 0.15s;
+  }
+
+  .create-generate-btn:hover,
+  .create-generate-btn:focus-visible {
+    background: var(--color-accent);
+    border-color: var(--color-oak);
+    box-shadow: var(--space-1) var(--space-1) 0 var(--color-oak);
+  }
+
+  .create-generate-btn:active {
+    box-shadow: none;
+    transform: translate(var(--space-1), var(--space-1));
+  }
+
+  .create-generate-btn:disabled {
+    opacity: 0.6;
+    cursor: default;
+  }
+
+  /* ── Loading State ───────────────────────────────────────────────────── */
+
+  .loading-block {
+    padding: var(--space-5) 0;
+  }
+
+  .progress-bar-track {
+    width: 100%;
+    height: var(--space-4);
+    background: var(--color-bg-dark);
+    border: var(--space-1) solid var(--color-border);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    margin-bottom: var(--space-3);
+    box-shadow: inset var(--space-1) var(--space-1) 0 rgba(0, 0, 0, 0.3);
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    width: 0%;
+    background: var(--color-primary);
+    transition: width 0.3s linear;
+    box-shadow: inset 0 calc(-1 * var(--space-1)) 0 var(--color-moss);
+  }
+
+  .loading-text {
+    font-family: var(--font-heading);
+    font-size: var(--text-xs);
+    color: var(--color-accent);
+    margin: 0;
+    animation: blink 1s steps(2, start) infinite;
+  }
+
+  @keyframes blink {
+    50% { opacity: 0.4; }
+  }
+
+  /* ── Success State ───────────────────────────────────────────────────── */
+
+  .result-subtitle {
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    color: var(--color-stone);
+    margin: 0 0 var(--space-4);
+    font-style: italic;
+  }
+
+  .result-card {
+    display: flex;
+    flex-direction: column;
+    background: var(--color-bg-mid);
+    border: var(--space-1) solid var(--color-primary);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    box-shadow: var(--space-1) var(--space-1) 0 var(--color-moss);
+    margin-bottom: var(--space-5);
+  }
+
+  .result-thumb {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    display: block;
+  }
+
+  .result-body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    padding: var(--space-3);
+    text-align: left;
+  }
+
+  .result-type-badge {
+    display: inline-block;
+    align-self: flex-start;
+    font-family: var(--font-heading);
+    font-size: var(--text-xs);
+    color: var(--color-text-dark);
+    background: var(--color-accent);
+    border-radius: var(--border-radius);
+    padding: var(--space-1) var(--space-2);
+    text-transform: capitalize;
+    line-height: 1;
+  }
+
+  .result-name {
+    font-family: var(--font-heading);
+    font-size: var(--text-sm);
+    color: var(--color-text-light);
+    margin: 0;
+    line-height: 1.4;
+  }
+
+  .result-desc {
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    color: var(--color-stone);
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  .result-price {
+    font-family: var(--font-heading);
+    font-size: var(--text-sm);
+    color: var(--color-accent);
+  }
+
+  .result-cart-btn {
+    font-family: var(--font-heading);
+    font-size: var(--text-xs);
+    color: var(--color-text-light);
+    background: var(--color-primary);
+    border: none;
+    border-top: var(--space-1) solid var(--color-moss);
+    border-radius: var(--border-radius);
+    padding: var(--space-2) var(--space-3);
+    cursor: pointer;
+    transition: background 0.15s;
+    text-align: center;
+  }
+
+  .result-cart-btn:hover,
+  .result-cart-btn:focus-visible {
+    background: var(--color-accent);
+  }
+
+  .result-cart-btn--in-cart {
+    background: var(--color-stone);
+    border-top-color: var(--color-border);
+    cursor: default;
+    opacity: 0.8;
+  }
+
+  .result-cart-btn--in-cart:hover,
+  .result-cart-btn--in-cart:focus-visible {
+    background: var(--color-stone);
+  }
+
+  /* ── Back Link ───────────────────────────────────────────────────────── */
+
+  .back-link {
+    display: inline-block;
+    font-family: var(--font-heading);
+    font-size: var(--text-xs);
+    color: var(--color-text-light);
+    background: var(--color-bg-mid);
+    border: var(--space-1) solid var(--color-border);
+    border-radius: var(--border-radius);
+    padding: var(--space-2) var(--space-4);
+    text-decoration: none;
+    transition: background 0.15s, border-color 0.15s;
+  }
+
+  .back-link:hover,
+  .back-link:focus-visible {
+    background: var(--color-primary);
+    border-color: var(--color-moss);
+  }
+
+  /* ── Responsive: mobile (375px+) ──────────────────────────────────────── */
+
+  @media (max-width: 640px) {
+    .create-page {
+      padding: var(--space-4) var(--space-3) var(--space-6);
+    }
+
+    .create-title {
+      font-size: var(--text-lg);
+      margin-bottom: var(--space-4);
+    }
+
+    .create-instructions {
+      font-size: var(--text-sm);
+    }
+
+    .create-input {
+      font-size: var(--text-sm);
+      padding: var(--space-2);
+    }
+
+    .create-generate-btn {
+      font-size: var(--text-xs);
+      padding: var(--space-2) var(--space-4);
+      width: 100%;
+    }
+
+    .result-body {
+      padding: var(--space-2);
+    }
+
+    .result-name {
+      font-size: var(--text-xs);
+    }
+
+    .result-desc {
+      font-size: var(--text-xs);
+    }
+  }
+</style>
+
+<script>
+  import { addToCart, isInCart, onCartChange } from '../scripts/cart';
+
+  // ── Hardcoded generated addon ─────────────────────────────────────────
+  const generatedAddon = {
+    id: 'ai-generated-001',
+    name: 'Lightning Blade',
+    slug: 'lightning-blade',
+    type: 'item',
+    description: {
+      short: 'A mystical blade crackling with electrical energy',
+      long: 'Forged in the heart of a thunderstorm...',
+    },
+    price: 0.10,
+    thumbnail: '/images/addons/netherite-trident-thumb.png',
+    gallery: [],
+    tags: ['weapon', 'custom', 'ai-generated'],
+    mcVersion: '1.20+',
+    fileSize: '1.2 MB',
+  };
+
+  // ── DOM references ────────────────────────────────────────────────────
+  const stateForm = document.getElementById('state-form') as HTMLElement;
+  const stateLoading = document.getElementById('state-loading') as HTMLElement;
+  const stateSuccess = document.getElementById('state-success') as HTMLElement;
+
+  const descriptionInput = document.getElementById('item-description') as HTMLInputElement;
+  const generateBtn = document.getElementById('generate-btn') as HTMLButtonElement;
+  const progressBar = document.getElementById('progress-bar') as HTMLElement;
+  const loadingText = document.getElementById('loading-text') as HTMLElement;
+  const resultSubtitle = document.getElementById('result-subtitle') as HTMLElement;
+  const addToCartBtn = document.getElementById('add-to-cart-btn') as HTMLButtonElement;
+
+  // ── State management ──────────────────────────────────────────────────
+
+  function showState(state: 'form' | 'loading' | 'success'): void {
+    stateForm.hidden = state !== 'form';
+    stateLoading.hidden = state !== 'loading';
+    stateSuccess.hidden = state !== 'success';
+  }
+
+  // ── Loading messages ──────────────────────────────────────────────────
+
+  const loadingMessages = [
+    'Analyzing description...',
+    'Generating textures...',
+    'Building addon structure...',
+    'Applying enchantments...',
+    'Finalizing item...',
+  ];
+
+  let activeInterval: ReturnType<typeof setInterval> | null = null;
+
+  function cancelGeneration(): void {
+    if (activeInterval !== null) {
+      clearInterval(activeInterval);
+      activeInterval = null;
+    }
+  }
+
+  // ── Simulate generation ───────────────────────────────────────────────
+
+  function simulateGeneration(): void {
+    cancelGeneration();
+    showState('loading');
+    generateBtn.disabled = true;
+    progressBar.style.width = '0%';
+    loadingText.textContent = loadingMessages[0];
+
+    const totalDuration = 3000;
+    const steps = loadingMessages.length;
+    const stepDuration = totalDuration / steps;
+
+    let currentStep = 0;
+
+    activeInterval = setInterval(() => {
+      currentStep++;
+      const progress = Math.min((currentStep / steps) * 100, 100);
+      progressBar.style.width = `${progress}%`;
+
+      if (currentStep < steps) {
+        loadingText.textContent = loadingMessages[currentStep];
+      }
+
+      if (currentStep >= steps) {
+        cancelGeneration();
+        setTimeout(() => {
+          showState('success');
+          updateCartBtn();
+        }, 300);
+      }
+    }, stepDuration);
+  }
+
+  // ── Cart button handling ──────────────────────────────────────────────
+
+  function updateCartBtn(): void {
+    if (isInCart(generatedAddon.id)) {
+      addToCartBtn.textContent = 'In Cart';
+      addToCartBtn.classList.add('result-cart-btn--in-cart');
+      addToCartBtn.disabled = true;
+    } else {
+      addToCartBtn.textContent = 'Add to Cart';
+      addToCartBtn.classList.remove('result-cart-btn--in-cart');
+      addToCartBtn.disabled = false;
+    }
+  }
+
+  // ── Event listeners ───────────────────────────────────────────────────
+
+  generateBtn.addEventListener('click', () => {
+    const description = descriptionInput.value.trim();
+    if (!description) {
+      descriptionInput.focus();
+      return;
+    }
+
+    resultSubtitle.textContent = `Generated from: "${description}"`;
+    simulateGeneration();
+  });
+
+  addToCartBtn.addEventListener('click', () => {
+    addToCart(generatedAddon.id);
+    // Store generated addon data so the cart page can resolve it
+    try {
+      localStorage.setItem('ea-generated-addon', JSON.stringify(generatedAddon));
+    } catch (_) { /* storage unavailable */ }
+    updateCartBtn();
+  });
+
+  onCartChange(() => {
+    updateCartBtn();
+  });
+</script>

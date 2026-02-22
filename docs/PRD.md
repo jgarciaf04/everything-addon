@@ -29,7 +29,7 @@ All stack decisions are final constraints, not recommendations.
 
 ## 3. Pages and Features
 
-The site MUST consist of exactly five pages. All pages MUST share a persistent navigation header that includes links to the Landing Page, Addon Catalog Page, and Cart Page, plus a cart item count indicator. Each page is described below with its required content and behavior.
+The site MUST consist of exactly four pages. All pages MUST share a persistent navigation header that includes links to the Landing Page, Addon Catalog Page, and Cart Page, plus a cart item count indicator. Each page is described below with its required content and behavior.
 
 ### 3.1 Landing Page
 
@@ -37,11 +37,13 @@ The site MUST consist of exactly five pages. All pages MUST share a persistent n
 
 **Required Elements**:
 - Hero banner containing Minecraft-themed visuals, a headline, and a subheadline describing the product value proposition.
+- A pixel-art Minecraft character or mob decorative element present within the hero section.
 - Features section listing the selling points of the addon store (minimum three distinct feature highlights).
 - A primary call-to-action (CTA) button that navigates the user to the Addon Catalog Page.
 
 **Acceptance Criteria**:
 - [ ] The hero banner is visible on page load without scrolling on both mobile and desktop viewports.
+- [ ] A pixel-art Minecraft character or mob decorative element is visible within the hero section without scrolling on both mobile and desktop viewports.
 - [ ] The features section displays a minimum of three feature highlights.
 - [ ] The CTA button navigates to the Addon Catalog Page when clicked.
 - [ ] No broken image references exist on the page.
@@ -53,12 +55,15 @@ The site MUST consist of exactly five pages. All pages MUST share a persistent n
 **Purpose**: Allow users to browse, filter, and search available addons, and add them to their cart.
 
 **Required Elements**:
+- A pixel-art decorative element in the page header area.
 - A grid displaying between 15 and 20 mock addon cards.
 - Each addon card MUST show: thumbnail image, addon name, type badge, short description, price, and an "Add to Cart" button.
 - A filter control allowing users to filter the grid by type: `mob`, `item`, `block`, `system`. Selecting a type shows only addons of that type. A default "All" state shows every addon.
 - A search bar that filters the visible grid in real time by matching the user's input against addon name, short description, and tags fields.
+- A "Create Your Own Item" CTA card or button that is visually distinct from the regular addon grid cards and links to the Create Page.
 
 **Acceptance Criteria**:
+- [ ] A pixel-art decorative element is present in the page header area.
 - [ ] The grid renders between 15 and 20 addon cards on initial load with no filter or search active.
 - [ ] Each card displays all six required elements: thumbnail, name, type badge, short description, price, "Add to Cart" button.
 - [ ] Selecting a type filter reduces the grid to only cards matching that type.
@@ -67,6 +72,7 @@ The site MUST consist of exactly five pages. All pages MUST share a persistent n
 - [ ] Combining a type filter and a search term applies both constraints simultaneously.
 - [ ] Clicking "Add to Cart" on a card adds that addon to the cart state. The button MUST reflect an "added" state if the addon is already in the cart (e.g., disabled or label change).
 - [ ] Clicking an addon card (outside the "Add to Cart" button) navigates to that addon's Detail Page.
+- [ ] The "Create Your Own Item" CTA is visually distinguishable from regular addon cards and navigates to the Create Page when clicked.
 
 ---
 
@@ -93,42 +99,60 @@ The site MUST consist of exactly five pages. All pages MUST share a persistent n
 
 ---
 
-### 3.4 Cart Page
+### 3.4 Cart & Preview Page
 
-**Purpose**: Display the user's selected addons and allow them to proceed to the preview and generation step.
+**Purpose**: Display the user's selected addons and provide an inline preview and simulated generation flow without navigating away from the page.
 
 **Required Elements**:
 - A list of all addons currently in the cart. Each list item MUST show: addon name, price, and a remove button.
-- A total price value calculated as the sum of all addon prices in the cart.
-- A "Preview & Generate" button that navigates to the Preview & Download Page.
+- A total price value calculated as item count × 0.10.
+- A "Preview & Generate" CTA that, when activated, reveals an inline preview section directly below the cart list without navigating to a new page.
+- The inline preview section MUST contain: a summary list of all addons included in the pack, a visual preview element representing the combined addon pack, a "Generate Addon" button, and a mocked success state displayed after the simulated generation completes.
 
 **Acceptance Criteria**:
 - [ ] The page displays all addons currently in the cart.
 - [ ] Each cart item shows the addon name and price.
 - [ ] Clicking the remove button on a cart item removes that addon from the cart and updates the list and total immediately without a page reload.
-- [ ] The total price reflects the sum of all current cart item prices.
-- [ ] If the cart is empty, the page displays an empty state message and the "Preview & Generate" button is disabled or hidden.
-- [ ] Clicking "Preview & Generate" navigates to the Preview & Download Page.
-
----
-
-### 3.5 Preview & Download Page
-
-**Purpose**: Present a final summary of selected addons and simulate the addon pack generation and download.
-
-**Required Elements**:
-- A summary list of all addons included in the generated pack.
-- A visual preview element representing the combined addon pack.
-- A "Generate Addon" button that, when clicked, triggers a simulated generation process.
-- A mocked success state displayed after the simulated generation completes, representing a successful download or pack creation.
-
-**Acceptance Criteria**:
-- [ ] The page displays the names of all addons in the current cart.
-- [ ] The visual preview element is present on the page.
+- [ ] The total price reflects item count × 0.10.
+- [ ] If the cart is empty, the page displays an empty state message and the "Preview & Generate" CTA is disabled or hidden.
+- [ ] Activating "Preview & Generate" reveals the inline preview section on the same page; no navigation event occurs.
+- [ ] The inline preview section displays the names of all addons in the current cart.
+- [ ] The visual preview element is present within the inline preview section.
 - [ ] Clicking "Generate Addon" triggers a visible loading or processing state.
 - [ ] After the simulated process completes, a success state is displayed (e.g., a success message or mock download confirmation).
 - [ ] No real file is generated or downloaded. The success state is entirely cosmetic and mocked.
-- [ ] If the cart is empty when this page is reached, the page displays an appropriate empty state or redirects to the Cart Page.
+
+---
+
+### 3.5 Create Your Own Item Page
+
+**Purpose**: Present a mocked AI-driven addon creation experience. No real AI, network request, or server-side logic is involved at any point.
+
+**File**: `src/pages/create.astro`
+
+**Required Elements**:
+- A text input where the user describes the desired addon.
+- A "Generate" button that initiates the fake generation flow.
+- A 2–4 second fake generation animation consisting of a progress bar and rotating status messages. The animation style MUST match the preview simulation style used on the Cart & Preview Page.
+- After the animation completes, a pre-made static addon card is displayed as if AI-generated. This card is identical in structure to regular addon cards and MUST display: name, description, type badge, thumbnail, "Add to Cart" button, and price of €0.10.
+
+**Constraints**:
+- MUST NOT call any external API.
+- MUST NOT execute any server-side logic.
+- MUST NOT generate real content of any kind.
+- MUST NOT issue any network request during the entire flow.
+- The displayed result card MUST be a pre-authored static asset; it is always the same regardless of the text input value.
+
+**Acceptance Criteria**:
+- [ ] The page is reachable from the Addon Catalog Page via the "Create Your Own Item" CTA.
+- [ ] A text input and a "Generate" button are present on the page.
+- [ ] Clicking "Generate" starts the fake animation; the animation lasts between 2 and 4 seconds.
+- [ ] The animation includes a visible progress bar and at least two distinct rotating status messages.
+- [ ] After the animation completes, the pre-made static addon card is displayed.
+- [ ] The result card displays: name, description, type badge, thumbnail, "Add to Cart" button, and price €0.10.
+- [ ] Clicking "Add to Cart" on the result card adds that static addon to the cart state.
+- [ ] No network request is issued at any point during the flow (verifiable via browser DevTools Network tab showing zero requests).
+- [ ] The displayed result is identical on every invocation, regardless of the text input value.
 
 ---
 
@@ -162,10 +186,10 @@ All visual design decisions MUST follow the Minecraft-inspired aesthetic defined
 | Attribute | Requirement |
 |-----------|-------------|
 | Visual style | Pixelated; textures and icons MUST use pixel-art style assets |
-| Color palette | Earth tones (browns, tans, greens, grays) consistent with Minecraft's block palette |
+| Color palette | Blue-based palette (sky, water, lapis, diamond tones) consistent with Minecraft's block palette |
 | Typography | Minecraft-style fonts for headings and display text; legible system or web font acceptable for body text |
 | UI elements | Block-like; rectangular components with sharp corners; no rounded buttons or card corners |
-| Responsiveness | All five pages MUST render correctly on mobile (minimum 375px wide) and desktop (minimum 1280px wide) viewports |
+| Responsiveness | All four pages MUST render correctly on mobile (minimum 375px wide) and desktop (minimum 1280px wide) viewports |
 
 ---
 
@@ -173,8 +197,10 @@ All visual design decisions MUST follow the Minecraft-inspired aesthetic defined
 
 All pricing displayed in this POC is mocked. No real payment processing exists or is integrated.
 
+- All addons are priced at a flat €0.10 per addon.
+- All price displays use the EUR currency symbol (€) throughout the site.
+- Cart total is calculated as item count × 0.10.
 - Addon prices are numeric mock values stored in the mock JSON data.
-- The cart total is a calculated sum of mock prices.
 - Payment gateways, checkout flows, and financial transactions of any kind MUST NOT be implemented in the POC.
 - Any UI element that resembles a payment action (e.g., a "Buy" button) MUST either be absent or clearly non-functional in the POC scope.
 
@@ -184,12 +210,14 @@ All pricing displayed in this POC is mocked. No real payment processing exists o
 
 ### In Scope
 
-- Five static pages as defined in Section 3.
+- Four static pages as defined in Section 3.
 - Addon catalog rendered from static mock JSON.
 - Client-side cart state (in-memory or browser storage; no server persistence required).
 - Type filtering and name/short-description/tags search on the catalog.
 - Addon detail pages with gallery and specs.
 - Simulated generation and mocked download success state.
+- Mocked AI item creation feature (static, no real AI).
+- Pixel-art Minecraft character/mob decorative elements.
 - Minecraft-inspired visual design system.
 - Responsive layout for mobile and desktop.
 
@@ -199,6 +227,7 @@ The following MUST NOT be implemented in the POC:
 
 - Real payment processing of any kind.
 - Real addon file generation, merging, or packaging.
+- Real AI or LLM integration of any kind.
 - User authentication, accounts, or session management.
 - Database, API, or any server-side backend.
 - Addon compatibility checking between selected items.
