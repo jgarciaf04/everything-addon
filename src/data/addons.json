@@ -8,7 +8,7 @@
       "short": "Tame a baby Ender Dragon that fights alongside you and grows stronger over time.",
       "long": "Hatch your very own Ender Dragon from a dragon egg and raise it as a loyal companion. Your dragon starts small but grows through three stages, gaining new abilities like fire breath and aerial attacks. Feed it chorus fruit to accelerate growth and unlock a rideable form for soaring across the End dimension and beyond."
     },
-    "price": 4.99,
+    "price": 0.10,
     "thumbnail": "/images/addons/ender-dragon-companion-thumb.png",
     "gallery": [
       "/images/addons/ender-dragon-companion-gallery-1.png",
@@ -28,7 +28,7 @@
       "short": "Summon a tamed Warden to patrol your base and obliterate hostile mobs on sight.",
       "long": "Craft a sculk totem to bind a Warden to your will as the ultimate base defender. The Warden Guardian patrols a configurable radius around the totem, using its sonic boom attack against any hostile mob that dares approach. Upgrade its armor with reinforced deepslate plating to make it nearly indestructible. Includes custom idle and alert animations."
     },
-    "price": 4.99,
+    "price": 0.10,
     "thumbnail": "/images/addons/warden-guardian-thumb.png",
     "gallery": [
       "/images/addons/warden-guardian-gallery-1.png",
@@ -48,7 +48,7 @@
       "short": "Ride a spectral Phantom mount with custom wing animations and dive-bomb attacks.",
       "long": "Capture and tame Phantoms using a new enchanted membrane lure. Once tamed, your Phantom becomes a rideable flying mount with smooth wing animations and responsive aerial controls. Execute devastating dive-bomb attacks on ground targets for massive damage. The Phantom also grants slow falling to its rider when dismounting mid-air."
     },
-    "price": 2.49,
+    "price": 0.10,
     "thumbnail": "/images/addons/phantom-wings-thumb.png",
     "gallery": [
       "/images/addons/phantom-wings-gallery-1.png",
@@ -67,7 +67,7 @@
       "short": "Recruit an armored Blaze warrior that wields dual blaze rods in melee combat.",
       "long": "Forge a nether star scepter to summon the Blaze Rod Warrior, a heavily armored Blaze variant that fights with dual blaze rod weapons in close quarters. Unlike regular Blazes, this warrior charges into melee range, spinning its rods in devastating combos. It is immune to fire and lava, making it the perfect companion for Nether expeditions and fortress raids."
     },
-    "price": 2.49,
+    "price": 0.10,
     "thumbnail": "/images/addons/blaze-rod-warrior-thumb.png",
     "gallery": [
       "/images/addons/blaze-rod-warrior-gallery-1.png",
@@ -87,7 +87,7 @@
       "short": "A fearsome Drowned boss mob that commands an undead crew and guards ocean treasure.",
       "long": "Encounter the Drowned Captain, a new mini-boss that spawns in ocean ruins and shipwrecks with a crew of elite Drowned soldiers. The Captain wields a corrupted trident with chain lightning and can summon tidal waves to sweep players off their feet. Defeat the Captain to earn unique loot including nautilus shell armor and the Captain's enchanted trident."
     },
-    "price": 7.99,
+    "price": 0.10,
     "thumbnail": "/images/addons/drowned-captain-thumb.png",
     "gallery": [
       "/images/addons/drowned-captain-gallery-1.png",
@@ -107,7 +107,7 @@
       "short": "An elite Wither Skeleton with full netherite armor, a shield, and wither aura attacks.",
       "long": "The Wither Skeleton Knight is a formidable Nether fortress guardian clad in custom netherite plate armor and wielding a wither-infused greatsword. It blocks incoming attacks with a bone shield and radiates a wither aura that debuffs nearby players. Defeating it drops rare wither bones used to craft the Witherbane sword, a weapon that deals bonus damage to all undead mobs."
     },
-    "price": 7.99,
+    "price": 0.10,
     "thumbnail": "/images/addons/wither-skeleton-knight-thumb.png",
     "gallery": [
       "/images/addons/wither-skeleton-knight-gallery-1.png",
@@ -126,7 +126,7 @@
       "short": "Upgrade your trident with netherite for devastating thrown and melee damage.",
       "long": "Combine a trident with a netherite ingot at a smithing table to forge the Netherite Trident, the most powerful throwable weapon in the game. It deals 12 base damage in melee, returns faster when thrown, and is immune to fire and lava destruction. Includes a unique dark metallic texture and custom throw animation with purple particle trails."
     },
-    "price": 2.49,
+    "price": 0.10,
     "thumbnail": "/images/addons/netherite-trident-thumb.png",
     "gallery": [
       "/images/addons/netherite-trident-gallery-1.png",
@@ -145,7 +145,7 @@
       "short": "A crystalline bow that fires piercing amethyst shards with a satisfying chime.",
       "long": "Craft the Amethyst Bow using amethyst shards and string at a crafting table. This elegant weapon fires custom amethyst shard projectiles that pierce through up to two targets and emit the iconic amethyst chime on impact. Fully charged shots apply a brief slowness effect, making it ideal for crowd control. The bow features a translucent purple crystal model with subtle glow effects."
     },
-    "price": 2.49,
+    "price": 0.10,
     "thumbnail": "/images/addons/amethyst-bow-thumb.png",
     "gallery": [
       "/images/addons/amethyst-bow-gallery-1.png",
@@ -165,7 +165,7 @@
       "short": "Channel sculk energy through this staff to unleash sonic boom blasts at range.",
       "long": "The Echo Shard Staff is a rare weapon crafted from echo shards and a blaze rod. Right-click to charge and release a directional sonic boom that damages and knocks back all entities in a line. The staff has a cooldown between uses and consumes durability, but can be repaired with echo shards. Its sculk-themed design pulses with teal energy when fully charged."
     },
-    "price": 4.99,
+    "price": 0.10,
     "thumbnail": "/images/addons/echo-shard-staff-thumb.png",
     "gallery": [
       "/images/addons/echo-shard-staff-gallery-1.png",
@@ -184,7 +184,7 @@
       "short": "A vibration-powered crossbow that locks onto nearby mobs and fires homing bolts.",
       "long": "Infuse a crossbow with sculk catalysts to create the Sculk Crossbow, a weapon that detects vibrations to lock onto targets. When aimed near a mob, the crosshair snaps to the target and fired bolts curve toward them with mild homing capability. Bolts apply darkness for 3 seconds on hit, disorienting enemies. The crossbow features animated sculk veins that spread across its surface."
     },
-    "price": 4.99,
+    "price": 0.10,
     "thumbnail": "/images/addons/sculk-crossbow-thumb.png",
     "gallery": [
       "/images/addons/sculk-crossbow-gallery-1.png",
@@ -204,7 +204,7 @@
       "short": "A full set of copper tools that oxidize over time, gaining unique enchantment bonuses.",
       "long": "This pack adds a complete copper tool tier including pickaxe, axe, shovel, hoe, and sword. Copper tools start with baseline stats between stone and iron but oxidize through four stages over time, each stage granting a different passive bonus like fortune, efficiency, or looting. Wax your tools with honeycomb to lock in your preferred oxidation stage. Includes all four patina color variants."
     },
-    "price": 4.99,
+    "price": 0.10,
     "thumbnail": "/images/addons/copper-pickaxe-set-thumb.png",
     "gallery": [
       "/images/addons/copper-pickaxe-set-gallery-1.png",
@@ -224,7 +224,7 @@
       "short": "A handheld device that rapid-fires ender pearls for fast, precise teleportation.",
       "long": "The Ender Pearl Launcher is a redstone-powered handheld cannon that loads up to 8 ender pearls and fires them in quick succession with pinpoint accuracy. Unlike hand-thrown pearls, launched pearls travel in a flat trajectory at high speed, making long-range teleportation reliable and precise. The launcher features a reload animation and an ammo counter displayed on the item tooltip. Perfect for PvP and parkour maps."
     },
-    "price": 7.99,
+    "price": 0.10,
     "thumbnail": "/images/addons/ender-pearl-launcher-thumb.png",
     "gallery": [
       "/images/addons/ender-pearl-launcher-gallery-1.png",
@@ -243,7 +243,7 @@
       "short": "Over 40 deepslate dungeon blocks including pillars, arches, chains, and trap floors.",
       "long": "Transform your builds into atmospheric underground dungeons with this comprehensive deepslate block set. Includes carved pillars, crumbling arches, iron-grate floors, wall-mounted chains, moss-covered bricks, and hidden trap blocks that collapse under player weight. All blocks connect seamlessly with vanilla deepslate variants and support waterlogging. Ideal for adventure maps, RPG servers, and survival base decoration."
     },
-    "price": 9.99,
+    "price": 0.10,
     "thumbnail": "/images/addons/deepslate-dungeon-set-thumb.png",
     "gallery": [
       "/images/addons/deepslate-dungeon-set-gallery-1.png",
@@ -263,7 +263,7 @@
       "short": "Elegant cherry wood furniture including tables, chairs, shelves, and lanterns.",
       "long": "Decorate your cherry grove home with this beautiful furniture set crafted from cherry wood planks. Includes dining tables, cushioned chairs, bookshelves, wall lanterns, flower vases, kitchen counters, and a kotatsu-style low table. All pieces feature the signature pink cherry wood aesthetic with subtle petal particle effects. Furniture blocks are interactable where appropriate, with chairs you can sit in and shelves that display items."
     },
-    "price": 7.99,
+    "price": 0.10,
     "thumbnail": "/images/addons/cherry-blossom-furniture-thumb.png",
     "gallery": [
       "/images/addons/cherry-blossom-furniture-gallery-1.png",
@@ -283,7 +283,7 @@
       "short": "Decorative amethyst blocks with glowing crystals, chimes, and geode formations.",
       "long": "Expand the amethyst geode aesthetic with 25 new crystal block variants. This pack includes large crystal formations, glowing amethyst lamps, crystal chime wind catchers, polished amethyst slabs and stairs, and hollow geode shell blocks. All blocks emit a soft purple glow and play gentle chime sounds when players walk nearby. Crystal clusters can be oriented in any direction for maximum creative flexibility."
     },
-    "price": 4.99,
+    "price": 0.10,
     "thumbnail": "/images/addons/amethyst-crystal-pack-thumb.png",
     "gallery": [
       "/images/addons/amethyst-crystal-pack-gallery-1.png",
@@ -302,7 +302,7 @@
       "short": "Advanced sculk sensor blocks for building wireless redstone and detection systems.",
       "long": "Take sculk technology to the next level with specialized sensor blocks that filter and relay vibrations with precision. This pack includes directional sensors, frequency filters, signal amplifiers, and sculk relay nodes that transmit redstone signals wirelessly up to 64 blocks. Build sophisticated alarm systems, automatic doors, and hidden mechanisms without a single piece of redstone dust. Includes a guidebook item with circuit diagrams and tutorials."
     },
-    "price": 9.99,
+    "price": 0.10,
     "thumbnail": "/images/addons/sculk-sensor-array-thumb.png",
     "gallery": [
       "/images/addons/sculk-sensor-array-gallery-1.png",
@@ -322,7 +322,7 @@
       "short": "Buildable copper pipe blocks that transport items, water, and redstone signals.",
       "long": "Construct elaborate pipe networks using connectable copper pipe blocks that automatically route items between containers. Pipes oxidize through four visual stages just like vanilla copper, and different oxidation levels affect transport speed. The pack includes straight pipes, elbows, T-junctions, valves, and filter blocks that sort items by type. Water pipes can irrigate farmland in a radius, and redstone pipes carry signals around corners without repeaters."
     },
-    "price": 9.99,
+    "price": 0.10,
     "thumbnail": "/images/addons/copper-pipe-network-thumb.png",
     "gallery": [
       "/images/addons/copper-pipe-network-gallery-1.png",
@@ -342,7 +342,7 @@
       "short": "Tropical mangrove blocks with stilted foundations, rope bridges, and thatched roofs.",
       "long": "Build stunning tropical villages and swamp outposts with this mangrove-themed construction set. Includes stilted foundation posts, woven rope bridges, thatched roof panels, mangrove root lattice walls, hanging vine curtains, and mud-brick accent blocks. All pieces blend naturally with vanilla mangrove wood and muddy mangrove roots. The set is designed for elevated builds over water, with foundation blocks that snap to varying heights for an organic, uneven look."
     },
-    "price": 7.99,
+    "price": 0.10,
     "thumbnail": "/images/addons/mangrove-building-set-thumb.png",
     "gallery": [
       "/images/addons/mangrove-building-set-gallery-1.png",
@@ -362,7 +362,7 @@
       "short": "A comprehensive in-game UI for managing world rules, difficulty, mob spawning, and tick speed without commands.",
       "long": "The World Settings Manager adds a sleek, touch-friendly settings panel accessible from a custom craftable tablet item or the pause menu. Operators and world owners can toggle game rules, adjust difficulty, control mob spawning categories, set random tick speed, manage weather cycles, and configure player permissions — all without typing a single slash command. Changes are logged with timestamps and player names so server admins can audit who changed what. The addon also supports preset profiles that can be saved, loaded, and shared as exportable files, making it easy to switch between survival, creative building, and minigame configurations instantly."
     },
-    "price": 4.99,
+    "price": 0.10,
     "thumbnail": "/images/addons/world-settings-manager-thumb.png",
     "gallery": [
       "/images/addons/world-settings-manager-gallery-1.png",
