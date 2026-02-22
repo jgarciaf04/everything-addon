@@ -1,0 +1,9 @@
+docs/PRD.md
+src/data/addons.json
+src/pages/addons/[slug].astro
+src/pages/cart.astro
+src/pages/catalog.astro
+src/pages/create.astro
+src/pages/index.astro
+src/pages/preview.astro
+src/styles/tokens.css
