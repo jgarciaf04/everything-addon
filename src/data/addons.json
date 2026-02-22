@@ -1,21 +1,21 @@
 [
   {
     "id": "mob-001",
-    "name": "Ender Dragon Companion",
-    "slug": "ender-dragon-companion",
+    "name": "Loyal Hound Companion",
+    "slug": "loyal-hound-companion",
     "type": "mob",
     "description": {
-      "short": "Tame a baby Ender Dragon that fights alongside you and grows stronger over time.",
-      "long": "Hatch your very own Ender Dragon from a dragon egg and raise it as a loyal companion. Your dragon starts small but grows through three stages, gaining new abilities like fire breath and aerial attacks. Feed it chorus fruit to accelerate growth and unlock a rideable form for soaring across the End dimension and beyond."
+      "short": "Tame an adorable pixel-art dachshund that follows, fetches, and fights alongside you.",
+      "long": "Adopt a Loyal Hound Companion by taming a wild dachshund with a bone. The hound follows you across all dimensions, fetches dropped items within a 10-block radius, and assists in combat by biting mobs for light damage. It sits on command, sleeps when you do, and wags its tail during idle animations. A collar dye system lets you choose from 16 colors to match your style."
     },
     "price": 4.99,
-    "thumbnail": "/images/addons/ender-dragon-companion-thumb.png",
+    "thumbnail": "/images/addons/loyal-hound-companion-thumb.jpg",
     "gallery": [
       "/images/addons/ender-dragon-companion-gallery-1.png",
       "/images/addons/ender-dragon-companion-gallery-2.png",
       "/images/addons/ender-dragon-companion-gallery-3.png"
     ],
-    "tags": ["ender dragon", "companion", "pet", "tameable", "flying mount", "end"],
+    "tags": ["dog", "hound", "companion", "pet", "tameable", "fetch", "mob"],
     "mcVersion": "1.21+",
     "fileSize": "3.7 MB"
   },
@@ -41,20 +41,20 @@
   },
   {
     "id": "mob-003",
-    "name": "Phantom Wings",
-    "slug": "phantom-wings",
+    "name": "Golden Butterfly",
+    "slug": "golden-butterfly",
     "type": "mob",
     "description": {
-      "short": "Ride a spectral Phantom mount with custom wing animations and dive-bomb attacks.",
-      "long": "Capture and tame Phantoms using a new enchanted membrane lure. Once tamed, your Phantom becomes a rideable flying mount with smooth wing animations and responsive aerial controls. Execute devastating dive-bomb attacks on ground targets for massive damage. The Phantom also grants slow falling to its rider when dismounting mid-air."
+      "short": "A passive golden butterfly mob that pollinates flowers and drops golden pollen.",
+      "long": "Golden Butterflies spawn naturally in flower-rich biomes like meadows, sunflower plains, and cherry groves. They flutter between flowers, triggering a pollination animation that spreads bone meal to adjacent flower blocks. Killing a butterfly drops 1\u20132 golden pollen items used to brew a Luck potion variant. They are attracted to yellow flowers specifically and can be bred in captivity using dandelion petals, producing a larva that hatches after 20 minutes."
     },
     "price": 2.49,
-    "thumbnail": "/images/addons/phantom-wings-thumb.png",
+    "thumbnail": "/images/addons/golden-butterfly-thumb.jpg",
     "gallery": [
       "/images/addons/phantom-wings-gallery-1.png",
       "/images/addons/phantom-wings-gallery-2.png"
     ],
-    "tags": ["phantom", "flying", "mount", "wings", "aerial combat", "night"],
+    "tags": ["butterfly", "mob", "passive", "golden", "pollination", "meadow", "flower"],
     "mcVersion": "1.20+",
     "fileSize": "1.8 MB"
   },
@@ -80,21 +80,21 @@
   },
   {
     "id": "mob-005",
-    "name": "Drowned Captain",
-    "slug": "drowned-captain",
-    "type": "mob",
+    "name": "Pirate Treasure Chest",
+    "slug": "pirate-treasure-chest",
+    "type": "block",
     "description": {
-      "short": "A fearsome Drowned boss mob that commands an undead crew and guards ocean treasure.",
-      "long": "Encounter the Drowned Captain, a new mini-boss that spawns in ocean ruins and shipwrecks with a crew of elite Drowned soldiers. The Captain wields a corrupted trident with chain lightning and can summon tidal waves to sweep players off their feet. Defeat the Captain to earn unique loot including nautilus shell armor and the Captain's enchanted trident."
+      "short": "A decorative pirate treasure chest block overflowing with gold and diamonds.",
+      "long": "Place the Pirate Treasure Chest as a lavish display block for your storage rooms or adventure map rewards. The chest model is open-lidded and filled with a static pile of gold ingots, diamonds, and emeralds rendered in vanilla pixel art. It functions as a standard large chest for storage while displaying the overflowing treasure visual. Spawns naturally in buried treasure structures when the addon is active, replacing vanilla buried treasure chests."
     },
     "price": 7.99,
-    "thumbnail": "/images/addons/drowned-captain-thumb.png",
+    "thumbnail": "/images/addons/pirate-treasure-chest-thumb.jpg",
     "gallery": [
       "/images/addons/drowned-captain-gallery-1.png",
       "/images/addons/drowned-captain-gallery-2.png",
       "/images/addons/drowned-captain-gallery-3.png"
     ],
-    "tags": ["drowned", "boss", "ocean", "trident", "undead", "shipwreck", "loot"],
+    "tags": ["treasure", "chest", "pirate", "gold", "diamonds", "decoration", "block", "storage"],
     "mcVersion": "1.20+",
     "fileSize": "4.2 MB"
   },
@@ -119,20 +119,20 @@
   },
   {
     "id": "item-001",
-    "name": "Netherite Trident",
-    "slug": "netherite-trident",
+    "name": "Lightning Blade",
+    "slug": "lightning-blade",
     "type": "item",
     "description": {
-      "short": "Upgrade your trident with netherite for devastating thrown and melee damage.",
-      "long": "Combine a trident with a netherite ingot at a smithing table to forge the Netherite Trident, the most powerful throwable weapon in the game. It deals 12 base damage in melee, returns faster when thrown, and is immune to fire and lava destruction. Includes a unique dark metallic texture and custom throw animation with purple particle trails."
+      "short": "A diamond sword crackling with lightning energy that strikes mobs with chain lightning on hit.",
+      "long": "Forge the Lightning Blade by combining a diamond sword with a lightning rod at a smithing table during a thunderstorm. Each melee hit triggers a chain lightning discharge that arcs to up to two additional mobs within 5 blocks, dealing 4 bonus lightning damage per arc. The blade is immune to water and deals double damage to mobs that are vulnerable to lightning. A constant crackling particle effect and ambient electricity sound play while the blade is held."
     },
     "price": 2.49,
-    "thumbnail": "/images/addons/netherite-trident-thumb.png",
+    "thumbnail": "/images/addons/lightning-blade-thumb.jpg",
     "gallery": [
       "/images/addons/netherite-trident-gallery-1.png",
       "/images/addons/netherite-trident-gallery-2.png"
     ],
-    "tags": ["netherite", "trident", "weapon", "throwable", "melee", "upgrade"],
+    "tags": ["sword", "lightning", "weapon", "diamond", "melee", "chain lightning", "item"],
     "mcVersion": "1.20+",
     "fileSize": "850 KB"
   },
@@ -197,60 +197,60 @@
   },
   {
     "id": "item-005",
-    "name": "Copper Pickaxe Set",
-    "slug": "copper-pickaxe-set",
+    "name": "Voxel Racing Kart",
+    "slug": "voxel-racing-kart",
     "type": "item",
     "description": {
-      "short": "A full set of copper tools that oxidize over time, gaining unique enchantment bonuses.",
-      "long": "This pack adds a complete copper tool tier including pickaxe, axe, shovel, hoe, and sword. Copper tools start with baseline stats between stone and iron but oxidize through four stages over time, each stage granting a different passive bonus like fortune, efficiency, or looting. Wax your tools with honeycomb to lock in your preferred oxidation stage. Includes all four patina color variants."
+      "short": "A driveable red voxel racing kart that reaches high speeds on flat terrain.",
+      "long": "Craft the Voxel Racing Kart from red concrete blocks and iron ingots. Right-click to mount and steer with movement keys at speeds up to 24 blocks per second on flat ground. The kart drifts on gravel and sand, slows on soul sand, and reaches top speed on ice. Colliding with a wall or mob deals knockback and ejects the driver. Includes a rev sound effect that scales with speed and a custom red F1-style model."
     },
     "price": 4.99,
-    "thumbnail": "/images/addons/copper-pickaxe-set-thumb.png",
+    "thumbnail": "/images/addons/voxel-racing-kart-thumb.jpg",
     "gallery": [
       "/images/addons/copper-pickaxe-set-gallery-1.png",
       "/images/addons/copper-pickaxe-set-gallery-2.png",
       "/images/addons/copper-pickaxe-set-gallery-3.png"
     ],
-    "tags": ["copper", "pickaxe", "tools", "oxidation", "mining", "crafting", "set"],
+    "tags": ["racing", "kart", "vehicle", "rideable", "speed", "voxel", "item"],
     "mcVersion": "1.21+",
     "fileSize": "2.3 MB"
   },
   {
     "id": "item-006",
-    "name": "Ender Pearl Launcher",
-    "slug": "ender-pearl-launcher",
+    "name": "Pixel Toothbrush",
+    "slug": "pixel-toothbrush",
     "type": "item",
     "description": {
-      "short": "A handheld device that rapid-fires ender pearls for fast, precise teleportation.",
-      "long": "The Ender Pearl Launcher is a redstone-powered handheld cannon that loads up to 8 ender pearls and fires them in quick succession with pinpoint accuracy. Unlike hand-thrown pearls, launched pearls travel in a flat trajectory at high speed, making long-range teleportation reliable and precise. The launcher features a reload animation and an ammo counter displayed on the item tooltip. Perfect for PvP and parkour maps."
+      "short": "A decorative pixel-art toothbrush item that grants the Cleansed status effect when used.",
+      "long": "Craft the Pixel Toothbrush from blue wool and a stick. Right-clicking grants the Cleansed status effect for 5 minutes, which gradually removes poison, hunger, and weakness debuffs one tier at a time. The toothbrush has 30 uses before it wears out and can be refilled with a water bottle. Its vibrant blue pixel-art design makes it a fun novelty item for survival role-play servers and adventure maps."
     },
     "price": 7.99,
-    "thumbnail": "/images/addons/ender-pearl-launcher-thumb.png",
+    "thumbnail": "/images/addons/pixel-toothbrush-thumb.jpg",
     "gallery": [
       "/images/addons/ender-pearl-launcher-gallery-1.png",
       "/images/addons/ender-pearl-launcher-gallery-2.png"
     ],
-    "tags": ["ender pearl", "launcher", "teleportation", "gadget", "redstone", "pvp"],
+    "tags": ["toothbrush", "item", "status effect", "cleanse", "novelty", "pixel art", "utility"],
     "mcVersion": "1.20+",
     "fileSize": "1.4 MB"
   },
   {
     "id": "block-001",
-    "name": "Deepslate Dungeon Set",
-    "slug": "deepslate-dungeon-set",
+    "name": "Redstone Building Block",
+    "slug": "redstone-building-block",
     "type": "block",
     "description": {
-      "short": "Over 40 deepslate dungeon blocks including pillars, arches, chains, and trap floors.",
-      "long": "Transform your builds into atmospheric underground dungeons with this comprehensive deepslate block set. Includes carved pillars, crumbling arches, iron-grate floors, wall-mounted chains, moss-covered bricks, and hidden trap blocks that collapse under player weight. All blocks connect seamlessly with vanilla deepslate variants and support waterlogging. Ideal for adventure maps, RPG servers, and survival base decoration."
+      "short": "A decorative red building block with a classic toy-brick look and Add-on badge texture.",
+      "long": "Add a playful toy-brick aesthetic to your builds with the Redstone Building Block. Its bright red surface features raised circular studs and an embossed \"Add-on\" badge on one face, making it a statement piece for creative builds, lobby areas, and showcase rooms. The block comes in a full set of slab, stair, and wall variants and connects flush with other stud-top block variants. It emits a faint redstone glow at night."
     },
     "price": 9.99,
-    "thumbnail": "/images/addons/deepslate-dungeon-set-thumb.png",
+    "thumbnail": "/images/addons/redstone-building-block-thumb.jpg",
     "gallery": [
       "/images/addons/deepslate-dungeon-set-gallery-1.png",
       "/images/addons/deepslate-dungeon-set-gallery-2.png",
       "/images/addons/deepslate-dungeon-set-gallery-3.png"
     ],
-    "tags": ["deepslate", "dungeon", "building", "decoration", "adventure", "blocks", "traps"],
+    "tags": ["block", "decorative", "building", "redstone", "toy", "brick", "creative"],
     "mcVersion": "1.21+",
     "fileSize": "5.1 MB"
   },
@@ -315,21 +315,21 @@
   },
   {
     "id": "block-005",
-    "name": "Copper Pipe Network",
-    "slug": "copper-pipe-network",
+    "name": "Copper Smeltery",
+    "slug": "copper-smeltery",
     "type": "block",
     "description": {
-      "short": "Buildable copper pipe blocks that transport items, water, and redstone signals.",
-      "long": "Construct elaborate pipe networks using connectable copper pipe blocks that automatically route items between containers. Pipes oxidize through four visual stages just like vanilla copper, and different oxidation levels affect transport speed. The pack includes straight pipes, elbows, T-junctions, valves, and filter blocks that sort items by type. Water pipes can irrigate farmland in a radius, and redstone pipes carry signals around corners without repeaters."
+      "short": "A copper smeltery block with a glowing furnace core for automated ore processing.",
+      "long": "Place the Copper Smeltery to unlock an upgraded furnace tier with a glowing central core. It processes ores twice as fast as a standard furnace and automatically outputs smelted ingots into adjacent chests. The smeltery's amber glow intensifies as its queue grows, giving your base a warm industrial ambiance. Pairs naturally with vanilla copper blocks and oxidizes through the same four patina stages."
     },
     "price": 9.99,
-    "thumbnail": "/images/addons/copper-pipe-network-thumb.png",
+    "thumbnail": "/images/addons/copper-smeltery-thumb.jpg",
     "gallery": [
       "/images/addons/copper-pipe-network-gallery-1.png",
       "/images/addons/copper-pipe-network-gallery-2.png",
       "/images/addons/copper-pipe-network-gallery-3.png"
     ],
-    "tags": ["copper", "pipes", "transport", "automation", "redstone", "item sorting", "building"],
+    "tags": ["copper", "smeltery", "furnace", "automation", "smelting", "block", "crafting"],
     "mcVersion": "1.21+",
     "fileSize": "3.3 MB"
   },
