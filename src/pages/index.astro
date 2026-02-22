@@ -1,6 +1,8 @@
 ---
-import '../styles/global.css';
+import type { Addon } from '../types/addon';
 import NavHeader from '../components/NavHeader.astro';
+import '../styles/global.css';
+import addons from '../data/addons.json';
 ---
 
 <!DOCTYPE html>
@@ -11,278 +13,399 @@ import NavHeader from '../components/NavHeader.astro';
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" />
-  <title>Everything Addon — Minecraft Bedrock Edition Addons</title>
+  <title>Everything Addon</title>
 </head>
 <body>
   <NavHeader />
 
-  <main>
-    <!-- ── Hero Banner ──────────────────────────────────────────────────── -->
-    <section class="hero" aria-label="Hero banner">
-      <div class="hero-inner">
-        <h1 class="hero-title">Everything Addon</h1>
-        <p class="hero-subtitle">
-          Your one-stop shop for Minecraft Bedrock Edition addons.
-          Discover, download, and play — all in one place.
-        </p>
-        <a class="cta-button" href="/catalog">Browse Addons</a>
+  <main class="catalog-page">
+    <!-- ── Page Heading ─────────────────────────────────────────────────── -->
+    <h1 class="catalog-title">Addon Catalog</h1>
+
+    <!-- ── Filter / Search Bar ──────────────────────────────────────────── -->
+    <div class="filter-bar">
+      <input
+        id="search-input"
+        class="search-input"
+        type="text"
+        placeholder="Search addons..."
+        aria-label="Search addons by name, description, or tags"
+      />
+
+      <div class="filter-buttons" role="group" aria-label="Filter by addon type">
+        <button class="filter-btn filter-btn--active" data-type="all" type="button" aria-pressed="true">All</button>
+        <button class="filter-btn" data-type="mob" type="button" aria-pressed="false">Mob</button>
+        <button class="filter-btn" data-type="item" type="button" aria-pressed="false">Item</button>
+        <button class="filter-btn" data-type="block" type="button" aria-pressed="false">Block</button>
+        <button class="filter-btn" data-type="system" type="button" aria-pressed="false">System</button>
       </div>
+    </div>
 
-      <!-- Decorative pixel grid overlay -->
-      <div class="hero-pixels" aria-hidden="true"></div>
-    </section>
+    <!-- ── Addon Card Grid ──────────────────────────────────────────────── -->
+    <div class="card-grid">
+      {addons.map((addon: Addon) => (
+        <div
+          class="addon-card"
+          data-type={addon.type}
+          data-name={addon.name}
+          data-description={addon.description.short}
+          data-tags={addon.tags.join(',')}
+          data-id={addon.id}
+          data-slug={addon.slug}
+        >
+          <a class="card-link" href={'/addons/' + addon.slug}>
+            <img src={addon.thumbnail} alt={addon.name} class="card-thumb" />
+            <div class="card-body">
+              <span class="type-badge">{addon.type}</span>
+              <h3 class="card-name">{addon.name}</h3>
+              <p class="card-desc">{addon.description.short}</p>
+              <span class="card-price">${addon.price.toFixed(2)}</span>
+            </div>
+          </a>
+          <button class="cart-btn" type="button" data-addon-id={addon.id}>Add to Cart</button>
+        </div>
+      ))}
+    </div>
 
-    <!-- ── Features Section ─────────────────────────────────────────────── -->
-    <section class="features" aria-label="Features">
-      <h2 class="features-heading">Why Everything Addon?</h2>
-
-      <div class="features-grid">
-        <article class="feature-card">
-          <h3 class="feature-title">Curated Addons</h3>
-          <p class="feature-desc">
-            Every addon is hand-picked and tested for quality.
-            No junk, no guesswork — only the best content.
-          </p>
-        </article>
-
-        <article class="feature-card">
-          <h3 class="feature-title">Instant Download</h3>
-          <p class="feature-desc">
-            One-click downloads straight to your device.
-            Get playing in seconds, not minutes.
-          </p>
-        </article>
-
-        <article class="feature-card">
-          <h3 class="feature-title">Bedrock Ready</h3>
-          <p class="feature-desc">
-            Built exclusively for Bedrock Edition.
-            Every addon is guaranteed compatible with your world.
-          </p>
-        </article>
-      </div>
-    </section>
-
-    <!-- ── Bottom CTA ───────────────────────────────────────────────────── -->
-    <section class="bottom-cta" aria-label="Call to action">
-      <p class="bottom-cta-text">Ready to upgrade your world?</p>
-      <a class="cta-button" href="/catalog">Explore the Catalog</a>
-    </section>
+    <p id="no-results" class="no-results" hidden>No addons match your search.</p>
   </main>
 </body>
 </html>
 
 <style>
-  /* ── Hero Banner ──────────────────────────────────────────────────────── */
+  /* ── Page Container ──────────────────────────────────────────────────── */
 
-  .hero {
-    position: relative;
-    overflow: hidden;
-    background:
-      linear-gradient(
-        180deg,
-        var(--color-bg-dark) 0%,
-        var(--color-bg-mid) 100%
-      );
-    border-bottom: var(--space-1) solid var(--color-border);
-  }
-
-  .hero-inner {
-    position: relative;
-    z-index: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
+  .catalog-page {
     max-width: 1280px;
     margin: 0 auto;
-    padding: var(--space-6) var(--space-4) var(--space-6);
-    gap: var(--space-4);
+    padding: var(--space-5) var(--space-4) var(--space-7);
   }
 
-  .hero-title {
+  /* ── Page Title ──────────────────────────────────────────────────────── */
+
+  .catalog-title {
     font-family: var(--font-heading);
     font-size: var(--text-2xl);
     color: var(--color-primary);
-    text-shadow:
-      var(--space-1) var(--space-1) 0 var(--color-moss);
-    letter-spacing: var(--space-1);
+    margin-bottom: var(--space-5);
   }
 
-  .hero-subtitle {
-    font-family: var(--font-body);
-    font-size: var(--text-lg);
-    color: var(--color-text-light);
-    max-width: 40rem;
-    margin: 0;
-    line-height: 1.6;
-  }
+  /* ── Filter / Search Bar ─────────────────────────────────────────────── */
 
-  /* Decorative pixel-grid overlay on the hero */
-  .hero-pixels {
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-    opacity: 0.06;
-    background-image:
-      linear-gradient(
-        var(--color-primary) var(--space-1),
-        transparent var(--space-1)
-      ),
-      linear-gradient(
-        90deg,
-        var(--color-primary) var(--space-1),
-        transparent var(--space-1)
-      );
-    background-size: var(--space-5) var(--space-5);
-    pointer-events: none;
-  }
-
-  /* ── CTA Button ───────────────────────────────────────────────────────── */
-
-  .cta-button {
-    display: inline-block;
-    font-family: var(--font-heading);
-    font-size: var(--text-sm);
-    color: var(--color-text-light);
-    background: var(--color-primary);
-    border: var(--space-1) solid var(--color-moss);
-    border-radius: var(--border-radius);
-    padding: var(--space-3) var(--space-6);
-    text-decoration: none;
-    cursor: pointer;
-    transition: background 0.15s, border-color 0.15s;
-    box-shadow:
-      var(--space-1) var(--space-1) 0 var(--color-moss);
-  }
-
-  .cta-button:hover,
-  .cta-button:focus-visible {
-    background: var(--color-accent);
-    border-color: var(--color-oak);
-    box-shadow:
-      var(--space-1) var(--space-1) 0 var(--color-oak);
-  }
-
-  /* ── Features Section ─────────────────────────────────────────────────── */
-
-  .features {
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: var(--space-7) var(--space-4);
-  }
-
-  .features-heading {
-    font-family: var(--font-heading);
-    font-size: var(--text-xl);
-    color: var(--color-accent);
-    text-align: center;
-    margin-bottom: var(--space-6);
-  }
-
-  .features-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: var(--space-5);
-  }
-
-  .feature-card {
-    background: var(--color-bg-mid);
-    border: var(--space-1) solid var(--color-border);
-    border-radius: var(--border-radius);
-    padding: var(--space-5);
+  .filter-bar {
     display: flex;
-    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: center;
     gap: var(--space-3);
+    margin-bottom: var(--space-5);
   }
 
-  .feature-title {
-    font-family: var(--font-heading);
-    font-size: var(--text-sm);
-    color: var(--color-primary);
-  }
-
-  .feature-desc {
+  .search-input {
+    flex: 1 1 240px;
     font-family: var(--font-body);
     font-size: var(--text-base);
     color: var(--color-text-light);
-    margin: 0;
-    line-height: 1.6;
+    background: var(--color-bg-mid);
+    border: var(--space-1) solid var(--color-border);
+    border-radius: var(--border-radius);
+    padding: var(--space-2) var(--space-3);
+    outline: none;
+    transition: border-color 0.15s;
   }
 
-  /* ── Bottom CTA ───────────────────────────────────────────────────────── */
+  .search-input::placeholder {
+    color: var(--color-stone);
+  }
 
-  .bottom-cta {
+  .search-input:focus {
+    border-color: var(--color-primary);
+  }
+
+  .filter-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .filter-btn {
+    font-family: var(--font-heading);
+    font-size: var(--text-xs);
+    color: var(--color-text-light);
+    background: var(--color-bg-mid);
+    border: var(--space-1) solid var(--color-border);
+    border-radius: var(--border-radius);
+    padding: var(--space-2) var(--space-3);
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+    text-transform: capitalize;
+  }
+
+  .filter-btn:hover,
+  .filter-btn:focus-visible {
+    background: var(--color-primary);
+    border-color: var(--color-moss);
+  }
+
+  .filter-btn--active {
+    background: var(--color-primary);
+    border-color: var(--color-moss);
+    box-shadow: var(--space-1) var(--space-1) 0 var(--color-moss);
+  }
+
+  /* ── Card Grid ───────────────────────────────────────────────────────── */
+
+  .card-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+  }
+
+  @media (min-width: 640px) {
+    .card-grid {
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    }
+  }
+
+  /* ── Addon Card ──────────────────────────────────────────────────────── */
+
+  .addon-card {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    gap: var(--space-4);
-    padding: var(--space-7) var(--space-4);
     background: var(--color-bg-mid);
-    border-top: var(--space-1) solid var(--color-border);
+    border: var(--space-1) solid var(--color-border);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    transition: border-color 0.15s;
+  }
+
+  .addon-card:hover {
+    border-color: var(--color-primary);
+  }
+
+  .card-link {
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+
+  .card-thumb {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    display: block;
+  }
+
+  .card-body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    padding: var(--space-3);
+    flex: 1;
+  }
+
+  /* ── Type Badge ──────────────────────────────────────────────────────── */
+
+  .type-badge {
+    display: inline-block;
+    align-self: flex-start;
+    font-family: var(--font-heading);
+    font-size: var(--text-xs);
+    color: var(--color-text-dark);
+    background: var(--color-accent);
+    border-radius: var(--border-radius);
+    padding: var(--space-1) var(--space-2);
+    text-transform: capitalize;
+    line-height: 1;
+  }
+
+  /* ── Card Text ───────────────────────────────────────────────────────── */
+
+  .card-name {
+    font-family: var(--font-heading);
+    font-size: var(--text-sm);
+    color: var(--color-text-light);
+    margin: 0;
+    line-height: 1.4;
+  }
+
+  .card-desc {
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    color: var(--color-stone);
+    margin: 0;
+    line-height: 1.5;
+    flex: 1;
+  }
+
+  .card-price {
+    font-family: var(--font-heading);
+    font-size: var(--text-sm);
+    color: var(--color-accent);
+  }
+
+  /* ── Cart Button ─────────────────────────────────────────────────────── */
+
+  .cart-btn {
+    font-family: var(--font-heading);
+    font-size: var(--text-xs);
+    color: var(--color-text-light);
+    background: var(--color-primary);
+    border: none;
+    border-top: var(--space-1) solid var(--color-moss);
+    border-radius: var(--border-radius);
+    padding: var(--space-2) var(--space-3);
+    cursor: pointer;
+    transition: background 0.15s;
     text-align: center;
   }
 
-  .bottom-cta-text {
-    font-family: var(--font-heading);
+  .cart-btn:hover,
+  .cart-btn:focus-visible {
+    background: var(--color-accent);
+  }
+
+  .cart-btn--in-cart {
+    background: var(--color-stone);
+    border-top-color: var(--color-border);
+    cursor: default;
+    opacity: 0.8;
+  }
+
+  .cart-btn--in-cart:hover,
+  .cart-btn--in-cart:focus-visible {
+    background: var(--color-stone);
+  }
+
+  /* ── No Results Message ─────────────────────────────────────────────── */
+
+  .no-results {
+    font-family: var(--font-body);
     font-size: var(--text-lg);
-    color: var(--color-accent);
+    color: var(--color-stone);
+    text-align: center;
+    padding: var(--space-7) var(--space-4);
     margin: 0;
   }
 
   /* ── Responsive: mobile (375px+) ──────────────────────────────────────── */
 
   @media (max-width: 640px) {
-    .hero-inner {
-      padding: var(--space-5) var(--space-3) var(--space-5);
-      gap: var(--space-3);
+    .catalog-page {
+      padding: var(--space-4) var(--space-3) var(--space-6);
     }
 
-    .hero-title {
+    .catalog-title {
       font-size: var(--text-lg);
+      margin-bottom: var(--space-4);
     }
 
-    .hero-subtitle {
-      font-size: var(--text-base);
+    .filter-bar {
+      gap: var(--space-2);
+      margin-bottom: var(--space-4);
     }
 
-    .cta-button {
-      font-size: var(--text-xs);
-      padding: var(--space-2) var(--space-5);
-    }
-
-    .features {
-      padding: var(--space-6) var(--space-3);
-    }
-
-    .features-heading {
-      font-size: var(--text-base);
-      margin-bottom: var(--space-5);
-    }
-
-    .features-grid {
-      grid-template-columns: 1fr;
-      gap: var(--space-4);
-    }
-
-    .feature-card {
-      padding: var(--space-4);
-    }
-
-    .feature-title {
-      font-size: var(--text-xs);
-    }
-
-    .feature-desc {
+    .search-input {
       font-size: var(--text-sm);
+      padding: var(--space-2);
     }
 
-    .bottom-cta {
-      padding: var(--space-6) var(--space-3);
+    .filter-btn {
+      padding: var(--space-1) var(--space-2);
     }
 
-    .bottom-cta-text {
-      font-size: var(--text-base);
+    .card-body {
+      padding: var(--space-2);
+    }
+
+    .card-name {
+      font-size: var(--text-xs);
+    }
+
+    .card-desc {
+      font-size: var(--text-xs);
     }
   }
 </style>
+
+<script>
+  import { addToCart, isInCart, onCartChange } from '../scripts/cart';
+
+  const searchInput = document.getElementById('search-input') as HTMLInputElement | null;
+  const filterBtns = document.querySelectorAll('.filter-btn');
+  const cards = document.querySelectorAll('.addon-card');
+  const cartBtns = document.querySelectorAll('.cart-btn');
+  const noResults = document.getElementById('no-results');
+
+  let activeType = 'all';
+
+  function filterCards() {
+    if (!searchInput) return;
+    const searchText = searchInput.value.toLowerCase();
+    let visibleCount = 0;
+
+    cards.forEach((card) => {
+      const el = card as HTMLElement;
+      const type = el.dataset.type || '';
+      const name = (el.dataset.name || '').toLowerCase();
+      const desc = (el.dataset.description || '').toLowerCase();
+      const tags = (el.dataset.tags || '').toLowerCase();
+
+      const matchesType = activeType === 'all' || type === activeType;
+      const matchesSearch = !searchText || name.includes(searchText) || desc.includes(searchText) || tags.includes(searchText);
+
+      const visible = matchesType && matchesSearch;
+      el.style.display = visible ? '' : 'none';
+      if (visible) visibleCount++;
+    });
+
+    if (noResults) {
+      noResults.hidden = visibleCount > 0;
+    }
+  }
+
+  if (searchInput) {
+    searchInput.addEventListener('input', filterCards);
+  }
+
+  filterBtns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      filterBtns.forEach((b) => {
+        b.classList.remove('filter-btn--active');
+        b.setAttribute('aria-pressed', 'false');
+      });
+      btn.classList.add('filter-btn--active');
+      btn.setAttribute('aria-pressed', 'true');
+      activeType = (btn as HTMLElement).dataset.type || 'all';
+      filterCards();
+    });
+  });
+
+  // Cart button handling
+  function updateCartBtn(btn: Element) {
+    const id = (btn as HTMLElement).dataset.addonId;
+    if (!id) return;
+    if (isInCart(id)) {
+      btn.textContent = 'In Cart';
+      btn.classList.add('cart-btn--in-cart');
+      (btn as HTMLButtonElement).disabled = true;
+    }
+  }
+
+  cartBtns.forEach((btn) => {
+    updateCartBtn(btn);
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const id = (btn as HTMLElement).dataset.addonId;
+      if (!id) return;
+      addToCart(id);
+      updateCartBtn(btn);
+    });
+  });
+
+  onCartChange(() => {
+    cartBtns.forEach((btn) => updateCartBtn(btn));
+  });
+</script>
