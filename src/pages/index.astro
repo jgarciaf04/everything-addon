@@ -37,9 +37,26 @@ import addons from '../data/addons.json';
         <button class="filter-btn" data-type="mob" type="button" aria-pressed="false">Mob</button>
         <button class="filter-btn" data-type="item" type="button" aria-pressed="false">Item</button>
         <button class="filter-btn" data-type="block" type="button" aria-pressed="false">Block</button>
-        <button class="filter-btn" data-type="system" type="button" aria-pressed="false">System</button>
       </div>
     </div>
+
+    <!-- ── Create Your Item CTA Banner ────────────────────────────────────── -->
+    <a class="cta-banner" href="/create" aria-label="Create your own addon">
+      <div class="cta-stars" aria-hidden="true">
+        <span class="star star-1"></span>
+        <span class="star star-2"></span>
+        <span class="star star-3"></span>
+        <span class="star star-4"></span>
+        <span class="star star-5"></span>
+        <span class="star star-6"></span>
+        <span class="star star-7"></span>
+        <span class="star star-8"></span>
+      </div>
+      <div class="cta-content">
+        <h2 class="cta-heading">MAKE YOUR ITEM</h2>
+        <span class="cta-link">Start Creating &rarr;</span>
+      </div>
+    </a>
 
     <!-- ── Addon Card Grid ──────────────────────────────────────────────── -->
     <div class="card-grid">
@@ -278,6 +295,102 @@ import addons from '../data/addons.json';
     background: var(--color-stone);
   }
 
+  /* ── CTA Banner ─────────────────────────────────────────────────────── */
+
+  .cta-banner {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-bg-dark);
+    border: var(--space-1) solid var(--color-border);
+    border-radius: var(--border-radius);
+    padding: var(--space-7) var(--space-4);
+    margin-bottom: var(--space-4);
+    overflow: hidden;
+    text-decoration: none;
+    cursor: pointer;
+    transition: border-color 0.3s;
+  }
+
+  .cta-banner:hover {
+    border-color: var(--color-accent);
+  }
+
+  .cta-stars {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .star {
+    position: absolute;
+    width: var(--space-1);
+    height: var(--space-1);
+    background: var(--color-text-light);
+    border-radius: var(--border-radius);
+    opacity: 0;
+    animation: twinkle 3s ease-in-out infinite;
+  }
+
+  .star-1 { top: 15%; left: 10%; animation-delay: 0s; }
+  .star-2 { top: 25%; left: 80%; animation-delay: 0.5s; }
+  .star-3 { top: 60%; left: 25%; animation-delay: 1s; }
+  .star-4 { top: 70%; left: 65%; animation-delay: 1.5s; }
+  .star-5 { top: 40%; left: 45%; animation-delay: 0.3s; }
+  .star-6 { top: 80%; left: 90%; animation-delay: 2s; }
+  .star-7 { top: 10%; left: 55%; animation-delay: 0.8s; }
+  .star-8 { top: 50%; left: 5%; animation-delay: 1.3s; }
+
+  @keyframes twinkle {
+    0%, 100% { opacity: 0; transform: scale(0.5); }
+    50% { opacity: 0.9; transform: scale(1.2); }
+  }
+
+  .cta-content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-3);
+    text-align: center;
+  }
+
+  .cta-heading {
+    font-family: var(--font-heading);
+    font-size: var(--text-2xl);
+    color: var(--color-text-light);
+    margin: 0;
+    letter-spacing: var(--space-1);
+    text-shadow: 0 0 var(--space-4) rgba(240, 192, 64, 0.3);
+  }
+
+  .cta-link {
+    font-family: var(--font-heading);
+    font-size: var(--text-sm);
+    color: var(--color-accent);
+    background: transparent;
+    border: var(--space-1) solid var(--color-accent);
+    border-radius: var(--border-radius);
+    padding: var(--space-2) var(--space-5);
+    transition: box-shadow 0.3s, background 0.15s;
+  }
+
+  .cta-banner:hover .cta-link {
+    background: var(--color-accent);
+    color: var(--color-text-dark);
+    box-shadow:
+      0 0 var(--space-3) var(--color-accent),
+      0 0 var(--space-6) rgba(240, 192, 64, 0.4);
+    animation: glow-pulse 1.5s ease-in-out infinite;
+  }
+
+  @keyframes glow-pulse {
+    0%, 100% { box-shadow: 0 0 var(--space-3) var(--color-accent), 0 0 var(--space-6) rgba(240, 192, 64, 0.4); }
+    50% { box-shadow: 0 0 var(--space-5) var(--color-accent), 0 0 var(--space-8) rgba(240, 192, 64, 0.6); }
+  }
+
   /* ── No Results Message ─────────────────────────────────────────────── */
 
   .no-results {
@@ -325,6 +438,19 @@ import addons from '../data/addons.json';
 
     .card-desc {
       font-size: var(--text-xs);
+    }
+
+    .cta-banner {
+      padding: var(--space-5) var(--space-3);
+    }
+
+    .cta-heading {
+      font-size: var(--text-lg);
+    }
+
+    .cta-link {
+      font-size: var(--text-xs);
+      padding: var(--space-2) var(--space-3);
     }
 
   }

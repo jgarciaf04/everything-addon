@@ -73,7 +73,7 @@ import '../styles/global.css';
         </button>
       </div>
 
-      <a class="back-link" href="/catalog">&larr; Back to Catalog</a>
+      <a class="back-link" href="/">&larr; Back to Catalog</a>
     </div>
   </main>
 </body>
@@ -101,6 +101,20 @@ import '../styles/global.css';
 
   .create-state {
     text-align: center;
+    opacity: 0;
+    transform: translateY(var(--space-3));
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    pointer-events: none;
+  }
+
+  .create-state.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  .create-state[hidden] {
+    display: none;
   }
 
   /* ── Form State ──────────────────────────────────────────────────────── */
@@ -228,10 +242,10 @@ import '../styles/global.css';
     display: flex;
     flex-direction: column;
     background: var(--color-bg-mid);
-    border: var(--space-1) solid var(--color-primary);
+    border: var(--space-1) solid var(--color-accent);
     border-radius: var(--border-radius);
     overflow: hidden;
-    box-shadow: var(--space-1) var(--space-1) 0 var(--color-moss);
+    box-shadow: var(--space-1) var(--space-1) 0 var(--color-oak);
     margin-bottom: var(--space-5);
   }
 
@@ -265,7 +279,7 @@ import '../styles/global.css';
 
   .result-name {
     font-family: var(--font-heading);
-    font-size: var(--text-sm);
+    font-size: var(--text-xl);
     color: var(--color-text-light);
     margin: 0;
     line-height: 1.4;
@@ -314,6 +328,23 @@ import '../styles/global.css';
   .result-cart-btn--in-cart:hover,
   .result-cart-btn--in-cart:focus-visible {
     background: var(--color-stone);
+  }
+
+  /* ── Result Card Entrance Animation ─────────────────────────────────── */
+
+  @keyframes card-entrance {
+    from {
+      opacity: 0;
+      transform: translateY(var(--space-5)) scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  .is-visible .result-card {
+    animation: card-entrance 0.6s ease-out 0.1s both;
   }
 
   /* ── Back Link ───────────────────────────────────────────────────────── */
@@ -411,12 +442,35 @@ import '../styles/global.css';
   const resultSubtitle = document.getElementById('result-subtitle') as HTMLElement;
   const addToCartBtn = document.getElementById('add-to-cart-btn') as HTMLButtonElement;
 
+  // Initialize: show form state with animation
+  stateForm.hidden = false;
+  stateForm.classList.add('is-visible');
+
   // ── State management ──────────────────────────────────────────────────
 
   function showState(state: 'form' | 'loading' | 'success'): void {
-    stateForm.hidden = state !== 'form';
-    stateLoading.hidden = state !== 'loading';
-    stateSuccess.hidden = state !== 'success';
+    const states = { form: stateForm, loading: stateLoading, success: stateSuccess };
+    Object.entries(states).forEach(([key, el]) => {
+      if (key === state) {
+        el.hidden = false;
+        // Use requestAnimationFrame to ensure hidden is removed before adding class
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            el.classList.add('is-visible');
+          });
+        });
+      } else {
+        el.classList.remove('is-visible');
+        // Wait for transition to complete before hiding
+        const handler = () => {
+          el.hidden = true;
+          el.removeEventListener('transitionend', handler);
+        };
+        el.addEventListener('transitionend', handler);
+        // Fallback: hide after transition duration if transitionend doesn't fire
+        setTimeout(() => { el.hidden = true; }, 500);
+      }
+    });
   }
 
   // ── Loading messages ──────────────────────────────────────────────────
